@@ -1,7 +1,12 @@
 !! Creating and versionning some contents 
 
+In this part we will describe the complete setup starting just after the creation 
+of a git repository to version the booklet files. The example used for this is this booklet. 
 
+
+!!! Installing pillar
 !!!! Cloning a git repository
+
 [[[
 git clone git@github.com:SquareBracketAssociates/Booklet-PublishingAPillarBooklet.git
 ]]]
@@ -11,6 +16,8 @@ cd Booklet-PublishingAPillarBooklet
 ]]]
 
 !!!! Installing Pillar
+
+The following script install pillar. 
 [[[
 wget https://raw.githubusercontent.com/pillar-markup/pillar/master/download.sh
 chmod +x download.sh
@@ -33,17 +40,20 @@ or
 make book spiral 
 ]]]
 
-produces a book in the folder ==build==.
+produces a book in the folder ==build==. Indeed the folder Chapters and figures contain some samples.
 
+!!! Adapting Pillar to your book
 
-!!! Your book
+Now we are ready to produce your own book. For this we edit some configuration files, in addition to edit some chapters. We focus on the configuration of files.
 
-Now we are ready to produce your own book.
+You need to edit two files:
+- pillar.conf which defines all the concerns such as author name, book tile but also the book template.
+- book.pillar which lists the chapters in order and is the place to add some glue text.
 
 !!!! Editing pillar.conf 
 
 You can start to edit the file ==pillar.conf==.
-The main points are
+The main points are:
 - title: 
 - attribution: Give the author of the booklet.
 - chapters. Here you should give the list of the files. You can put them in separate folders or not. 
@@ -95,6 +105,9 @@ ${inputFile:Chapters/GettingStarted.pillar}$
 ${inputFile:Chapters/TravisBintray.pillar}$
 ]]]
 
+!!!! Adding a .gitignore
+
+Not all the downloaded files are worth versionning. We suggest the following .gitignore configuration. 
 
 [[[
 more .gitignore
@@ -108,5 +121,6 @@ more .gitignore
 /build/
 ]]]
 
-
+You can remove the folder figures and the chapter samples. 
+Now you are ready to commit your files. 
 
