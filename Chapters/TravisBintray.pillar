@@ -17,7 +17,7 @@ Note that this setup may take a while to sync. So do not worry if these systems 
 
 !!! Add and edit the .travis.yml file
 
-Here is the ==.travis.yml== of the Learning oo programming project:
+Here is the ==.travis.yml== of this booklet. You can find it online at *https://github.com/SquareBracketAssociates/Booklet-PublishingAPillarBooklet*:
 
 [[[
 sudo: required
@@ -29,7 +29,6 @@ before_install:
 
 script:
 - docker run --tty --rm --volume $PWD:/work dpollet/texlive:pillar make spiralbook
-
 ]]]
 
 Add a similar configuration file to your repository. Once the travis github get synchronised and travis is kicked in, you will be able to check on the travis log that your project has been successfully built. 
