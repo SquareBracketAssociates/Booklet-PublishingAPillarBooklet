@@ -1,0 +1,112 @@
+!! Creating and versionning some contents 
+
+
+!!!! Cloning a git repository
+[[[
+git clone git@github.com:SquareBracketAssociates/Booklet-PublishingAPillarBooklet.git
+]]]
+
+[[[
+cd Booklet-PublishingAPillarBooklet
+]]]
+
+!!!! Installing Pillar
+[[[
+wget https://raw.githubusercontent.com/pillar-markup/pillar/master/download.sh
+chmod +x download.sh
+./download.sh
+]]]
+
+
+!!!! Selecting and installing book
+
+[[[
+./pillar archetype book
+]]]
+
+[[[
+make book 	
+]]]
+
+or 
+[[[
+make book spiral 
+]]]
+
+produces a book in the folder ==build==.
+
+
+!!! Your book
+
+Now we are ready to produce your own book.
+
+!!!! Editing pillar.conf 
+
+You can start to edit the file ==pillar.conf==.
+The main points are
+- title: 
+- attribution: Give the author of the booklet.
+- chapters. Here you should give the list of the files. You can put them in separate folders or not. 
+
+Here is the 
+[[[
+	{
+	  "metadata" : {
+	    "title": "Publishing a Pillar Booklet",
+	    "attribution": "StéphaneDucasse",
+	    "series": "Square Bracket tutorials",
+	    "keywords": "project template, Pillar, Pharo, Smalltalk"
+	  },
+	  "outputDirectory": "build",
+	  "mainDocument": "book",
+	  "latexTemplate": "support/templates/main.latex.mustache",
+	  "latexChapterTemplate": "support/templates/chapter.latex.mustache",
+	  "htmlTemplate": "support/templates/html.mustache",
+	  "htmlChapterTemplate": "support/templates/html.mustache",
+	  "chapters": [ 
+  			"Chapters/GettingStarted",
+  			"Chapters/TravisBintray"
+	  "newLine": #unix,
+	  "configurations": {
+	    "LaTeX" : {
+	      "outputType": #'latex:sbabook',
+	      "separateOutputFiles": true
+	    },
+	    "HTML" : {
+	      "outputType": #html,
+	      "separateOutputFiles": true
+	    }
+	  }
+	}
+
+]]]
+
+!!!! Editing book.pillar
+
+Now we will edit the file ==book.pillar== (the file listed in == "mainDocument": "book"== in the ==pillar.conf== file).
+
+[[[
+more book.pillar
+
+The current document is a little tutorial to show you how to begin with the creation of booklet.
+It describes the installation, customisation and integration with travis and bintray online services.
+${inputFile:Chapters/GettingStarted.pillar}$
+
+${inputFile:Chapters/TravisBintray.pillar}$
+]]]
+
+
+[[[
+more .gitignore
+>>>
+/Pharo.*
+/pharo
+/pharo-ui
+/pillar
+/mustache
+/pharo-vm/
+/build/
+]]]
+
+
+

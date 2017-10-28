@@ -1,0 +1,6 @@
+The current document is a little tutorial to show you how to begin with the creation of booklet.
+It describes the installation, customisation and integration with travis and bintray online services.
+
+${inputFile:Chapters/GettingStarted.pillar}$
+
+${inputFile:Chapters/TravisBintray.pillar}$
