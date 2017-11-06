@@ -65,7 +65,6 @@ You can now use the status of a travis build right in the github repository usin
 [badge]: https://travis-ci.org/SquareBracketAssociates/
 Booklet-PublishingAPillarBooklet.svg?branch=master
 
-
 ## To contribute
 - Fork
 - Do pull Request 
@@ -79,14 +78,9 @@ make book spiral
 ```
 ]]]
 
-
 At the stage you should get already important feedback since you will know if your project fully builds or not. 
 
-
-
-
 !! Deploying work in progresss artefacts in bintray
-
 
 Bintray is a service that can host artefacts produced by Travis.
 We will use bintray to store the latest pdf produced by travis and we will use github to store the released (tagged) pdf.
@@ -111,7 +105,6 @@ travis encrypt 'Your API Key from Bintray'
 
 You will use the resulting key in your .travis.yml configuration file.
 
-
 !!! Enabling bintray
 
 To enable bintray, we extend the ==.travis.yml== description with the following section:
@@ -121,7 +114,7 @@ deploy:
 - provider: bintray
   file: .bintray.json
   on:
-    repo: SquareBracketAssociates/LearningOOPWithPharo
+    repo: SquareBracketAssociates/Booklet-PublishingAPillarBooklet
   skip_cleanup: true
   user: ducasse
   key:
@@ -136,7 +129,7 @@ Note that the ==skyp_cleanup: true== is a way to circumvent some strange behavio
 !!! Add and edit the .bintray.json file 
 Now we should add a ==.bintray.json== configuration file that you should version with your project.
 
-Here is the one of the *https://github.com/SquareBracketAssociates/LearningOOPWithPharo*
+Here is the one of the *https://github.com/SquareBracketAssociates/Booklet-PublishingAPillarBooklet*
 
 [[[
 more .bintray.json
@@ -145,16 +138,16 @@ more .bintray.json
 [[[
 
 {
-    "package": {
-        "name": "Loop",
-        "repo": "wip",
-        "subject": "squarebracketassociates",
-        "desc": "Learning OOP with Pharo",
-        "licenses": ["MIT"],
-        "website_url": "https://github.com/SquareBracketAssociates/LearningOOPWithPharo",
-        "issue_tracker_url": "https://github.com/SquareBracketAssociates/LearningOOPWithPharo/issues",
-        "vcs_url": "https://github.com/SquareBracketAssociates/LearningOOPWithPharo.git",
-        "labels": ["work-in-progress"]
+  "package": {
+      "name": "Booklet-PublishingABooklet",
+      "repo": "wip",
+      "subject": "squarebracketassociates",
+      "desc": "Distributing",
+      "licenses": ["MIT"],
+      "website_url": "https://github.com/SquareBracketAssociates/Booklet-PublishingAPillarBooklet",
+      "issue_tracker_url": "https://github.com/SquareBracketAssociates/Booklet-PublishingAPillarBooklet/issues",
+      "vcs_url": "https://github.com/SquareBracketAssociates/Booklet-PublishingAPillarBooklet.git",
+      "labels": ["work-in-progress"]
     },
 
     "version": {

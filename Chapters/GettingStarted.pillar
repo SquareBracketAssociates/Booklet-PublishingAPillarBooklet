@@ -1,12 +1,18 @@
 !! Creating and Configuring a Booklet 
 
 In this part we will describe the complete setup starting just after the creation 
-of a git repository to version the booklet files. The example used for this is this booklet. 
+of a git repository to version the booklet files. The example used for this is this booklet itself.
 
+We take as hypothesis that you want to version your document on gihub but Pillar does not care about this. 
+Now in the next chapter we will explain how to use github service integration. Such services only work with github.
 
 !!! Installing pillar
+
+Installing pillar is simple. Now since Pillar can be used to generate different families of document, once you download you should install the template you want to use. But let us get started!
+
 !!!! Cloning a git repository
 
+Let us clone the repository which is empty right now.
 [[[
 git clone git@github.com:SquareBracketAssociates/Booklet-PublishingAPillarBooklet.git
 ]]]
@@ -17,7 +23,8 @@ cd Booklet-PublishingAPillarBooklet
 
 !!!! Installing Pillar
 
-The following script install pillar. 
+Now you are ready to install Pillar using the following script:
+
 [[[
 wget https://raw.githubusercontent.com/pillar-markup/pillar/master/download.sh
 chmod +x download.sh
@@ -26,6 +33,14 @@ chmod +x download.sh
 
 
 !!!! Selecting and installing book
+Pillar come with several templates and you can define your own using mustache (see the book Entreprise Pharo: a Web perspective).
+By default pillar offers the following templates hosted at *https://github.com/pillar-markup/Pillar-Archetype*:
+
+- Book. This is the template used in recent Pharo books and booklets. 
+- Presentation. These are the beamer templates used for example in the Pharo mooc. 
+- Basic-latex. This template is good to generate basic reports. What is nice is that you do not need the latest version of latex packages. 
+- Welcome. This template is to teach how to build templates. 
+
 
 [[[
 ./pillar archetype book
