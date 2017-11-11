@@ -6,7 +6,7 @@ of a git repository to version the booklet files. The example used for this is t
 We take as hypothesis that you want to version your document on gihub but Pillar does not care about this. 
 Now in the next chapter we will explain how to use github service integration. Such services only work with github.
 
-!!! Installing pillar
+!!! Installing Pillar
 
 Installing pillar is simple. Now since Pillar can be used to generate different families of document, once you download you should install the template you want to use. But let us get started!
 
@@ -32,7 +32,7 @@ chmod +x download.sh
 ]]]
 
 
-!!!! Selecting and installing book
+!!!! Selecting and Installing Book
 Pillar come with several templates and you can define your own using mustache (see the book Entreprise Pharo: a Web perspective).
 By default pillar offers the following templates hosted at *https://github.com/pillar-markup/Pillar-Archetype*:
 
@@ -57,7 +57,7 @@ make book spiral
 
 produces a book in the folder ==build==. Indeed the folder Chapters and figures contain some samples.
 
-!!! Adapting Pillar to your book
+!!! Adapting Pillar to your Book
 
 Now we are ready to produce your own book. For this we edit some configuration files, in addition to edit some chapters. We focus on the configuration of files.
 
@@ -76,16 +76,14 @@ The main points are:
 Here is the 
 [[[
 	{
-	  "metadata" : {
-	    "title": "Publishing a Pillar Booklet",
-	    "attribution": "StéphaneDucasse",
-	    "series": "Square Bracket tutorials",
-	    "keywords": "project template, Pillar, Pharo, Smalltalk"
-	  },
-	  "outputDirectory": "build",
-	  "mainDocument": "book",
-	  "latexTemplate": "support/templates/main.latex.mustache",
-	  "latexChapterTemplate": "support/templates/chapter.latex.mustache",
+    "title": "Publishing a Pillar Booklet",
+    "attribution": "StéphaneDucasse",
+    "series": "Square Bracket tutorials",
+    "keywords": "project template, Pillar, Pharo, Smalltalk"
+    "outputDirectory": "build",
+    "mainDocument": "book",
+    "latexTemplate": "support/templates/main.latex.mustache",
+    "latexChapterTemplate": "support/templates/chapter.latex.mustache",
 	  "htmlTemplate": "support/templates/html.mustache",
 	  "htmlChapterTemplate": "support/templates/html.mustache",
 	  "chapters": [ 

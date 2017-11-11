@@ -1,115 +1,70 @@
-!! Writing Pillar Documents
+!! Pillar Core Syntactic Elements
 @chawriting
 
 In this section we show how to write Pillar documents by presenting the Pillar syntax. You might want to have a look at the
 *cheat sheet>http://pillarhub.pharocloud.com/hub/pillarhub/pillarcheatsheet* and even download and print it.
 
-!!!Meta-Information
+!!! Meta-Information
 
-Meta-information of a particular file is written at the start of the file between curly braces using the STON syntax (see chapter *@cha:ston*).
+Meta-information of a particular file is written at the start of the file between curly braces using the STON syntax (a super set of JSON).
 A meta-information starts with a word between quotation marks acting as a key, is followed by a colon ==:==, and finishes with a value.
 For example, the following Pillar file,
 
 [[[language=pillar
 {
-	"title": "My first document from pillar.conf",
-	"author": "Damien Cassou"
+	"title": "A first document",
+	"author": "John Doe"
 }
 
 !Hello World
 ]]]
 
-represents a Pillar document with the title and author set. You can use whatever keys you like. Use them by referencing them in templates (see section
-*@templating* for more information about templating).
+represents a Pillar document with the title and author set. You can use whatever keys you like. The metadata keys can be used in templates (see Section *@templating* for more information about templating).
 
-!!!!Chapters & Sections
+!!! Headings: Chapters & Sections
+@chapterAndSections
 
 A line starting with ==!== represents a heading. Use multiple ==!== to create sections and subsections.
 
-@chapterAndSections
-
-To refer to a section or chapter, put an anchor (equivalent to \\label{chapterAndSections} in Latex) using the ==@chapterAndSections== syntax on a
-''separate line''. Then, when you want to link to it (equivalent to \\ref{chapterAndSections} in Latex), use the ==\*@chapterAndSections\*== syntax. Anchors are
-invisible and links will be rendered as: *@chapterAndSections*.
-
-!!!Paragraphs and Framed Paragraphs
-
-An empty line starts a new paragraph.
-
-An annotated paragraph starts with ==\@@== followed by a keyword such as ==todo== and ==note==. For example,
-
-[[[language=pillar
-@@note this is a note annotation.
+[[[
+!!!Headings: Chapters & Sections
 ]]]
 
-generates
+is the way the current section is created. The exporter and template may interpret the section the way they want. 
 
-@@note this is a note annotation.
+Note: some exporters support the possibility to specify a level of interpretation for ==!==. 
+==headingLevelOffset== controls how to convert from the level of a Pillar heading to the level of heading in your exported document.
+For example, a ==headingLevelOffset== of 3 converts a 1st level Pillar heading to an ==<h4>== in HTML.
 
-And,
-
-[[[language=pillar
-@@todo this is a todo annotation
+[[[
+"headingLevelOffset" : 3
 ]]]
 
-generates a todo annotation
+!!! References and Links
 
-@@todo this is a todo annotation
+To refer to a section or chapter, put an anchor (equivalent to \\label{chapterAndSections} in LaTeX) using the ==@chapterAndSections== syntax on a
+''separate line''. Then, when you want to refer to it (equivalent to \\ref{chapterAndSections} in LaTeX), use the ==\*@chapterAndSections\*== syntax. Anchors are invisible and links will be rendered as: *@chapterAndSections*.
 
-The annotation (e.g., ==todo== and ==note==) can be any word that is meaningful to the author. In HTML, an annotated paragraph triggers the generation of a
-paragraph with the annotation as the paragraph ==class==. In LaTeX, an environment with the annotation name is generated. In HTML, you can tweak the output to make
-it look nice, for example with such JavaScript code:
+!!!! Alias
+You can create alias for links (this is especially adapted for web sites containing reference to other pages).
 
-[[[language=javascript
-// Wraps paragraphs with class pClass inside a div and adds an H4 element with pTitle.
-function transformAnnotatedParagraphs(pClass, pTitle) {
-   $("p." + pClass).wrap( "<div class='annotated-paragraph "
-         + pClass + "' />" ).prepend("<h4>"+ pTitle +"</h4>");
-}
-
-transformAnnotatedParagraphs("note", "Note");
-transformAnnotatedParagraphs("todo", "To do");
+[[[
+*Chapters>chapterAndSections*
 ]]]
 
-Above code will prepend the titles "Note" and "To do" to the ==@\@note== and ==@\@todo== paragraphs. You can make that looks nice using a little bit of CSS:
+creates the link *Chapters>chapterAndSections*.
 
-[[[language=css
-.annotated-paragraph {
-   margin: 20px 0;
-   padding: 15px 30px 15px 15px;
-   border-left: 5px solid #eee;
-}
 
-.annotated-paragraph h4 {
-   margin-top: 0;
-}
+To create a link to another pillar file, use the ==\*Alias>path.pillar@anchorName\*==. The Alias and the anchor are optional but you will need them in some cases (for example if you have an inter-file link and you export in LaTeX, or if you have an inter-file link and you export all your file in the same html file).
 
-.annotated-paragraph p:last-child {
-   margin-bottom: 0;
-}
+!!!!External Links
 
-.note {
-   background-color: #f0f7fd;
-   border-color: #d0e3f0;
-}
+To create links to external resources, use the ==\*Pharo>http://pharo.org/\*== syntax which is rendered as *Pharo>http://pharo.org/*. The same syntax can also represent email addresses: write ==\*damien@cassou.me\*== to get *damien@cassou.me*.
 
-.note h4 {
-   color: #3a87ad;
-}
 
-.todo {
-   background-color: #dff0d8;
-   border-color: #d6e9c6;
-}
+!!! Lists
 
-.todo h4 {
-   color: #3c763d;
-}
-]]]
-
-!!!Lists
-
-!!!!Unordered Lists
+!!!! Unordered Lists
 
 [[[language=pillar
 -A block of lines,
@@ -169,6 +124,7 @@ generates
 -#Thus, a line starting with ==-#==
 -#is an element of a bulleted list that is part of an ordered list.
 
+
 !!!Formatting
 There is some syntax for text formatting:
 
@@ -180,19 +136,95 @@ There is some syntax for text formatting:
 -To make something ^^superscript^^, write ==\^^superscript\^^==
 -To make something __underlined__, write ==\__underlined\__==
 
-!!!Tables
-To create a table, start the lines with ==|== and separate the elements with ==|==. Each new line represents a new row of the table. Add a single ==!== to
-let the cell become a table heading.
+
+!!! Annotated Paragraphs
+
+An empty line starts a new paragraph.
+
+An annotated paragraph starts with ==\@@== followed by a keyword such as ==todo== and ==note==. For example,
 
 [[[language=pillar
-|!Language |!Coolness
-|Smalltalk | Hypra cool
-|Java | baaad
+@@note this is a note annotation.
 ]]]
 
-|!Language |!Coolness
-|Smalltalk | Hypra cool
-|Java | baaad
+generates
+
+@@note this is a note annotation.
+
+And,
+
+[[[language=pillar
+@@todo this is a todo annotation
+]]]
+
+generates a todo annotation
+
+@@todo this is a todo annotation
+
+By default the templates support ==@\@todo== and ==@\@note==. 
+
+Note that the annotation (e.g., ==todo== and ==note==) can be any word that is meaningful to the author. In HTML, an annotated paragraph triggers the generation of a paragraph with the annotation as the paragraph ==class==. In LaTeX, an environment with the annotation name is generated. In HTML, you can tweak the output to make it look nice, for example with such JavaScript code:
+
+[[[language=javascript
+// Wraps paragraphs with class pClass inside a div and adds an H4 element with pTitle.
+function transformAnnotatedParagraphs(pClass, pTitle) {
+   $("p." + pClass).wrap( "<div class='annotated-paragraph "
+         + pClass + "' />" ).prepend("<h4>"+ pTitle +"</h4>");
+}
+
+transformAnnotatedParagraphs("note", "Note");
+transformAnnotatedParagraphs("todo", "To do");
+]]]
+
+Above code will prepend the titles "Note" and "To do" to the ==@\@note== and ==@\@todo== paragraphs. You can make that looks nice using a little bit of CSS:
+
+[[[language=css
+.annotated-paragraph {
+   margin: 20px 0;
+   padding: 15px 30px 15px 15px;
+   border-left: 5px solid #eee;
+}
+
+.annotated-paragraph h4 {
+   margin-top: 0;
+}
+
+.annotated-paragraph p:last-child {
+   margin-bottom: 0;
+}
+
+.note {
+   background-color: #f0f7fd;
+   border-color: #d0e3f0;
+}
+
+.note h4 {
+   color: #3a87ad;
+}
+
+.todo {
+   background-color: #dff0d8;
+   border-color: #d6e9c6;
+}
+
+.todo h4 {
+   color: #3c763d;
+}
+]]]
+
+
+!!!Tables
+To create a table, start the lines with ==|== and separate the elements with ==|==. Each new line represents a new row of the table. Add a single ==!== to let the cell become a table heading.
+
+[[[language=pillar
+|!Country |!Capital
+|France | Paris
+|Belgium | Brussels
+]]]
+
+|!Country |!Capital
+|France | Paris
+|Belgium | Brussels
 
 
 The contents of cells can be aligned left, centered or aligned right by using ==|{==, ==||== or ==|}== respectively.
@@ -207,20 +239,10 @@ generates
 ||centered||!centered header||centered
 |{ left |} right || center
 
-!!!Links
 
-!!!!Internal Links and Anchors
-@anchorName
 
-To put an anchor (equivalent to \\label in Latex), use the ==@anchorName== syntax on a ''separate line''. Then, when you want to link to it (equivalent to
-\\ref in Latex), use the ==\*@anchorName\*== syntax. Anchors are invisible and links will be rendered as: *@anchorName*.
 
-To create a link to an other pillar file, use the ==\*Alias>path.pillar@anchorName\*==. The Alias and the anchor are optional but you will need them in some
-cases (for example if you have an inter-file link and you export in LaTeX, or if you have an inter-file link and you export all your file in the same html file).
-
-!!!!External Links
-
-To create links to external resources, use the ==\*Pharo>http://pharo.org/\*== syntax which is rendered as *Pharo>http://pharo.org/*. The same syntax can also represent email addresses: write ==\*damien@cassou.me\*== to get *damien@cassou.me*.
+!!! Extensions
 
 !!!!Semantic Links
 
