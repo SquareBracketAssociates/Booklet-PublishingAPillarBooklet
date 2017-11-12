@@ -2,7 +2,7 @@
 @chawriting
 
 In this section we show how to write Pillar documents by presenting the Pillar syntax. Have a look at the
-*cheat sheet>http://pillarhub.pharocloud.com/hub/pillarhub/pillarcheatsheet*. We use the current text as example, notice however, that some results may be different on other support like HTML because of different common practices (for example creating an anchor with the reference instead of a footnote for an external link).
+Chapter *@chacheat*. We use the current text as example, notice however, that some results may be different on other support like HTML because of different common practices (for example creating an anchor with the reference instead of a footnote for an external link).
 
 It is important to see that since Pillar is extensible plugins may extend the default markup. The extensions mechanisms
 allows one not to learn new syntax just new tags and parameters as will present later.
@@ -22,7 +22,7 @@ For example, the following Pillar file,
 !Hello World
 ]]]
 
-represents a Pillar document with the title and author set. You can use whatever keys you like. The metadata keys can be used in templates (see Section *@templating* for more information about templating).
+represents a Pillar document with the title and author set. You can use whatever keys you like. The metadata keys can be used in templates (see Chapter *@templating* for more information about templating).
 
 !!! Headings: Chapters & Sections
 @chapterAndSections
@@ -565,6 +565,7 @@ There is two kind of structures for the moment:
 
 
 !! Pillar Cheatsheet
+@chacheat
 
 !!!! Headings
 %||!Headings| |
