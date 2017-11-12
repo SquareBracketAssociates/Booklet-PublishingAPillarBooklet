@@ -428,24 +428,23 @@ A good practice is to always specify for which kind of export the raw text must 
 = (1+sqrt(2)) / 2
 = }}}
 
-""Take care:"" avoid terminating the verbatim text with a ==}== as
-this will confuse the parser. So, don't write --==\{{{\\begin{scriptsize}}}}==-- but ==\{{{\\begin{scriptsize} }}}== instead.
+""Take care:"" Avoid terminating the verbatim text with a ==}== as
+this will confuse the parser, better add a space or two. So, don't write ==\{{{\\begin{scriptsize}}}}== but ==\{{{\\begin{scriptsize} }}}== instead.
 
 
 
-!!Extensions
+!!!! Annotations: supporting extensions
 
-Pillar proposes two extensions mechanisms: tag and parameters. Pay attention that each plugin should handle the tag or parameters processing. 
+Pillar proposes two extensions mechanisms: tags and parameters. Pay attention that each plugin should handle the tag or parameter processing. 
 
 
-!!! Annotations
 Annotations are the Pillar way to have extensible syntax. An annotation has this syntax:
 
 [[[language=pillar
 ${tag:parameter=value|parameter2=value2}$
 ]]]
 
-!!!! InputFile Annotation
+!!!!InputFile Annotation
 
 You can include a file into another pillar file. The ==inputFile== annotation takes as parameter the path of the file relative to ==baseDirectory== (if you don't change the base directory, it is your working directory). In this example, 2 files are included:
 
@@ -455,7 +454,7 @@ ${inputFile:test.pillar}$
 ${inputFile:chapter2/chapter2.pillar}$
 ]]]
 
-!!!! Footnote Annotation
+!!!!Footnote Annotation
 
 You can add footnotes to explain or annotate words. The ==footnote== annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
 
@@ -463,15 +462,15 @@ You can add footnotes to explain or annotate words. The ==footnote== annotation 
 Foo${footnote:Some Explanation for Foo}$
 ]]]
 
-!!!Parameters
+!!!!Parameters
 
 Pictures and scripts are both using parameters to specify different options and variations. Parameters are pairs =="label"="value"== separated by ==\|==.
 
 Here are two examples within the same expressions: Code blocks and captions use parameters.
 
-[[[label=foobar|caption=My code block that works|language=pillar
-+Caption of the picture.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
-]]]
+= [[[label=foobar|caption=My code block that works|language=pillar
+= +Caption of the picture.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
+= ]]]
 
 
 
@@ -481,9 +480,9 @@ Here are two examples within the same expressions: Code blocks and captions use 
 !! Support Specific Markup
 This chapter presents extensions specific to a given support such as LaTeX or slides.
 
-!!! LaTeX
+!!!LaTeX
 
-!!!! Citations
+!!!!Citations
 
 Citations are only available for LaTeX.
 You can add citations to your document to reference an element in a LaTeX bibliography. The ==cite== annotationtakes as parameter the key of the reference in the bibliography.
@@ -498,10 +497,10 @@ If you want to use other type of citations like ==citep== or ==citet==, please o
 ==\renewcommand{\cite}{\citep}==
 
 
-!!! Slides
+!!!Slides
 Pillar offers the possibility to define slides. Slides requires the use of the presentation archetype. 
 
-!!!! Slide Annotation
+!!!!Slide Annotation
 @sec:slide
 
 This annotation is used to create slides structure for a ==beamer== or a ==deck.js== export.
@@ -512,7 +511,7 @@ The ""label"" parameter can be used to refer to this slide in another slide:
 ${slide:title=My slide|label=sld:mySlide}$
 ]]]
 
-!!!! Columns
+!!!!Columns
 
 With Pillar you can put text and other contents in columns.
 To do that, you need to delimit an environment with the ==columns== and ==endColumns== annotations.
@@ -533,8 +532,6 @@ ${endColumns}$
 @@note The column annotations currently works only for the beamer, HTML and Deck.js export.
 
 
-
-
 !!!Under Development
 
 !!!!Semantic Links
@@ -548,7 +545,7 @@ Same for Youtube links : ==\*Youtube Pharo>youtube:KDvNuOjdjY4\*==, the result i
 
 Note that such feature will be probably revised to be more generic and let the user define other semantic links. 
 
-!!!! Structures
+!!!!Structures
 
 You can create structures to render all structures with the same name as the same object.
 Structures use the scripts syntax (see *@scripts*) with a particular parameter ==structure==
@@ -570,30 +567,28 @@ There is two kind of structures for the moment:
 !! Pillar Cheatsheet
 
 !!!! Headings
-||!Headings| |
-|{ ==! Heading== | Heading 1 
-|{ ==!! Heading== | Heading 2 
-|{ ==!!! Heading== | Heading 3 
+%||!Headings| |
+|{ ==! Heading== | Heading 1 |{ ==!!! Heading== | Heading 3 
+|{ ==!! Heading== | Heading 2 |{ ==!!!! Heading== | Heading 4
+
 
 !!!! Anchors and Links 
-||!Anchors and References | |
+%||!Anchors and References | |
 |{ ==@anchor== | anchor 
 |{ ==\*\@Internal Link\*== | Internal link 
 |{ ==\*http://www.pharo.org\*== | External link 
 |{ ==\*Pharo\>http://www.pharo.org\*== | Alias external link
 
 !!!! Lists
-
-||!Lists | |
-|{ ==\-bullet== | 
-|{ ==\#numbered== |  
-|{ ==\;description :definition== | 
+%||!Lists | |
+|{ ==\-bullet== |  Creates one bullet
+|{ ==\#numbered== | Creates one numbered item
+|{ ==\;description :definition== | Creates a description definition item
 
 
 
 !!!!Formatting
-
-||!Formatting | |
+%||!Formatting | |
 | ==\""bold\""== |""bold""
 | ==\''italic\''== | ''italic''
 | ==\=\=monospaced\=\=== |  ==monospaced==
@@ -602,7 +597,7 @@ There is two kind of structures for the moment:
 | ==\^^superscript\^^== | ^^superscript^^
 | ==\__underlined\__== | __underlined__
 
-Character to be escaped using ==\\== are
+Characters to be escaped using ==\\== are
 [[[eval=true
 | characters |
 characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
@@ -611,34 +606,30 @@ characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: 
 stream cr; nextPutAll: ']]]'; cr.
 ]]]
 
-!!!!Comments
-||!Comments | |
-| ==\%== | each line starting with ==\%== is ignored 
+%||!Comments | |
+| ==\%== commented line | each line starting with ==\%== is ignored 
 
 
 !!!! Pictures
-
 = +Caption.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
 
 !!!! Tables
+%[[[language=pillar
+%||centered||!centered header||centered
+%|{ left |} right || center
+%]]]
 
-[[[language=pillar
-||centered||!centered header||centered
-|{ left |} right || center
-]]]
-
-|! Tables ||
-| ==\|\! Column1 | Column2 == 
+%|! Tables ||
+| ==\|\! Column1 \| Column2== | Two column header
 | ==\|\|== | centered
 | ==\|\{ left== | left
 | ==\|\} right== | right
 
 
 !!!!Annotated Paragraphs
-
-||!Annotated Paragraph | |
-| ==@@note== | 
-| ==@@todo== | 
+%||!Annotated Paragraph | |
+| ==@@note== | Produce a note paragraph
+| ==@@todo== | Produces a todo
 
 !!!! Code Blocks
 
