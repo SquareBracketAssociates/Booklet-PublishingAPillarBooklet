@@ -1,5 +1,6 @@
 !! Creating and Configuring a Booklet 
 
+@chagettingstarted
 In this part we will describe the complete setup starting just after the creation 
 of a git repository to version the booklet files. The example used for this is this booklet itself.
 The current installation refers to Pillar 5 or 6 and it will be updated to describe the simplified version put in place with Pillar 70. 
@@ -35,7 +36,7 @@ chmod +x download.sh
 
 !!!! Selecting and Installing Book
 Pillar come with several templates and you can define your own using mustache (see the book Entreprise Pharo: a Web perspective).
-By default pillar offers the following templates hosted at *https://github.com/pillar-markup/Pillar-Archetype*:
+By default Pillar offers the following templates:
 
 - Book. This is the template used in recent Pharo books and booklets. 
 - Presentation. These are the beamer templates used for example in the Pharo mooc. 

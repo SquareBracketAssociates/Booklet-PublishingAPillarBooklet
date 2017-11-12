@@ -1,0 +1,129 @@
+!! Templates
+
+@chausingtemplate
+
+As we showed in the Chapter *@chagettingstarted*, an archetype is a project skeleton that packages together a template, pillar configuration and an example.
+
+Basically you have:
+-pillar.conf
+-templates
+-... with some differences between archetypes
+
+To install a new archetype, launch this command :
+
+[[[language=bash
+./pillar archetype <archetypeName>
+]]]
+
+By default Pillar offers the following templates 
+- Book. This is the template used in recent Pharo books and booklets. 
+- Presentation. These are the beamer templates used for example in the Pharo mooc. 
+- Basic-latex. This template is good to generate basic reports. What is nice is that you do not need the latest version of latex packages. 
+- Welcome. This template is to teach how to build templates. 
+
+In this chapter we will explain how to define archetypes but first templates, since an archetype is mainly a template example.
+
+!!! A document (Update)
+
+Imagine that we have a pillar file name MyDocument.pillar.
+
+[[[
+! Hello from Pillar
+]]]
+
+
+[[[
+make book-result/MyDocument.html
+]]]
+
+
+!!! A template (update)
+@templating
+
+Pillar uses Mustache templating engine. Templates are filled in using Mustache (See the Mustache Chapter in ''Enterprise Pharo: a Web Perspective'' available at *http://books.pharo.org*).
+
+Here is an example HTML template using Mustache:
+
+[[[language=html
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>{{{title}}}</title>
+   </head>
+   <body>
+      <div class="container">
+         {{{content}}}
+      </div>
+   </body>
+</html>
+]]]
+
+In this example, we can see the use of ==\{\{\{title\}\}\}== and ==\{\{\{content\}\}\}== to refer to the title of the document and its actual content (the one
+exported from Pillar). You have to put such a template in a dedicated file (named ==chapter.html.template== for example) and refers this file from the
+config file or in your pillar document. 
+When you will compile to HTML, Pillar will use this template.
+
+
+!!! A Configuration (udpate)
+
+We should be able to produce something without a configuration!
+
+
+
+
+You can also use ==mustache== alone with command:
+
+[[[language=bash
+@@TOBEUPDATED ./mustache --data=file.html.json --template=myhtml.template > file.html
+]]]
+
+
+
+
+
+
+
+
+!!! Configuring your output
+
+@configuring
+
+In this section we show how to configure the export.
+
+!!!! Configuration File
+
+Pillar exporting mechanism can be configured using *STON>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/STON* (see corresponding chapter In Enterprise Pharo: a Web Perspective), a lightweight, text-based, human-readable data interchange format (similar to the popular JSON). Configuration is done either in ==pillar.conf== or at the beginning of Pillar files.
+
+!!!! Configuration Parameters
+@configParameters
+
+[[[eval=true
+CCDocumentationGeneration of: PRPillarConfiguration on: stream.
+]]]
+
+
+!!! Command-Line Interface
+@commandLineInterface
+
+In this section we show how to use the Pillar command-line interface.
+
+One of the basic uses of the command line is:
+
+[[[language=bash
+$ ./pillar export --to=latex PharoSound.pillar
+]]]
+
+[[[eval=true
+stream nextPutAll: 'You can select an export type with the parameter ==-\-to==. The possible exports are: '.
+(PRDocumentWriter withAllConcreteClasses collect: #writerName) asStringOn: stream delimiter: ', ' last: ' and '.
+stream nextPutAll: '.'
+]]]
+
+The ==Makefile== will create a symbolic link named ==root== referencing the output directory into each directory containing output files.
+You can use this symbolic link to reference files in specified in the ==support== collection.
+
+
+
+
+
+

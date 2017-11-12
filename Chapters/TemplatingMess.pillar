@@ -1,0 +1,254 @@
+
+
+
+!!! A template
+
+Then we have to create a template, for instance let's create welcome.html.template in the Pharo directory and fill in this template example:
+[[[
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>{{{title}}}</title>
+	</head>
+
+	<body>
+		<div class="container">
+			{{{content}}}
+		</div>
+	</body>
+</html>
+]]]
+
+Each template variable will be replaced by its values
+
+
+
+
+
+You can check the result in the stdout file which is placed in the Pharo directory
+
+-Exportation in latex
+The procedure is the same with other kind of document. This is an another example with latex
+
+In this example we show how to add a bibliography and how to export the result as pdf with pdflatex provided by (MiKTeX distribution)
+
+Let's set some attributes (title, content) in testLatex.pillar for instance
+
+[[[
+{
+    "metadata": {
+      "title":"My latex bibliography test with Pillar !"
+    }
+}
+
+my bibliography test
+{{{latex: \bibliographystyle{abbrv}
+\bibliography{rmod}
+}}}
+]]]
+
+We create testLatex.tex.json with the following command
+
+[[[
+Pharo.exe Pillar.image pillar export --to=latex --outputFile=testLatex testLatex.pillar
+]]]
+
+Then, let's create the template in testLatex.latex.template file for instance
+
+[[[
+\documentclass{article}
+
+\begin{document}
+
+Cite : first \cite{ref}, second \cite{ref2}, third \cite{ref3}.
+
+{{{content}}}
+
+\end{document}
+]]]
+
+We generate the document in the stdout file with the following command
+
+[[[
+Pharo.exe Pillar.image mustache --data=testLatex.tex.json --template=testLatex.latex.template
+]]]
+
+Create a bibliography if it doesn't exists and place it in the Pharo directory. In our example this is rmod.bib file
+
+Then, link the bibliography with the latex document
+[[[
+bibtex stdout
+]]]
+
+Create your pdf
+[[[
+pdflatex stdout
+]]]
+
+
+
+
+!!! Creating a first page
+You can create a first page naemd ==first.pillar== file with this content:
+
+[[[language=pillar
+!Hello World
+]]]
+
+And finally compiling it from a terminal (see Section *@commandLineInterface* for more information about the command-line interface). 
+
+[[[language=bash
+make build/first.html
+]]]
+
+This will generate a ''first.html'' file you can open in a web browser. The content of this file will be something like:
+
+[[[language=json
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <div class="container">
+      <section>
+        <h1>1. Hello World</h1>
+      </section>
+    </div>
+  </body>
+</html>
+]]]
+
+!!Configuring a Document
+
+As you can see, there is no document title in the generated ''first.html'' file. This is because we did not specify any. To specify a title, we have to add it with a configuration
+at the beginning of the ''first.pillar'' file:
+
+[[[language=pillar
+{
+   "metadata": {
+     "title": "My first document while reading the 5 minutes Pillar tutorial"
+    }
+}
+
+!Hello World
+]]]
+
+When you compile using the same command line,
+
+[[[language=bash
+make build/first.html
+]]]
+
+you should now get a web page with a title:
+
+[[[language=html
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>My first document while reading the 5 minutes Pillar tutorial</title>
+   </head>
+]]]
+
+Another way to achieve the same is to use a dedicated configuration file. This configuration is typically named ==pillar.conf== and is written in the
+STON format (see Section *@configuring* for more information about the configuration file). Create your
+first ==pillar.conf== file:
+
+[[[language=ston
+{
+     "title" : "My first document from pillar.conf"
+}
+]]]
+
+Meta-information specified in Pillar files take precedence over configuration in the ==pillar.conf== file. To see the new title, you thus have to remove the one in ==first.pillar==.
+
+!!Exporting a Different Content Using a Template
+
+If you want to tweak the content of the exported file, for example to reference your CSS or to add a footer, you need to create your own template (see Section
+*@templating* for more information about templating). You must write such template in its own file, e.g., ==myhtml.template==:
+
+[[[language=html
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>{{{title}}}</title>
+   </head>
+   <body>
+      <div class="container">
+         {{{content}}}
+      </div>
+      <footer>
+         <p>{{author}}, {{year}}</p>
+      </footer>
+   </body>
+</html>
+]]]
+
+Then, to use this template, you need to replace the ==HTMLTEMPLATE== variable in the ==Makefile==. So, edit your ==Makefile==:
+
+[[[language=bash
+HTMLTEMPLATE = myhtml.template
+]]]
+
+Now, write your name in ==first.pillar== :
+
+[[[language=pillar
+{
+  "author": "Damien Cassou"
+}
+
+!Hello World
+]]]
+
+You can also write the year in the ==pillar.conf== file:
+
+[[[language=ston
+{
+  "title":"My first document from pillar.conf",
+  "year":"2016"
+}
+]]]
+
+Finally, compile ==first.pillar== one last time
+
+[[[language=bash
+@@Update make book-result/first.html
+]]]
+
+to generate a file containing:
+
+[[[language=html
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>My first document from pillar.conf</title>
+   </head>
+   <body>
+      <div class="container"> [...]
+         <h1>Hello World</h1>
+      </div>
+      <footer>
+         <p>Damien Cassou, 2016</p>
+      </footer>
+   </body>
+</html>
+]]]
+
+Look at how the HTML template (==myhtml.template==) references ==title==, ==author== and ==year==. These variables are referenced by enclosing them in 3 curly braces. The templating
+engine that transforms your templates in documents is Mustache (see chapter *@cha:mustache*. As you can see, I decided to put the author of the document in the ==first.pillar== file whereas the year and title are specified in ==pillar.conf==: this is arbitrary and you can do whatever suits you
+best: the differences being that the ==pillar.conf== file applies to all Pillar files of the project and that file meta-information takes precedence.
+
+This concludes our 5 minutes tutorial.
+
+
+
+
+
+
+
+
+
+
+
+
+

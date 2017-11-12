@@ -8,4 +8,10 @@ ${inputFile:Chapters/GettingStarted.pillar}$
 
 ${inputFile:Chapters/PillarSyntax.pillar}$
 
+${inputFile:Chapters/Templating.pillar}$
+
+${inputFile:Chapters/InPharo.pillar}$
+
 ${inputFile:Chapters/TravisBintray.pillar}$
+
+${inputFile:Chapters/CheatSheet.pillar}$
