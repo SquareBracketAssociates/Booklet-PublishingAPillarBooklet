@@ -1,8 +1,11 @@
 !! Pillar Core Syntactic Elements
 @chawriting
 
-In this section we show how to write Pillar documents by presenting the Pillar syntax. You might want to have a look at the
-*cheat sheet>http://pillarhub.pharocloud.com/hub/pillarhub/pillarcheatsheet* and even download and print it.
+In this section we show how to write Pillar documents by presenting the Pillar syntax. Have a look at the
+*cheat sheet>http://pillarhub.pharocloud.com/hub/pillarhub/pillarcheatsheet*. We use the current text as example, notice however, that some results may be different on other support like HTML because of different common practices (for example creating an anchor with the reference instead of a footnote for an external link).
+
+It is important to see that since Pillar is extensible plugins may extend the default markup. The extensions mechanisms
+allows one not to learn new syntax just new tags and parameters as will present later.
 
 !!! Meta-Information
 
@@ -30,9 +33,9 @@ A line starting with ==!== represents a heading. Use multiple ==!== to create se
 !!!Headings: Chapters & Sections
 ]]]
 
-is the way the current section is created. The exporter and template may interpret the section the way they want. 
+is the way the current section is created. The exporter and template may interpret the section the way they want (.i.e., for example outputing ==\subsection== instead of ==\section==).
 
-Note: some exporters support the possibility to specify a level of interpretation for ==!==. 
+Some exporters support the possibility to specify a level of interpretation for ==!==.
 ==headingLevelOffset== controls how to convert from the level of a Pillar heading to the level of heading in your exported document.
 For example, a ==headingLevelOffset== of 3 converts a 1st level Pillar heading to an ==<h4>== in HTML.
 
@@ -42,29 +45,47 @@ For example, a ==headingLevelOffset== of 3 converts a 1st level Pillar heading t
 
 !!! References and Links
 
-To refer to a section or chapter, put an anchor (equivalent to \\label{chapterAndSections} in LaTeX) using the ==@chapterAndSections== syntax on a
-''separate line''. Then, when you want to refer to it (equivalent to \\ref{chapterAndSections} in LaTeX), use the ==\*@chapterAndSections\*== syntax. Anchors are invisible and links will be rendered as: *@chapterAndSections*.
+!!!! Defining an anchor
+ To refer to a section or chapter, put an anchor (equivalent to \\label{chapterAndSections} in LaTeX) using the ==@chapterAndSections== syntax on a ''separate line''. 
+ 
+[[[
+@chapterAndSections
+]]]
+ 
+!!!! Refering to an anchor
+When you want to refer to it (equivalent to \\ref{chapterAndSections} in LaTeX), use the ==\*@chapterAndSections\*== syntax. Anchors are invisible and links will be rendered as: *@chapterAndSections*.
+
+[[[
+*@chapterAndSections*
+]]]
 
 !!!! Alias
-You can create alias for links (this is especially adapted for web sites containing reference to other pages).
+
+You can create alias for links. Tthis is especially adapted for web sites containing reference to other pages.
 
 [[[
 *Chapters>chapterAndSections*
 ]]]
 
-creates the link *Chapters>chapterAndSections*.
+creates the link *Chapters>chapterAndSections*. Again the template may interpret this differently than a LaTeX footnote.
 
 
-To create a link to another pillar file, use the ==\*Alias>path.pillar@anchorName\*==. The Alias and the anchor are optional but you will need them in some cases (for example if you have an inter-file link and you export in LaTeX, or if you have an inter-file link and you export all your file in the same html file).
+To create a link to another pillar file, use the ==\*Alias>File.pillar@AnchorName\*==. The alias and anchor parts are optional but you will need them in some cases (for example if you have an inter-file link and you export in LaTeX, or if you have an inter-file link and you export all your file in the same html file).
 
 !!!!External Links
 
-To create links to external resources, use the ==\*Pharo>http://pharo.org/\*== syntax which is rendered as *Pharo>http://pharo.org/*. The same syntax can also represent email addresses: write ==\*damien@cassou.me\*== to get *damien@cassou.me*.
+To create links to external resources, use the ==\*Pharo>http://pharo.org/\*== syntax which is rendered as *Pharo>http://pharo.org/*. 
+
+[[[
+*http://www.pharo.org*
+]]]
+
+The same syntax can also represent email addresses: write ==\*dupond@free.fr\*== to get *dupond@free.fr*.
 
 
 !!! Lists
-
-!!!! Unordered Lists
+Pillar offers three default lists: Bullet, numbered and labelled. 
+!!!! Bulleted Lists
 
 [[[language=pillar
 -A block of lines,
@@ -78,36 +99,36 @@ generates
 -where each line starts with ==-==
 -is transformed to a bulleted list
 
-!!!!Ordered Lists
+!!!!Numbered Lists
 
 [[[language=pillar
 #A block of lines,
 #where each line starts with ==#==
-#is transformed to an ordered list
+#is transformed to a numbered list
 ]]]
 
 generates
 
 #A block of lines,
 #where each line starts with ==#==
-#is transformed to an ordered list
+#is transformed to a numbered list
 
 !!!!Definition Lists
 
 Definition lists (''aka.'' description lists) are lists with labels:
 
 [[[language=pillar
-;blue
+;blue.
 :color of the sky
-;red
+;red.
 :color of the fire
 ]]]
 
 generates
 
-;blue
+;blue.
 :color of the sky
-;red
+;red.
 :color of the fire
 
 !!!!List Nesting
@@ -135,6 +156,12 @@ There is some syntax for text formatting:
 -To make something @@subscript@@, write ==\@@subscript\@@==
 -To make something ^^superscript^^, write ==\^^superscript\^^==
 -To make something __underlined__, write ==\__underlined\__==
+
+
+
+
+
+
 
 
 !!! Annotated Paragraphs
@@ -240,18 +267,33 @@ generates
 |{ left |} right || center
 
 
+!!!Preformatted (less used)
+
+To create a preformatted block, begin each line with ==\===. A preformatted block uses equally spaced text so that spacing is preserved. In general you should prefer scripts over preformatted blocks.
+
+= = this is preformatted text
+= = this line as well
+
+!!!Commented Lines
+
+Lines that start with a ==%== are considered comments and will not be rendered in the resulting document.
+
+!!!Escaping Characters
+
+Special characters (e.g., ==\+== and ==\*==) must be escaped with a backslash: to get a ==\+==, you actually have to write ==\\\+==. The list of characters to escape is:
+
+[[[eval=true
+| characters |
+characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
+stream nextPutAll: '[[['; cr.
+characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
+stream cr; nextPutAll: ']]]'; cr.
+]]]
 
 
-!!! Extensions
 
-!!!!Semantic Links
 
-Semantic links are a way to simplify links to standard websites such as Wikipedia and Youtube.
 
-To create semantic links ressources, use the ==\*Wikipedia Pharo>wikipedia:Pharo\*== syntax which is rendered as *Wikipedia Pharo>wikipedia:Pharo*.
-To specify a language, you can use the ==\*Wikipedia Pharo>wikipedia:Pharo|lang=en\*== syntax which is rendered as *Wikipedia Pharo>wikipedia:Pharo|lang=en*
-
-Same for Youtube links : ==\*Youtube Pharo>youtube:KDvNuOjdjY4\*==, the result is : *Youtube Pharo>youtube:KDvNuOjdjY4*.
 
 !!!Pictures
 
@@ -377,22 +419,7 @@ stream
 
 For example section *@configParameters* of this chapter is generated.
 
-!!!Structures
 
-You can create structures to render all structures with the same name as the same object.
-Structures use the scripts syntax (see *@scripts*) with a particular parameter ==structure==
-
-= [[[structure=exercise
-= {
-=   "question":"What is the answer to life, the universe and everything ?",
-=   "answer":"42"
-= }
-= ]]]
-
-There is two kind of structures for the moment:
--exercise, rendered as a definition list
--city, rendered as a table
--country, rendered as a table
 
 !!!Raw
 
@@ -413,7 +440,12 @@ A good practice is to always specify for which kind of export the raw text must 
 ""Take care:"" avoid terminating the verbatim text with a ==}== as
 this will confuse the parser. So, don't write --==\{{{\\begin{scriptsize}}}}==-- but ==\{{{\\begin{scriptsize} }}}== instead.
 
-!!!Annotations
+
+
+
+
+
+!!Annotations: Extension Mechanism
 
 Annotations are the Pillar way to have extensible syntax. An annotation has this syntax:
 
@@ -431,15 +463,24 @@ ${inputFile:test.pillar}$
 ${inputFile:chapter2/chapter2.pillar}$
 ]]]
 
-!!!! Footnotes Annotation
+!!!! Footnote Annotation
 
-You can add footnotes to explain or annotate words. The ==footnotes== annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
+You can add footnotes to explain or annotate words. The ==footnote== annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
 
 [[[
 Foo${footnote:Some Explanation for Foo}$
 ]]]
 
-!!!!Citations
+
+
+
+
+
+!! Support Specific Markup
+
+!!! LaTeX Specific
+
+!!!! Citations
 
 Citations are only available for LaTeX.
 You can add citations to your document to reference an element in a LaTeX bibliography. The ==cite== annotationtakes as parameter the key of the reference in the bibliography.
@@ -453,21 +494,22 @@ The exemple above wil render as ==\cite{reference}==
 If you want to use other type of citations like ==citep== or ==citet==, please overwrite the command in your LaTeX template:
 ==\renewcommand{\cite}{\citep}==
 
-@@todo á vérifier
+
+!!! Slide Specific
+
 
 !!!! Slide Annotation
 @sec:slide
 
 This annotation is used to create slides structure for a ==beamer== or a ==deck.js== export.
 The parameter ""title"" is required.
-The ""label"" parameter can be used to reference this slide in another slide:
+The ""label"" parameter can be used to refer to this slide in another slide:
 
 [[[language=pillar
 ${slide:title=My slide|label=sld:mySlide}$
 ]]]
 
 !!!! Columns
-
 
 With Pillar you can put text and other contents in columns.
 To do that, you need to delimit an environment with the ==columns== and ==endColumns== annotations.
@@ -476,35 +518,84 @@ The column annotation takes 1 required parameter: the width of the column. Here 
 
 [[[language=pillar
 ${columns}$
+
    ${column:width=60}$
       bla
    ${column:40}$
       bla
+
 ${endColumns}$
 ]]]
 
 @@note The column annotations currently works only for the beamer, HTML and Deck.js export.
 
-!!!Preformatted (less used)
 
-To create a preformatted block, begin each line with ==\===. A preformatted block uses equally spaced text so that spacing is preserved. In general you should prefer scripts over preformatted blocks.
 
-= = this is preformatted text
-= = this line as well
 
-!!!Commented Lines
+!!!Under Development
 
-Lines that start with a ==%== are considered comments and will not be rendered in the resulting document.
 
-!!!Escaping Characters
+!!!!Semantic Links
 
-Special characters (e.g., ==\+== and ==\*==) must be escaped with a backslash: to get a ==\+==, you actually have to write ==\\\+==. The list of characters to escape is:
+Semantic links are a way to simplify links to standard websites such as Wikipedia and Youtube.
 
-[[[eval=true
-| characters |
-characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
-stream nextPutAll: '[[['; cr.
-characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
-stream cr; nextPutAll: ']]]'; cr.
-]]]
+To create semantic links ressources, use the ==\*Wikipedia Pharo>wikipedia:Pharo\*== syntax which is rendered as *Wikipedia Pharo>wikipedia:Pharo*.
+To specify a language, you can use the ==\*Wikipedia Pharo>wikipedia:Pharo|lang=en\*== syntax which is rendered as *Wikipedia Pharo>wikipedia:Pharo|lang=en*.
 
+Same for Youtube links : ==\*Youtube Pharo>youtube:KDvNuOjdjY4\*==, the result is : *Youtube Pharo>youtube:KDvNuOjdjY4*.
+
+Note that such feature will be probably revised to be more generic and let the user define other semantic links. 
+
+!!!! Structures
+
+You can create structures to render all structures with the same name as the same object.
+Structures use the scripts syntax (see *@scripts*) with a particular parameter ==structure==
+
+= [[[structure=exercise
+= {
+=   "question":"What is the answer to life, the universe and everything ?",
+=   "answer":"42"
+= }
+= ]]]
+
+There is two kind of structures for the moment:
+-exercise, rendered as a definition list
+-city, rendered as a table
+-country, rendered as a table
+
+
+
+!! Pillar Cheatsheet
+
+!!!! Headings
+||!Headings| |
+|{ ==! Heading== | Heading 1 
+|{ ==!! Heading== | Heading 2 
+|{ ==!!! Heading== | Heading 3 
+
+!!!! Anchors and Links 
+||!Anchors and References | |
+|{ ==@anchor== | anchor 
+|{ ==\*\@Internal Link\*== | Internal link 
+|{ ==\*http://www.pharo.org\*== | External link 
+|{ ==\*Pharo\>http://www.pharo.org\*== | Alias external link
+
+!!!! Lists
+
+||!Lists | |
+|{ ==\-bullet== | 
+|{ ==\#numbered== |  
+|{ ==\;description :definition== | 
+
+
+
+!!!!Formatting
+
+||!Formatting | |
+| ==\""bold\""== |""bold""
+| ==\''italic\''== | ''italic''
+| ==\=\=monospaced\=\=== |  ==monospaced==
+|  ==\--strikethrough\--== | --strikethrough--
+| ==\@@subscript\@@== | @@subscript@@
+| ==\^^superscript\^^== | ^^superscript^^
+| ==\__underlined\__== | __underlined__

@@ -2,6 +2,7 @@
 
 In this part we will describe the complete setup starting just after the creation 
 of a git repository to version the booklet files. The example used for this is this booklet itself.
+The current installation refers to Pillar 5 or 6 and it will be updated to describe the simplified version put in place with Pillar 70. 
 
 We take as hypothesis that you want to version your document on gihub but Pillar does not care about this. 
 Now in the next chapter we will explain how to use github service integration. Such services only work with github.
