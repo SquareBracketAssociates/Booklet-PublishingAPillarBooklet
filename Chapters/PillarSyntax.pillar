@@ -174,12 +174,18 @@ There is some syntax for text formatting:
 -To make something __underlined__, write ==\__underlined\__==
 
 
+!!!Pictures
+To include a picture, use the syntax ==\+caption>file://filename|parameters+==:
 
+[[[language=pillar
++Caption of the picture.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
+]]]
 
+generates Figure *@pharoLogo* (this reference has been generated using ==\*@pharoLogo*==).
 
+Parameters are pairs =="label"="value"== separated by ==\|==.
 
-
-
++Caption of the picture.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
 
 
 !!!Tables
@@ -203,33 +209,15 @@ The contents of cells can be aligned left, centered or aligned right by using ==
 |{ left |} right || center
 ]]]
 
-generates
+generates:
 
 ||centered||!centered header||centered
 |{ left |} right || center
 
 
 
-
-
-
-
-
-!!!Pictures
-
-To include a picture, use the syntax ==\+caption>file://filename|parameters+==:
-
-[[[language=pillar
-+Caption of the picture>file://figures/pharo-logo.png|width=50|label=pharoLogo+
-]]]
-
-generates Figure *@pharoLogo* (this reference has been generated using ==\*@pharoLogo*==).
-
-+This is the caption of the picture>file://figures/pharo-logo.png|width=50|label=pharoLogo+
-
 !!!Preformatted
-
-To create a preformatted block, begin each line with ==\===. A preformatted block uses equally spaced text so that spacing is preserved. In general you should prefer code block over preformatted blocks.
+To create a preformatted block, begin each line with ==\===. A preformatted block uses equally spaced text so that spacing is preserved. In general you should prefer code block over preformatted blocks. Code blocks more powerful. 
 
 = = this is preformatted text
 = = this line as well
@@ -237,7 +225,8 @@ To create a preformatted block, begin each line with ==\===. A preformatted bloc
 !!!Code Block
 @scripts
 
-Use code blocks when you want to add code blocks to your document.
+Use code blocks when you want to add code snippets to your document.
+Code blocks are delimited by ==\[\[\[== and ==\]\]\]==.
 
 = [[[
 = foo bar
@@ -449,8 +438,10 @@ this will confuse the parser. So, don't write --==\{{{\\begin{scriptsize}}}}==--
 
 
 
-!!Annotations: Extension Mechanism
+!!Extension Mechanisms
 
+
+!!! Annotations
 Annotations are the Pillar way to have extensible syntax. An annotation has this syntax:
 
 [[[language=pillar
@@ -475,6 +466,16 @@ You can add footnotes to explain or annotate words. The ==footnote== annotation 
 Foo${footnote:Some Explanation for Foo}$
 ]]]
 
+!!!Parameters
+
+Pictures and scripts are both using parameters to specify different options and variations. Parameters are pairs =="label"="value"== separated by ==\|==.
+
+Here are two examples within the same expressions: Code blocks and captions use parameters.
+
+[[[label=foobar|caption=My code block that works|language=pillar
++Caption of the picture.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
+]]]
+
 
 
 
@@ -483,7 +484,7 @@ Foo${footnote:Some Explanation for Foo}$
 !! Support Specific Markup
 This chapter presents extensions specific to a given support such as LaTeX or slides.
 
-!!! LaTeX Specific
+!!! LaTeX
 
 !!!! Citations
 
@@ -500,7 +501,7 @@ If you want to use other type of citations like ==citep== or ==citet==, please o
 ==\renewcommand{\cite}{\citep}==
 
 
-!!! Slide Specific
+!!! Slide
 
 
 !!!! Slide Annotation
@@ -604,11 +605,51 @@ There is two kind of structures for the moment:
 | ==\^^superscript\^^== | ^^superscript^^
 | ==\__underlined\__== | __underlined__
 
+Character to be escaped using ==\\== are
+[[[eval=true
+| characters |
+characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
+stream nextPutAll: '[[['; cr.
+characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
+stream cr; nextPutAll: ']]]'; cr.
+]]]
 
 !!!!Comments
 ||!Comments | |
 | ==\%== | each line starting with ==\%== is ignored 
 
-!!!Preformatted
 
+!!!! Pictures
+
+= +Caption.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
+
+!!!! Tables
+
+[[[language=pillar
+||centered||!centered header||centered
+|{ left |} right || center
+]]]
+
+|! Tables ||
+| ==\|\! Column1 | Column2 == 
+| ==\|\|== | centered
+| ==\|\{ left== | left
+| ==\|\} right== | right
+
+
+!!!!Annotated Paragraphs
+
+||!Annotated Paragraph | |
+| ==@@note== | 
+| ==@@todo== | 
+
+!!!! Code Blocks
+
+= [[[
+= self foo bar
+= ]]]
+
+= [[[label=foobar|caption=My code block that works|language=smalltalk
+= self foo bar
+= ]]]
 
