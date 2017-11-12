@@ -145,6 +145,22 @@ generates
 -#Thus, a line starting with ==-#==
 -#is an element of a bulleted list that is part of an ordered list.
 
+!!!Commented Lines
+
+Lines that start with a ==%== are considered comments and will not be rendered in the resulting document.
+
+!!!Escaping Characters
+
+Special characters (e.g., ==\+== and ==\*==) must be escaped with a backslash: to get a ==\+==, you actually have to write ==\\\+==. The list of characters to escape is:
+
+[[[eval=true
+| characters |
+characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
+stream nextPutAll: '[[['; cr.
+characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
+stream cr; nextPutAll: ']]]'; cr.
+]]]
+
 
 !!!Formatting
 There is some syntax for text formatting:
@@ -162,6 +178,177 @@ There is some syntax for text formatting:
 
 
 
+
+
+
+
+!!!Tables
+To create a table, start the lines with ==|== and separate the elements with ==|==. Each new line represents a new row of the table. Add a single ==!== to let the cell become a table heading.
+
+[[[language=pillar
+|!Country |!Capital
+|France | Paris
+|Belgium | Brussels
+]]]
+
+|!Country |!Capital
+|France | Paris
+|Belgium | Brussels
+
+
+The contents of cells can be aligned left, centered or aligned right by using ==|{==, ==||== or ==|}== respectively.
+
+[[[language=pillar
+||centered||!centered header||centered
+|{ left |} right || center
+]]]
+
+generates
+
+||centered||!centered header||centered
+|{ left |} right || center
+
+
+
+
+
+
+
+
+!!!Pictures
+
+To include a picture, use the syntax ==\+caption>file://filename|parameters+==:
+
+[[[language=pillar
++Caption of the picture>file://figures/pharo-logo.png|width=50|label=pharoLogo+
+]]]
+
+generates Figure *@pharoLogo* (this reference has been generated using ==\*@pharoLogo*==).
+
++This is the caption of the picture>file://figures/pharo-logo.png|width=50|label=pharoLogo+
+
+!!!Preformatted
+
+To create a preformatted block, begin each line with ==\===. A preformatted block uses equally spaced text so that spacing is preserved. In general you should prefer code block over preformatted blocks.
+
+= = this is preformatted text
+= = this line as well
+
+!!!Code Block
+@scripts
+
+Use code blocks when you want to add code blocks to your document.
+
+= [[[
+= foo bar
+= ]]]
+
+generates
+
+[[[
+foo bar
+]]]
+
+!!!! Code Block with a Label or Caption
+
+If you want either a label (to reference the code later) or a caption (to give a nice title to the code block), write the following:
+
+= [[[label=foobar|caption=My code block that works|language=smalltalk
+= self foo bar
+= ]]]
+
+which produces script *@foobar* (this reference is produced with ==\*@foobar\*==).
+
+[[[label=foobar|caption=My code block that works|language=smalltalk
+self foo bar
+]]]
+
+!!!! Code Block Syntax Highlighting
+@sec:syntaxHighlighting
+
+To specify the syntax a code block is written in, you need to use the ==language== parameter.
+For example on *@foobar* we used the ==smalltalk== value for the ==language== parameter.
+
+
+!!!! Code Block with Line Numbers
+
+If you need to explain a long piece of code, you may want a code block to have line numbers:
+
+= [[[lineNumber=true
+= self foo bar.
+= self bar foo.
+= ]]]
+
+produces
+
+[[[lineNumber=true
+self foo bar.
+self bar foo.
+]]]
+
+!!!! Code Block from an External File
+
+If you want you can also include a code block from a external file. For example if you have a file `myProject.html` and you want to take the code from line 15 to
+line 45, instead of copy/pasting the code you can use:
+
+= [[[language=html|fromFile=myProject.html|firstLine=15|lastLine=45
+= ]]]
+
+The ==firstLine== and ==lastLine== parameters are optional.
+
+!!!! Execution
+
+[[[eval=true
+| languages |
+stream nextPutAll: '@@note The currently supported languages are '.
+languages := PRRealScriptLanguage withAllConcreteClasses collect: #standardName.
+languages asStringOn: stream delimiter: ', ' last: ' and '
+]]]
+
+If you don't want syntax highlighting for a particular script, specify ==no language== as value to the ==language== parameter.
+
+
+!!!! Generate a Part of your Document with a Script
+
+If you want you can also evaluate a script to generate a part of your document.
+For example if you write a project's documentation and want to give some metrics about its code, you can write something like this:
+
+= [[[eval=true
+= | packages classes |
+= packages := RPackageOrganizer default packages select: [ :each |
+=                each name includesSubstring: 'Pillar' ].
+= classes := packages flatCollect: [ :each | each classes ].
+= stream
+=    nextPutAll: 'The Pillar project contains:';
+=    lf;
+=    nextPutAll: '- ==';
+=    print: packages size;
+=    nextPutAll: ' packages==.';
+=    lf;
+=    nextPutAll: '- ==';
+=    print: classes size;
+=    nextPutAll: ' classes=='.
+= ]]]
+
+will generate:
+
+[[[eval=true
+| packages classes |
+packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
+classes := packages flatCollect: [ :each | each classes ].
+stream
+   nextPutAll: 'The Pillar project contains:';
+   lf;
+   nextPutAll: '- ==';
+   print: packages size;
+   nextPutAll: ' packages==.';
+   lf;
+   nextPutAll: '- ==';
+   print: classes size;
+   nextPutAll: ' classes=='.
+]]]
+
+For example section *@configParameters* of this chapter is generated.
 
 
 !!! Annotated Paragraphs
@@ -240,186 +427,6 @@ Above code will prepend the titles "Note" and "To do" to the ==@\@note== and ==@
 ]]]
 
 
-!!!Tables
-To create a table, start the lines with ==|== and separate the elements with ==|==. Each new line represents a new row of the table. Add a single ==!== to let the cell become a table heading.
-
-[[[language=pillar
-|!Country |!Capital
-|France | Paris
-|Belgium | Brussels
-]]]
-
-|!Country |!Capital
-|France | Paris
-|Belgium | Brussels
-
-
-The contents of cells can be aligned left, centered or aligned right by using ==|{==, ==||== or ==|}== respectively.
-
-[[[language=pillar
-||centered||!centered header||centered
-|{ left |} right || center
-]]]
-
-generates
-
-||centered||!centered header||centered
-|{ left |} right || center
-
-
-!!!Preformatted (less used)
-
-To create a preformatted block, begin each line with ==\===. A preformatted block uses equally spaced text so that spacing is preserved. In general you should prefer scripts over preformatted blocks.
-
-= = this is preformatted text
-= = this line as well
-
-!!!Commented Lines
-
-Lines that start with a ==%== are considered comments and will not be rendered in the resulting document.
-
-!!!Escaping Characters
-
-Special characters (e.g., ==\+== and ==\*==) must be escaped with a backslash: to get a ==\+==, you actually have to write ==\\\+==. The list of characters to escape is:
-
-[[[eval=true
-| characters |
-characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
-stream nextPutAll: '[[['; cr.
-characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
-stream cr; nextPutAll: ']]]'; cr.
-]]]
-
-
-
-
-
-
-!!!Pictures
-
-To include a picture, use the syntax ==\+caption>file://filename|parameters+==:
-
-[[[language=pillar
-+Caption of the picture>file://figures/pharo-logo.png|width=50|label=pharoLogo+
-]]]
-
-generates Figure *@pharoLogo* (this reference has been generated using ==\*@pharoLogo*==).
-
-+This is the caption of the picture>file://figures/pharo-logo.png|width=50|label=pharoLogo+
-
-!!!Scripts
-@scripts
-
-Use scripts when you want to add code blocks to your document.
-
-= [[[
-= foo bar
-= ]]]
-
-generates
-
-[[[
-foo bar
-]]]
-
-!!!! Script with a Label or Caption
-
-If you want either a label (to reference the script later) or a caption (to give a nice title to the script), write the following:
-
-= [[[label=script1|caption=My script that works|language=smalltalk
-= self foo bar
-= ]]]
-
-which produces script *@script1* (this reference is produced with ==\*@script1\*==).
-
-[[[label=script1|caption=My script that works|language=smalltalk
-self foo bar
-]]]
-
-!!!! Syntax Highlighting
-@sec:syntaxHighlighting
-
-To specify the syntax a script is written in, you need to use the ==language== parameter.
-For example on *@script1* we used the ==smalltalk== value for the ==language== parameter.
-
-[[[eval=true
-| languages |
-stream nextPutAll: '@@note The currently supported languages are '.
-languages := PRRealScriptLanguage withAllConcreteClasses collect: #standardName.
-languages asStringOn: stream delimiter: ', ' last: ' and '
-]]]
-
-If you don't want syntax highlighting for a particular script, specify ==no language== as value to the ==language== parameter.
-
-!!!! Script with Line Numbers
-
-If you need to explain a long piece of code, you may want a script to have line numbers:
-
-= [[[lineNumber=true
-= self foo bar.
-= self bar foo.
-= ]]]
-
-produces
-
-[[[lineNumber=true
-self foo bar.
-self bar foo.
-]]]
-
-!!!! Script from an External File
-
-If you want you can also include a script from a external file. For example if you have a file `myProject.html` and you want to take the code from line 15 to
-line 45, instead of copy/pasting the code you can use:
-
-= [[[language=html|fromFile=myProject.html|firstLine=15|lastLine=45
-= ]]]
-
-The ==firstLine== and ==lastLine== parameters are optional.
-
-!!!! Generate a Part of your Document with a Script
-
-If you want you can also evaluate a script to generate a part of your document.
-For example if you write a project's documentation and want to give some metrics about its code, you can write something like this:
-
-= [[[eval=true
-= | packages classes |
-= packages := RPackageOrganizer default packages select: [ :each |
-=                each name includesSubstring: 'Pillar' ].
-= classes := packages flatCollect: [ :each | each classes ].
-= stream
-=    nextPutAll: 'The Pillar project contains:';
-=    lf;
-=    nextPutAll: '- ==';
-=    print: packages size;
-=    nextPutAll: ' packages==.';
-=    lf;
-=    nextPutAll: '- ==';
-=    print: classes size;
-=    nextPutAll: ' classes=='.
-= ]]]
-
-will generate:
-
-[[[eval=true
-| packages classes |
-packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
-classes := packages flatCollect: [ :each | each classes ].
-stream
-   nextPutAll: 'The Pillar project contains:';
-   lf;
-   nextPutAll: '- ==';
-   print: packages size;
-   nextPutAll: ' packages==.';
-   lf;
-   nextPutAll: '- ==';
-   print: classes size;
-   nextPutAll: ' classes=='.
-]]]
-
-For example section *@configParameters* of this chapter is generated.
-
-
 
 !!!Raw
 
@@ -439,9 +446,6 @@ A good practice is to always specify for which kind of export the raw text must 
 
 ""Take care:"" avoid terminating the verbatim text with a ==}== as
 this will confuse the parser. So, don't write --==\{{{\\begin{scriptsize}}}}==-- but ==\{{{\\begin{scriptsize} }}}== instead.
-
-
-
 
 
 
@@ -477,6 +481,7 @@ Foo${footnote:Some Explanation for Foo}$
 
 
 !! Support Specific Markup
+This chapter presents extensions specific to a given support such as LaTeX or slides.
 
 !!! LaTeX Specific
 
@@ -533,7 +538,6 @@ ${endColumns}$
 
 
 !!!Under Development
-
 
 !!!!Semantic Links
 
@@ -599,3 +603,12 @@ There is two kind of structures for the moment:
 | ==\@@subscript\@@== | @@subscript@@
 | ==\^^superscript\^^== | ^^superscript^^
 | ==\__underlined\__== | __underlined__
+
+
+!!!!Comments
+||!Comments | |
+| ==\%== | each line starting with ==\%== is ignored 
+
+!!!Preformatted
+
+
