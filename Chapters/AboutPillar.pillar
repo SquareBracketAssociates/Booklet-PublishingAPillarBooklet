@@ -25,7 +25,7 @@ Pillar has many features, helpful tools, and documentation:
 - a *cheat sheet>http://pillarhub.pharocloud.com/hub/pillarhub/pillarcheatsheet*
 
 
-!!!Pillar Users
+!!!Pillar users
 @pillarUSERS
 
 This book was written in Pillar. If you want to see how Pillar is used, have a look at its source code (*http://books.pharo.org/enterprise-pharo/*), or check the following other real-world projects:

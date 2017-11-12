@@ -1,4 +1,4 @@
-!! Pillar Core Syntactic Elements
+!! Pillar core syntactic elements
 @chawriting
 
 In this section we show how to write Pillar documents by presenting the Pillar syntax. Have a look at the
@@ -24,7 +24,7 @@ For example, the following Pillar file,
 
 represents a Pillar document with the title and author set. You can use whatever keys you like. The metadata keys can be used in templates (see Chapter *@templating* for more information about templating).
 
-!!! Headings: Chapters & Sections
+!!! Headings: Chapters & sections
 @chapterAndSections
 
 A line starting with ==!== represents a heading. Use multiple ==!== to create sections and subsections.
@@ -43,23 +43,23 @@ For example, a ==headingLevelOffset== of 3 converts a 1st level Pillar heading t
 "headingLevelOffset" : 3
 ]]]
 
-!!! References and Links
+!!! References and links
 
-!!!! Defining an anchor
+!!!!Anchor definition
  To refer to a section or chapter, put an anchor (equivalent to \\label{chapterAndSections} in LaTeX) using the ==@chapterAndSections== syntax on a ''separate line''. 
  
 [[[
 @chapterAndSections
 ]]]
  
-!!!! Refering to an anchor
+!!!!Anchor reference
 When you want to refer to it (equivalent to \\ref{chapterAndSections} in LaTeX), use the ==\*@chapterAndSections\*== syntax. Anchors are invisible and links will be rendered as: *@chapterAndSections*.
 
 [[[
 *@chapterAndSections*
 ]]]
 
-!!!! Alias
+!!!!Alias
 
 You can create alias for links. Tthis is especially adapted for web sites containing reference to other pages.
 
@@ -72,7 +72,7 @@ creates the link *Chapters>chapterAndSections*. Again the template may interpret
 
 To create a link to another pillar file, use the ==\*Alias>File.pillar@AnchorName\*==. The alias and anchor parts are optional but you will need them in some cases (for example if you have an inter-file link and you export in LaTeX, or if you have an inter-file link and you export all your file in the same html file).
 
-!!!!External Links
+!!!!External links
 
 To create links to external resources, use the ==\*Pharo>http://pharo.org/\*== syntax which is rendered as *Pharo>http://pharo.org/*. 
 
@@ -85,7 +85,8 @@ The same syntax can also represent email addresses: write ==\*dupond@free.fr\*==
 
 !!! Lists
 Pillar offers three default lists: Bullet, numbered and labelled. 
-!!!! Bulleted Lists
+
+!!!! Bulleted lists
 
 [[[language=pillar
 -A block of lines,
@@ -99,7 +100,7 @@ generates
 -where each line starts with ==-==
 -is transformed to a bulleted list
 
-!!!!Numbered Lists
+!!!!Numbered lists
 
 [[[language=pillar
 #A block of lines,
@@ -113,7 +114,7 @@ generates
 #where each line starts with ==#==
 #is transformed to a numbered list
 
-!!!!Definition Lists
+!!!!Definition lists
 
 Definition lists (''aka.'' description lists) are lists with labels:
 
@@ -131,7 +132,7 @@ generates
 ;red.
 :color of the fire
 
-!!!!List Nesting
+!!!!List nesting
 
 [[[language=pillar
 -Lists can also be nested.
@@ -145,11 +146,11 @@ generates
 -#Thus, a line starting with ==-#==
 -#is an element of a bulleted list that is part of an ordered list.
 
-!!!Commented Lines
+!!!Commented lines
 
 Lines that start with a ==%== are considered comments and will not be rendered in the resulting document.
 
-!!!Escaping Characters
+!!!Escaping characters
 
 Special characters (e.g., ==\+== and ==\*==) must be escaped with a backslash: to get a ==\+==, you actually have to write ==\\\+==. The list of characters to escape is:
 
@@ -222,7 +223,7 @@ To create a preformatted block, begin each line with ==\===. A preformatted bloc
 = = this is preformatted text
 = = this line as well
 
-!!!Code Block
+!!!Code block
 @scripts
 
 Use code blocks when you want to add code snippets to your document.
@@ -238,7 +239,7 @@ generates
 foo bar
 ]]]
 
-!!!! Code Block with a Label or Caption
+!!!! Code block with a label or caption
 
 If you want either a label (to reference the code later) or a caption (to give a nice title to the code block), write the following:
 
@@ -252,7 +253,7 @@ which produces script *@foobar* (this reference is produced with ==\*@foobar\*==
 self foo bar
 ]]]
 
-!!!! Code Block Syntax Highlighting
+!!!! Code block syntax highlighting
 @sec:syntaxHighlighting
 
 To specify the syntax a code block is written in, you need to use the ==language== parameter.
@@ -268,7 +269,7 @@ languages asStringOn: stream delimiter: ', ' last: ' and '
 
 If you don't want syntax highlighting for a particular script, specify ==no language== as value to the ==language== parameter.
 
-!!!! Code Block with Line Numbers
+!!!! Code block with line numbers
 
 If you need to explain a long piece of code, you may want a code block to have line numbers:
 
@@ -284,7 +285,7 @@ self foo bar.
 self bar foo.
 ]]]
 
-!!!! Code Block from an External File
+!!!! Code block from an external file
 
 If you want you can also include a code block from a external file. For example if you have a file `myProject.html` and you want to take the code from line 15 to
 line 45, instead of copy/pasting the code you can use:
@@ -297,7 +298,7 @@ The ==firstLine== and ==lastLine== parameters are optional.
 
 
 
-!!!! Generate a Part of your Document with a Script
+!!!! Generate a part of your document with a script
 
 If you want you can also evaluate a script to generate a part of your document.
 Notice that some pillar version may disable it for security reasons.
@@ -339,7 +340,7 @@ stream
    nextPutAll: ' classes=='.
 ]]]
 
-!!! Annotated Paragraphs
+!!! Annotated paragraphs
 
 An empty line starts a new paragraph.
 
@@ -444,7 +445,7 @@ Annotations are the Pillar way to have extensible syntax. An annotation has this
 ${tag:parameter=value|parameter2=value2}$
 ]]]
 
-!!!!InputFile Annotation
+!!!!InputFile annotation
 
 You can include a file into another pillar file. The ==inputFile== annotation takes as parameter the path of the file relative to ==baseDirectory== (if you don't change the base directory, it is your working directory). In this example, 2 files are included:
 
@@ -454,7 +455,7 @@ ${inputFile:test.pillar}$
 ${inputFile:chapter2/chapter2.pillar}$
 ]]]
 
-!!!!Footnote Annotation
+!!!!Footnote annotation
 
 You can add footnotes to explain or annotate words. The ==footnote== annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
 
@@ -477,7 +478,7 @@ Here are two examples within the same expressions: Code blocks and captions use 
 
 
 
-!! Support Specific Markup
+!! Support specific markup
 This chapter presents extensions specific to a given support such as LaTeX or slides.
 
 !!!LaTeX
@@ -500,7 +501,7 @@ If you want to use other type of citations like ==citep== or ==citet==, please o
 !!!Slides
 Pillar offers the possibility to define slides. Slides requires the use of the presentation archetype. 
 
-!!!!Slide Annotation
+!!!!Slide annotation
 @sec:slide
 
 This annotation is used to create slides structure for a ==beamer== or a ==deck.js== export.
@@ -532,9 +533,9 @@ ${endColumns}$
 @@note The column annotations currently works only for the beamer, HTML and Deck.js export.
 
 
-!!!Under Development
+!!!Under development
 
-!!!!Semantic Links
+!!!!Semantic links
 
 Semantic links are a way to simplify links to standard websites such as Wikipedia and Youtube.
 
@@ -564,7 +565,7 @@ There is two kind of structures for the moment:
 
 
 
-!! Pillar Cheatsheet
+!! Pillar cheatsheet
 @chacheat
 
 !!!! Headings
@@ -573,7 +574,7 @@ There is two kind of structures for the moment:
 |{ ==!! Heading== | Heading 2 |{ ==!!!! Heading== | Heading 4
 
 
-!!!! Anchors and Links 
+!!!! Anchors and links 
 %||!Anchors and References | |
 |{ ==@anchor== | anchor 
 |{ ==\*\@Internal Link\*== | Internal link 
@@ -627,12 +628,12 @@ stream cr; nextPutAll: ']]]'; cr.
 | ==\|\} right== | right
 
 
-!!!!Annotated Paragraphs
+!!!!Annotated paragraphs
 %||!Annotated Paragraph | |
 | ==@@note== | Produce a note paragraph
 | ==@@todo== | Produces a todo
 
-!!!! Code Blocks
+!!!! Code blocks
 
 = [[[
 = self foo bar
