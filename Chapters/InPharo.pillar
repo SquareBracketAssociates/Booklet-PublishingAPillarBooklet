@@ -12,7 +12,7 @@ In this chapter we will show you also that Pillar can be directed edited in Phar
 
 The team developing Bloc is currently working on an editor for Pillar directly in Pharo. To put it in perspective, let us take a look at one screenshot showing an inspector presentation containing a Brick editor opened on a Pillar file that includes some text, a code snippet and a reference to a picture:
 
-%+Pillar live edition and rendering in Bloc.>files://figures/pillarGTEditor.png+
+%+Pillar live edition and rendering in Bloc.>file://figures/pillarGTEditor.png+
 
 +Caption.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
 
