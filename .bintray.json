@@ -18,8 +18,8 @@
 
     "files": [
         {
-            "includePattern": "build/(book).spiral.pdf",
-            "uploadPattern": "$1DistributingPillar-wip.pdf",
+            "includePattern": "build/book.spiral.pdf",
+            "uploadPattern": "DistributingPillar-wip.pdf",
             "matrixParams": { "override": 1 }
         }
     ],
