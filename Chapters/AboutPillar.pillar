@@ -13,7 +13,7 @@ Pillar is sponsored by *ESUG>http://www.esug.org*.
 
 
 !!!Introduction
-Pillar (hosted at *http://github.com/pillar-markup) is a markup language and associated tools to write and generate documentation, books (such as this one) and slide-based presentations. The Pillar screenshot in Figure *@voyageDocExample* shows the HTML version of chapter *@cha:voyage*.
+Pillar (hosted at *http://github.com/pillar-markup*) is a markup language and associated tools to write and generate documentation, books (such as this one) and slide-based presentations. The Pillar screenshot in Figure *@voyageDocExample* shows the HTML version of chapter *@cha:voyage*.
 
 +An example Pillar output>file://figures/voyageDocExample-small.png|label=voyageDocExample|width=60+
 
