@@ -9,7 +9,7 @@ The first to start with is to enable the travis integration from your github rep
 +Enabling the travis service in your github account.>file://figures/configuringServices.png|label=github|width=80+
 
 
-Once this is done, you should go to your travis account *http://travis.com* and enable your project as shown in Figure *traviside*. 
+Once this is done, you should go to your travis account *http://travis-ci.com* and enable your project as shown in Figure *traviside*. 
 
 +Enabling your github project on travis.>file://figures/travis.png|label=traviside|width=80+
 
