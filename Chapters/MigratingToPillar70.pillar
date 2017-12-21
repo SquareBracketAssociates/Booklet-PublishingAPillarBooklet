@@ -1,0 +1,110 @@
+!! Migrating from Pillar 50 to Pillar 70
+
+
+!!! Uninstall Pillar 50
+
+[[[
+rm Pharo.image
+rm Pharo.changes
+rm pharo
+rm pharo-ui
+rm -r pharo-vm
+rm mustache
+rm pillar
+rm Makefile
+rm -r support/makefiles
+rm download.sh
+]]]
+
+!!! Install Pillar 70
+
+[[[
+git clone git@github.com:pillar-markup/pillar.git -b newpipeline _pillar
+./_pillar/scripts/build.sh
+]]]
+
+
+To keep a local pillar 
+
+[[[
+mv build _pillar/bin/
+export PATH=_pillar/bin:$PATH
+]]]
+
+!!! Updating the templates
+
+[[[
+pillar updateTemplate book
+]]]
+
+
+!!! Converting the pillar.conf
+
+Old pillar.conf
+
+[[[
+	{
+	  "metadata" : {
+	    "title": "The Pillar Super Book Archetype",
+	    "attribution": "The Pillar team",
+	    "series": "Square Bracket tutorials",
+	    "keywords": "project template, Pillar, Pharo, Smalltalk"
+	  },
+	  "outputDirectory": "build",
+	  "mainDocument": "book",
+	  "latexTemplate": "support/templates/main.latex.mustache",
+	  "latexChapterTemplate": "support/templates/chapter.latex.mustache",
+	  "htmlTemplate": "support/templates/html.mustache",
+	  "htmlChapterTemplate": "support/templates/html.mustache",
+	  "chapters": [ 
+		"Chapters/Chapter1/chapter1",
+		"Chapters/Chapter2/chapter2"],
+	  "newLine": #unix,
+	  "configurations": {
+	    "LaTeX" : {
+	      "outputType": #'latex:sbabook',
+	      "separateOutputFiles": true
+	    },
+	    "HTML" : {
+	      "outputType": #html,
+	      "separateOutputFiles": true
+	    }
+	  }
+	}
+]]]
+
+- We need to first flatten the metadata tag from this:
+
+[[[
+{
+  "metadata" : {
+    "title": "The Pillar Super Book Archetype",
+    "attribution": "The Pillar team",
+    "series": "Square Bracket tutorials",
+    "keywords": "project template, Pillar, Pharo, Smalltalk"
+  },
+  ...
+}
+]]]
+
+to this:
+
+[[[
+{
+  "title": "The Pillar Super Book Archetype",
+  "attribution": "The Pillar team",
+  "series": "Square Bracket tutorials",
+  "keywords": "project template, Pillar, Pharo, Smalltalk",
+  ...
+}
+]]]
+
+- We then need to replace the configurations entries configure a writer for each of the possible outputs we will use:
+
+[[[
+{
+	...
+	"latexWriter": #'latex:sbabook',
+	...
+}
+]]]
