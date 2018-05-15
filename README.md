@@ -15,19 +15,9 @@ The result from the latest successful Travis build can be found [on Bintray (PDF
 ## To latex it locally
 
 ```
-make
-make bootstrap
-make book spiral
+pillar build pdf
 ```
 ## To contribute
 
 - Fork
 - Do pull Request 
-
-## To latex it locally
-
-```
-make
-make bootstrap
-make spiral
-```
