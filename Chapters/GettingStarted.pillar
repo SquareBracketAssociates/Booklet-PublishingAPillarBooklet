@@ -150,7 +150,7 @@ Here is the ==pillar.conf== file of this booklet
 !!!! Editing book.pillar
 Now we will edit the file ==book.pillar== (the file listed in == "mainDocument": "book"== in the ==pillar.conf== file).
 
-We can simply add text there and file to be included using the Pillar command ==${inputFile:nameOfTheFIle.pillar}$ as follows:
+We can simply add text there and file to be included using the Pillar command ==\$\{inputFile:nameOfTheFIle.pillar\}\$ as follows:
 [[[
 $ more book.pillar
 
