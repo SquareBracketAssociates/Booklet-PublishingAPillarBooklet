@@ -1,16 +1,51 @@
-!! Creating and Configuring a Booklet 
-
+!! Installing Pillar and Creating a Booklet 
 @chagettingstarted
-In this part we will describe the complete setup starting just after the creation 
-of a git repository to version the booklet files. The example used for this is this booklet itself.
-The current installation refers to Pillar 5 or 6 and it will be updated to describe the simplified version put in place with Pillar 70. 
+In this part we will describe the complete setup. We will show how to install Pillar, create a book and version your document  in a git repository to version the booklet files. The example used for this is this booklet itself.
+The current installation refers to Pillar 70. 
 
 We take as hypothesis that you want to version your document on gihub but Pillar does not care about this. 
 Now in the next chapter we will explain how to use github service integration. Such services only work with github.
 
 !!! Installing Pillar
+Installing pillar is simple. Now since Pillar can be used to generate different families of documents, once you download you should install the template you want to use. But let us get started!
 
-Installing pillar is simple. Now since Pillar can be used to generate different families of document, once you download you should install the template you want to use. But let us get started!
+[[[
+$ mkdir Pillar
+$ cd Pillar
+$ git clone git@github.com:pillar-markup/pillar.git -b newpipeline
+$ ./pillar/scripts/build.sh
+]]]
+
+This will create a ==build== directory in the working directory and build pillar in there. You can then proceed to install pillar where you want in your home directory. Here we place it as ==.pillar== in our home directory.
+
+[[[
+$ mv Pillar ~/.pillar
+]]]
+
+Note that if you want to generate PDF you should have a running installation of LaTex. We will show in subsequent chapter that you 
+can setup a travis job to compile and generate the PDF for you on the Cloud.
+
+!!! Setting up your environment
+
+Once you downloaded pillar and moved it to your home directory, then add that directory to the ==PILLAR_HOME== and ==HOME== environment variables, for example, by modifying your .bashrc with
+
+[[[
+export PILLAR_HOME="$HOME/.pillar/build"
+export PATH="$PATH:$PILLAR_HOME"
+]]]
+
+Now you should be able to create a booklet for example. 
+
+[[[
+$ pillar archetype book
+$ pillar build pdf
+]]]
+
+It will build a book in the folder ==_result==. 
+
+!!! Creating your own versioned booklet
+
+We imagine that you want to write a little booklet as the one you are currently reading and that this booklet will be stored on github. 
 
 !!!! Cloning a git repository
 
@@ -23,15 +58,6 @@ git clone git@github.com:SquareBracketAssociates/Booklet-PublishingAPillarBookle
 cd Booklet-PublishingAPillarBooklet
 ]]]
 
-!!!! Installing Pillar
-
-Now you are ready to install Pillar using the following script:
-
-[[[
-wget https://raw.githubusercontent.com/pillar-markup/pillar/master/download.sh
-chmod +x download.sh
-./download.sh
-]]]
 
 
 !!!! Selecting and Installing Book
@@ -43,24 +69,47 @@ By default Pillar offers the following templates:
 - Basic-latex. This template is good to generate basic reports. What is nice is that you do not need the latest version of latex packages. 
 - Welcome. This template is to teach how to build templates. 
 
+To install a template you should indicate it to pillar using the archetype command as follows: 
 
 [[[
-./pillar archetype book
+pillar archetype book
 ]]]
+
+Then you can compile the default template to check that it effectively worked. 
 
 [[[
-make book 	
+pillar build pdf 
 ]]]
 
-or 
+produces a book in the folder ==_result==. Indeed the folder Chapters and figures contain some samples.
+
+!!!! Versioning your book
+
+Now to version simply you book you should version all the files except ==_result==. 
+Later we will show you how to add travis and bintray support for automatic compilation so that you do not need to install locally LaTeX on your machine. 
+
 [[[
-make book spiral 
+$ git add pillar.conf
+$ git add _support
+$ git add Chapters
+$ git add book.pillar
 ]]]
 
-produces a book in the folder ==build==. Indeed the folder Chapters and figures contain some samples.
+!!!! Adding a .gitignore
+
+Not all the downloaded files are worth versionning. We suggest the following .gitignore configuration. 
+
+[[[
+more .gitignore
+>>>
+/_result/
+]]]
+
+You can remove the folder figures and the chapter samples. 
+Now you are ready to commit your files. 
+
 
 !!! Adapting Pillar to your Book
-
 Now we are ready to produce your own book. For this we edit some configuration files, in addition to edit some chapters. We focus on the configuration of files.
 
 You need to edit two files:
@@ -75,43 +124,35 @@ The main points are:
 - attribution: Give the author of the booklet.
 - chapters. Here you should give the list of the files. You can put them in separate folders or not. 
 
-Here is the 
+Here is the ==pillar.conf== file of this booklet
 [[[
-	{
-    "title": "Publishing a Pillar Booklet",
-    "attribution": "StéphaneDucasse",
-    "series": "Square Bracket tutorials",
-    "keywords": "project template, Pillar, Pharo, Smalltalk"
-    "outputDirectory": "build",
-    "mainDocument": "book",
-    "latexTemplate": "support/templates/main.latex.mustache",
-    "latexChapterTemplate": "support/templates/chapter.latex.mustache",
-	  "htmlTemplate": "support/templates/html.mustache",
-	  "htmlChapterTemplate": "support/templates/html.mustache",
-	  "chapters": [ 
-  			"Chapters/GettingStarted",
-  			"Chapters/TravisBintray"
-	  "newLine": #unix,
-	  "configurations": {
-	    "LaTeX" : {
-	      "outputType": #'latex:sbabook',
-	      "separateOutputFiles": true
-	    },
-	    "HTML" : {
-	      "outputType": #html,
-	      "separateOutputFiles": true
-	    }
-	  }
-	}
-
+{
+  "title": "Publishing a Pillar Booklet",
+  "attribution": "StéphaneDucasse",
+  "series": "Square Bracket tutorials",
+  "keywords": "project template, Pillar, Pharo, Smalltalk",
+  
+  "outputDirectory": "build",
+  "mainDocument": "book",
+  "inputFile":"book.pillar",
+  "latexTemplate": "_support/templates/main.latex.mustache",
+  "latexChapterTemplate": "_support/templates/chapter.latex.mustache",
+  "htmlTemplate": "_support/templates/html.mustache",
+  "htmlChapterTemplate": "_support/templates/html.mustache",
+  "newLine": #unix,
+  "latexWriter": #'latex:sbabook',
+  "htmlWriter": #html
+}
 ]]]
 
-!!!! Editing book.pillar
+@@todo we should check if we really need outputDirectory: build?
 
+!!!! Editing book.pillar
 Now we will edit the file ==book.pillar== (the file listed in == "mainDocument": "book"== in the ==pillar.conf== file).
 
+We can simply add text there and file to be included using the Pillar command ==${inputFile:nameOfTheFIle.pillar}$ as follows:
 [[[
-more book.pillar
+$ more book.pillar
 
 The current document is a little tutorial to show you how to begin with the creation of booklet.
 It describes the installation, customisation and integration with travis and bintray online services.
@@ -120,22 +161,8 @@ ${inputFile:Chapters/GettingStarted.pillar}$
 ${inputFile:Chapters/TravisBintray.pillar}$
 ]]]
 
-!!!! Adding a .gitignore
 
-Not all the downloaded files are worth versionning. We suggest the following .gitignore configuration. 
+!!! Conclusion
 
-[[[
-more .gitignore
->>>
-/Pharo.*
-/pharo
-/pharo-ui
-/pillar
-/mustache
-/pharo-vm/
-/build/
-]]]
-
-You can remove the folder figures and the chapter samples. 
-Now you are ready to commit your files. 
+Now you are ready to write your document in Pillar and get them exported in PDF and HTML. 
 
