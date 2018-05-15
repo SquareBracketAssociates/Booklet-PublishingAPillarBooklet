@@ -1,16 +1,16 @@
 !! Pillar core syntactic elements
 @chawriting
 
-In this section we show how to write Pillar documents by presenting the Pillar syntax. Have a look at the
-Chapter *@chacheat*. We use the current text as example, notice however, that some results may be different on other support like HTML because of different common practices (for example creating an anchor with the reference instead of a footnote for an external link).
+In this Chapter we present the Pillar syntax. Have a look at the
+Chapter *@chacheat*: it contains a two pages summary. We use the current text as example, notice however, that some results may be different on other support like HTML because of different common practices (for example creating an anchor with the reference instead of a footnote for an external link).
 
-It is important to see that since Pillar is extensible plugins may extend the default markup. The extensions mechanisms
-allows one not to learn new syntax just new tags and parameters as will present later.
+It is important to see that since Pillar is extensible, plugins may extend the default markup. The extension mechanisms
+allow one not to learn new syntax but just new tags and parameters as will present later.
 
 !!! Meta-Information
 
-Meta-information of a particular file is written at the start of the file between curly braces using the STON syntax (a super set of JSON).
-A meta-information starts with a word between quotation marks acting as a key, is followed by a colon ==:==, and finishes with a value.
+Meta-information of a particular file is written at the start of the file between curly braces using the STON syntax (a super set of JSON). A meta-information starts with a word between quotation marks acting as a key, is followed by a colon ==:==, and finishes with a value.
+
 For example, the following Pillar file,
 
 [[[language=pillar
@@ -46,14 +46,14 @@ For example, a ==headingLevelOffset== of 3 converts a 1st level Pillar heading t
 !!! References and links
 
 !!!!Anchor definition
- To refer to a section or chapter, put an anchor (equivalent to \\label{chapterAndSections} in LaTeX) using the ==@chapterAndSections== syntax on a ''separate line''. 
+ To refer to a section or chapter, put an anchor (equivalent to ==\\label\{chapterAndSections\}== in LaTeX) using the ==@chapterAndSections== syntax on a ''separate line''. 
  
 [[[
 @chapterAndSections
 ]]]
  
 !!!!Anchor reference
-When you want to refer to it (equivalent to \\ref{chapterAndSections} in LaTeX), use the ==\*@chapterAndSections\*== syntax. Anchors are invisible and links will be rendered as: *@chapterAndSections*.
+When you want to refer to an anchor (equivalent to ==\\ref\{chapterAndSections\}== in LaTeX), use the ==\*@chapterAndSections\*== syntax. Anchors are invisible and links will be rendered as: *@chapterAndSections*.
 
 [[[
 *@chapterAndSections*
@@ -68,7 +68,6 @@ You can create alias for links. Tthis is especially adapted for web sites contai
 ]]]
 
 creates the link *Chapters>chapterAndSections*. Again the template may interpret this differently than a LaTeX footnote.
-
 
 To create a link to another pillar file, use the ==\*Alias>File.pillar@AnchorName\*==. The alias and anchor parts are optional but you will need them in some cases (for example if you have an inter-file link and you export in LaTeX, or if you have an inter-file link and you export all your file in the same html file).
 
@@ -434,7 +433,7 @@ this will confuse the parser, better add a space or two. So, don't write ==\{{{\
 
 
 
-!!!! Annotations: supporting extensions
+!!! Annotations: supporting extensions
 
 Pillar proposes two extensions mechanisms: tags and parameters. Pay attention that each plugin should handle the tag or parameter processing. 
 
@@ -475,10 +474,7 @@ Here are two examples within the same expressions: Code blocks and captions use 
 
 
 
-
-
-
-!! Support specific markup
+!! Specific markup
 This chapter presents extensions specific to a given support such as LaTeX or slides.
 
 !!!LaTeX
@@ -496,6 +492,8 @@ The exemple above wil render as ==\cite{reference}==
 
 If you want to use other type of citations like ==citep== or ==citet==, please overwrite the command in your LaTeX template:
 ==\renewcommand{\cite}{\citep}==
+
+Future versions will support also the definition in pillar.conf of the bibliography file. Right now you should harcode it in the template. 
 
 
 !!!Slides

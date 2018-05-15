@@ -1,4 +1,4 @@
-!! Templates
+!! Templates (draft)
 
 @chausingtemplate
 
@@ -23,9 +23,8 @@ By default Pillar offers the following templates
 
 In this chapter we will explain how to define archetypes but first templates, since an archetype is mainly a template example.
 
-!!! A document (Update)
-
-Imagine that we have a pillar file name MyDocument.pillar.
+!!! A document
+Imagine that we have a pillar file name ==MyDocument.pillar==.
 
 [[[
 ! Hello from Pillar
@@ -33,7 +32,7 @@ Imagine that we have a pillar file name MyDocument.pillar.
 
 
 [[[
-make book-result/MyDocument.html
+
 ]]]
 
 
@@ -76,10 +75,6 @@ You can also use ==mustache== alone with command:
 [[[language=bash
 @@TOBEUPDATED ./mustache --data=file.html.json --template=myhtml.template > file.html
 ]]]
-
-
-
-
 
 
 
