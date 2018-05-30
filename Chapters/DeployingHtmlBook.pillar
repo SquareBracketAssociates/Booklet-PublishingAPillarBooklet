@@ -2,7 +2,7 @@
 
 First of all, be sure you have a *github>www.github.com* account and *travis>www.travis-ci.org* one if possible. As explained for setting up Travis and Bintray, you will enable travis integration from your github repository containing your html files.
 
-Next step is to create some files which will be used during the deployment
+Next step is to create some files which will be used during the deployment.
 
 Let's start by creating a ==Makefile== at the top level of your repository. 
 
@@ -35,9 +35,12 @@ clean:
 
 
 This file will be used by travis to install the last version of pillar and generate your book in html format. After that, it delegates the deployment to another script.
-No changements needed for this file. Perhaps you will have to modify the branch (part after -b) from which pillar is cloned, in order to have the latest version.
-The gh-pages branch will be automatically created, so you are not obliged to create it on github. The gh-pages branch is recognized by github to be a special branch on which 
-static html files can be stored in order to be served. So pushing the generated html files on that branch will provide you a site availbale at 
+
+
+No changes needed for this file. Perhaps you will have to modify the branch (part after -b) from which pillar is cloned, in order to have the latest version.
+
+The ==gh-pages== branch will be automatically created, so you are not obliged to create it on github. The gh-pages branch is recognized by github to be a special branch on which 
+static html files can be stored in order to be served. So pushing the generated html files on that branch will provide you a site available at ==https://<git-username>.github.io/<your-repo-name>/==.
 
 
 Now you will create the ==scripts/prepare_for_deploy.sh== which is a bash file initializing a repository for your generated files.
@@ -78,7 +81,7 @@ echo "GH PAGES Setup finished"
 ]]]
 
 
-The TRAVIS_REPO_SLUG variable contains your github username and repository name like this ""toto/book_pillar"".
+The ""TRAVIS_REPO_SLUG"" variable contains your github username and repository name like this ""toto/book_pillar"".
 
 An important thing which has to be done here is the generation of the token, which is needed by travis.
 
@@ -128,6 +131,6 @@ Before doing that, just let us check some points
 - Travis integration is enabled on github
 - You have an encrypted token in ==.travis.yml== labelled ""GH_TOKEN""
 
-If so, you can safely do your commit. And enjoy travis integration. Your book will be served on https://<git-username>.github.io/<your-repo-name>/
+If so, you can safely do your commit. And enjoy travis integration. Your book will be served on ==https://<git-username>.github.io/<your-repo-name>/==
 
 ""Pay attention to have an index file in your repository and set base_url to your repository name"" (pillar.conf)
