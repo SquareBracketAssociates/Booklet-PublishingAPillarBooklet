@@ -1,10 +1,10 @@
 !! Deploy your html books using Travis and Github Pages
 
-First of all, be sure you have a *github>www.github.com* account and *travis>www.travis.org* one if possible. As explained for setting up *Travis>www.travis.org* and Bintray, you will enable travis integration from your github repository containing your html files.
+First of all, be sure you have a *github>www.github.com* account and *travis>www.travis-ci.org* one if possible. As explained for setting up Travis and Bintray, you will enable travis integration from your github repository containing your html files.
 
 Next step is to create some files which will be used during the deployment
 
-Let's start by creating a Makefile at the top level of your repository. 
+Let's start by creating a ==Makefile== at the top level of your repository. 
 
 That is the content of this file:
 
@@ -40,7 +40,7 @@ The gh-pages branch will be automatically created, so you are not obliged to cre
 static html files can be stored in order to be served. So pushing the generated html files on that branch will provide you a site availbale at 
 
 
-Now you will create the scripts/prepare_for_deploy.sh which is a bash file initializing a repository for your generated files.
+Now you will create the ==scripts/prepare_for_deploy.sh== which is a bash file initializing a repository for your generated files.
 
 That file looks like: 
 
