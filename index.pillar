@@ -14,4 +14,6 @@ ${inputFile:Chapters/InPharo.pillar}$
 
 ${inputFile:Chapters/TravisBintray.pillar}$
 
+${inputFile:Chapters/DeployingHtmlBook.pillar}$
+
 ${inputFile:Chapters/CheatSheet.pillar}$
