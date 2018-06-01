@@ -1,5 +1,7 @@
 !! Deploy your html books using Travis and Github Pages
 
+Not available
+
 First of all, be sure you have a *github>www.github.com* account and *travis>www.travis-ci.org* one if possible. As explained for setting up Travis and Bintray, you will enable travis integration from your github repository containing your html files.
 
 Next step is to create some files which will be used during the deployment.
