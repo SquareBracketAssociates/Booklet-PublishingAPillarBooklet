@@ -1,7 +1,7 @@
 language: smalltalk
 
 os:
-   - linux
+    - linux
 
 install:
     # Pillar installation
