@@ -1,5 +1,8 @@
 language: smalltalk
 
+os:
+   - linux
+
 install:
     # Pillar installation
     - git clone https://github.com/pillar-markup/pillar.git .pillar -b dev-7  # Clone pillar
