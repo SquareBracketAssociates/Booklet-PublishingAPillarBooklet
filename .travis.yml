@@ -1,7 +1,12 @@
 language: smalltalk
 
+
 os:
     - linux
+
+
+smalltalk:
+    - Pharo-6.1
 
 install:
     # Pillar installation
