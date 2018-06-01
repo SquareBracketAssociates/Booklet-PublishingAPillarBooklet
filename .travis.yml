@@ -8,6 +8,10 @@ os:
 smalltalk:
     - Pharo-6.1
 
+env:
+  matrix:
+    - JOB=test TYPE=System ARCHETYPE=docDockBook OUTPUT=html
+
 install:
     # Pillar installation
     - git clone https://github.com/pillar-markup/pillar.git .pillar -b dev-7  # Clone pillar
