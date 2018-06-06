@@ -121,6 +121,49 @@ $ travis encrypt GH_TOKEN=<your_token> --add env.global
 
 This will add the encrypted token to your ==.travis.yml== file.
 
+You are not so comfortable with bash scripts !! No problem, the next section is for you
+
+!!! For non geeks
+
+Here we are going to present another of doing the deploy without dealing with too many scripts. 
+
+See by your self :
+
+[[[
+language: smalltalk
+
+
+os:
+    - linux
+
+
+smalltalk:
+    - Pharo-6.1
+
+env:
+  matrix:
+    - JOB=test TYPE=System ARCHETYPE=book OUTPUT=html
+
+install:
+    # Pillar installation
+    - git clone https://github.com/pillar-markup/pillar.git .pillar -b dev-7  # Clone pillar
+    - cd .pillar && ./scripts/build.sh && cd ..
+
+script:
+    - .pillar/build/pillar build html
+    - cd _result/html && touch .nojekyll && cd ..
+
+deploy:
+   provider: pages
+   skip-cleanup: true
+   github-token: $GH_TOKEN
+   keep-history: true
+   local_dir: _result/html
+   on:
+     branch: master
+
+]]]
+
 
 !!! Recap
 
