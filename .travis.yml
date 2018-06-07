@@ -10,7 +10,7 @@ smalltalk:
 
 env:
   matrix:
-    - JOB=test TYPE=System ARCHETYPE=docDockBook OUTPUT=html
+    - JOB=test TYPE=System ARCHETYPE=book OUTPUT=html
 
 install:
     # Pillar installation
