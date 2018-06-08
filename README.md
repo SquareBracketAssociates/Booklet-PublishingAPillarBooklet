@@ -8,9 +8,9 @@
 
 The result from the latest successful Travis build can be found [on Bintray (PDF)](https://bintray.com/squarebracketassociates/wip/download_file?file_path=DistributingPillar-wip.pdf).
 
-#Pillar installation on Mac OS X / Linux
+# Pillar installation on Mac OS X / Linux
 
-##Building from sources
+## Building from sources
 
 You first need to get Pillar.
 
@@ -25,12 +25,12 @@ $ ./scripts/build.sh
 Note: For OSX users, you might need to install `wget` via `brew` following for example:
 
 ```bash
-#The following lines will install both Homebrew and wget, ignore the first one if Homebrew is already installed
+# The following lines will install both Homebrew and wget, ignore the first one if Homebrew is already installed
 $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 $ brew install wget --with-libressl
 ```
 
-##Setting up the environment
+## Setting up the environment
 
 You can then proceed to install that pillar build where you want.
 For example, you can place it in a hidden directory in your home directory:
@@ -48,7 +48,7 @@ export PILLAR_HOME="$HOME/.pillar/build"
 export PATH="$PATH:$PILLAR_HOME"
 ```
 
-##Test your installation
+## Test your installation
 
 To test your pillar installation, open a new terminal and execute the pillar `--version command`. If everything is ok, that should print out (as in the current version) the version of the Pharo VM. For example:
 
@@ -57,7 +57,7 @@ $ pillar --version
 M:    CoInterpreter VMMaker.oscog-eem.2380 uuid: c76d...
 ```
 
-##Getting started
+## Getting started
 
 To create a book, you can start by installing the book archetype in a directory where you want to manage it:
 
@@ -81,7 +81,7 @@ ${inputFile:Chapters/Chapter1/chapter1.pillar}$
 ${inputFile:Chapters/Chapter2/chapter2.pillar}$
 ```
 
-##Building a document
+## Building a document
 
 Finally, you can generate your book in pdf or html using the command `pillar build ...`.
 LateX is needed to build a pdf, if you have not installed it yet, install the texlive-full in your system
