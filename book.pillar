@@ -2,5 +2,5 @@ The current document is a little tutorial to show you how to begin with the crea
 
 We will use bintray to store the latest pdf produced by travis and we will use github to store the released pdf.
 
-${inputFile:Chapters/5minTutorial2.pillar}$
+${inputFile:path=Chapters/5minTutorial2.pillar}$
 
