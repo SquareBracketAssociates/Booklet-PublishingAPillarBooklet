@@ -2,18 +2,18 @@ The current document is a little tutorial to show you how to begin with the crea
 
 We will use bintray to store the latest pdf produced by travis and we will use github to store the released pdf.
 
-${inputFile:Chapters/AboutPillar.pillar}$
+${inputFile:path=Chapters/AboutPillar.pillar}$
 
-${inputFile:Chapters/GettingStarted.pillar}$
+${inputFile:path=Chapters/GettingStarted.pillar}$
 
-${inputFile:Chapters/PillarSyntax.pillar}$
+${inputFile:path=Chapters/PillarSyntax.pillar}$
 
-${inputFile:Chapters/Templating.pillar}$
+${inputFile:path=Chapters/Templating.pillar}$
 
-${inputFile:Chapters/InPharo.pillar}$
+${inputFile:path=Chapters/InPharo.pillar}$
 
-${inputFile:Chapters/TravisBintray.pillar}$
+${inputFile:path=Chapters/TravisBintray.pillar}$
 
-${inputFile:Chapters/DeployingHtmlBook.pillar}$
+${inputFile:path=Chapters/DeployingHtmlBook.pillar}$
 
-${inputFile:Chapters/CheatSheet.pillar}$
+${inputFile:path=Chapters/CheatSheet.pillar}$
