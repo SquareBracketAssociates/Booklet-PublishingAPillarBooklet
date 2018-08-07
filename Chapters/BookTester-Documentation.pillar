@@ -2,48 +2,59 @@
  
 What does it mean to ‘test a book’ and why would you do it? Testing a book means checking the code it displays is up to date. This can be done by checking if examples are correct or verifying that method and class definitions compile without raising an error in the last Pharo version. Being able to test a book means updating it more easily and therefore more frequently. On the long term, easier updates means more frequent updates but also a documentation improvement along with more ressources available for the community.
 
-!!!Testing your book
+Pillar comes with a book tester.
 
-!!!!Codeblock types
+!!! Typical codeblocks
 
-Pillar syntax allows you to write codeblocks, showing a part of code. The inside of a codeblock allows one to display any part of code you might want to. For example:
-%[[[
-%  [[[
-%	  YourClass >> yourMethod
-%	^ ‘bla’
-%  ]]]
-%]]]
+Pillar syntax allows you to write codeblocks, showing a part of code. The body of a codeblock allows one to display any part of code you might want to. For instance, example, method and class definitions can be tested.
+
+!!!! Examples
+[[[
+   [[[
+	   1 + 1
+	>>> 2
+]]]
+]]]
+
+!!!! Method definition
+[[[
+  [[[
+	YourClass >> yourMethod
+		^ 'bla'
+  ]]]
+]]]
+
 This codeblock presents a method definition, the other two possible codeblocks that can be tested are the following: 
 
--Class definitions
+!!!! Class definition
 [[[
-\[\[\[
-Object subclass\: \#YourClass
-            instanceVariableNames\: \'\'
-            classVariableNames\: \'\'
-            package: \'YourPackage\'
-\]\]\]
-]]]
--Examples
-[[[
-\[\[\[
-1\+1
-\>\>\> 2
-\]\]\]
+   [[[
+   Object subclass: #YourClass
+        instanceVariableNames: ''
+        classVariableNames: ''
+        package: 'YourPackage'
+   ]]]
 ]]]
 
-!!!!How are we testing those codeblocks?
+!!! Testing codeblocks
 
-- __Testing examples:__
+Using parameters we can indicate that the expression inside a codeblock should be validated.
+
+!!!! Testing examples 
+
+Using the parameter ==example== and the ==>>>=== helps you to validate 
+
 [[[
-\[\[\[testcase\=true
-==3\+4==                            
-\>\>\>7
-\]\]\]
+   [[[example=true
+   ==3\+4==
+   \>\>\>7
+   ]]]
 ]]]
 
-becomes  ==self assert\: \(3\+4\) equals\: 7==
-In fact, the use of \‘\>\>\>\’ and parameters in the codeblock will help us testing the code within it. The BookTester will turn examples into tests.
+The book tester interprets the following parametrized codeblock as an assertion 
+ ==self assert: (3 + 4 ) equals: 7==
+ 
+The use of \‘\>\>\>\’ and parameters in the codeblock will help us testing the code within it. The BookTester turns examples into tests.
 
 - __Testing method and class definitions:__
  
@@ -85,7 +96,7 @@ with an emphasis laid on \'\>\>\>\' at the beginning of a new line.
 
 !!! Practical testing
 
-There are currently two ways of testing your book. First, within Pharo itself and using a ==PRBookTesterVisitor== to ==checkFileNamed:==. This way is useful if you want to inspect every result within the Pharo environment. However, you can also use the following:
+There are currently two ways of testing your book.  However, you can also use the following:
 
 [[[language=bash
 $ $PHARO_VM $IMAGE clap checkBook
@@ -102,32 +113,47 @@ This second version uses the already existing ==build== command for Pillar and e
 
 However, using one method or the other leads you to obtaining a report on all tests made. The passed ones are not displayed, however the failed ones are shown by stating first the explanation of the failure (name of the exception or if the assertion failed). Note that only codeblocks with one of the three following parameters will be tested: ==example==, ==methodDefinition== and ==classDefinition==. And they will be tested using the methods used above.
 
+!!! For Pharoers
+
+You can also test a pillar file from within Pharo itself. To do so you should use a ==PRBookTesterVisitor== to check a file using ==checkFileNamed:==. This can be useful to inspect each of the results. In particular the successful one.
+
 !!! What can not be tested
 
 Some codeblocks can not be tested. For example, nested results to show what happens after some iterations such as:
+
 [[[
-\[\[\[
-1\+1
-\>\>\> 2
-\>\>\> 3
-\>\>\> 4
-\]\]\]
+	[[[
+		1 + 1
+		>>> 2
+		>>> 3
+		>>> 4
+	]]]
+]]]
+
+Local variable definition are not validated:
+
+[[[
+	[[[
+		|tmp|
+		tmp := 0.
+		tmp >>> 0
+	]]]
 ]]]
 
 Or examples that show an error should be raised such as:
 [[[
-\[\[\[
-String \+
-\>\>\> Error
-\]\]\]
+	[[[
+		String \+
+		>>> Error
+	]]]
 ]]]
 
-Or type examples that simply show an instanciation:
+Or examples without concrete values
 [[[
-\[\[\[
-yourAge \+ myAge
-\>\>\> anInteger
-\]\]\]
+	[[[
+		Date today
+		>>> aDate
+	]]]
 ]]]
 with ==yourAge== and ==myAge== as variables for example.
 
