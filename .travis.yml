@@ -13,31 +13,43 @@ smalltalk:
 env:
   matrix:
   - JOB=test TYPE=System ARCHETYPE=book OUTPUT=pdf
+  - JOB=test TYPE=System ARCHETYPE=book OUTPUT=html
 
 install:
   # Pillar installation
-  - git clone https://github.com/pillar-markup/pillar.git -b dev-7
-  - cd pillar && ./scripts/build.sh && cd ..                              # Run pillar build script. Pillar will be built in `pwd`/build!
-  - . pillar/scripts/ci/ensure_latex.sh                                   # Install latex
-  - ./pillar/scripts/ci/ensure_book_dependencies.sh                       # Install latex dependencies required by pillar
+  - git clone https://github.com/pillar-markup/pillar.git .pillar -b dev-7  # Clone pillar
+  - cd .pillar && ./scripts/build.sh && cd ..                              # Run pillar build script. Pillar will be built in `pwd`/build!
+  - .pillar/scripts/ci/ensure_latex.sh                                   # Install latex
+  - .pillar/scripts/ci/ensure_book_dependencies.sh                       # Install latex dependencies required by pillar
   
 script:
   - ./pillar/build/pillar build pdf
-  
+  - ./pillar/build/pillar build html
+  - cd _result/html && touch .nojekyll && cd ..
 
 deploy:
 - provider: bintray
   file: .bintray.json
   on:
-    repo: SquareBracketAssociates/Booklet-PublishingAPillarBooklet
+    repo: SquareBracketAssociates/Booklet-AReflectiveKernel
   skip_cleanup: true
   user: ducasse
   key:
-    secure: Ut3MoxtypMkwKO0ODyfnNau3FySWH7GfnnjKlYbVrQTgcK+KNFBh1SoxwZeZm0t1GS6fGu9A8wYIJyJYt8Xdpz1lcvt7pWJ+lvMno7KZN+5gMO/BNGI0MT1MtLDO0ZHJjP8rQOXJJsjukXbDm1icog6jdPXuV4z4Yb03Yjx8rL76AOwALCEFtFo0Rq7aAoDlPrWRzjomM1fTltMdmvciVg7EvJgjRt3WjdAcSP6sJymPhPMp+XBXQXUSkSu8PMhKmxntOP78iI42J8lsE+nZrn4xmBg5O2Pmtb6KoCDDF1zBbkvwjdcFkj6zgQq3BLRi+M2peTrOZzTRAzv6EnazzX9F9O3HHDgm8qlIiKHdfopciYXJjkhj/0VEyMOv1Sq3WqCqwOZ33cou/vSmHKPmO+GpWAFL7IuL83bv+XNG1xGdyDb+1frZuGtCJ3bOUGKKF16P5sVwFm1SAjBlDEZ3GCsQ+AcsbiOaZjxOs0e8/jCbvrl7dtINQzJkIsnrHYkMwGNUG3hxCLF7mnZoRt8EqYSA7D80k6Axtaiv3SJfagw9cMJ/TPik7ICYZNjqsXFXy4CIbREq/mCoClTFV2irIpI1TRiucD61o6WK1IO2yqX6k8DQoYF+v+FVTISk4sXCy1QscQvq73s3MjM8PZP76xscYDrrsgk0KhusuL4LGII=
+    secure: qJIAOqcm3Q7btvUV3ryCvSwgIgDnz4yVAChYvzFcIHW8NWmlvZmUQXHy6MuHCiv1r3QUz0xrLQQML+qD25GSRMSAUZ32Eeeuda33C3IvLQm8l3qp55f8MfnFsX232++09qU+mtzvJNpo8D9ojLqccP2TsugSi1GIXTURWCvg5bcP2LPWpsNomCmHtyFJwfp9WlxGlx0GSgqi36aeeqfqEZqXFlpoA2WL7Wz7ZbesO+6p/bd0KeHIJSpkKurbCw37g10nJziJ01R4b9fkoACVD3/GdPk6wNkHk9hoQbJUM/C9BHt22DFKMh4VAgTOUizv+rh63D9Tst+TPyW4B34UqhSInj1N0N8rfymWiUL8WPkC8IeBuTEo1nEI5VGgGpYjbHeK1kSdyi89UCOzOPah05OdFtc3NWOYXzqK8pTeNt+JEqd0Ay83zEuE9ccpwDN33KuUkj6Vgl6n0KCQ6TPPEXX5yYoGfJ7K3clk7QRmXfOVJUfzYkp37xer3QhGMKyJ1/ZIMYW2SzPHffidRtSzi6+tSPQKN/ey3aQKlXYcj5lS8s0NVha8kN+/OjfvLfRc7viqVCIjSJl3IYjQRz/QLBDLLYAwdHHsiHcrna2FLRM4HQLUp41eox37BuGLeeVkxS7ypan+bDamYL5XA4+gcOhiDBbavwRiMaUXXkKrN3E=
+
+- provider: pages
+  skip-cleanup: true
+  github-token: $GH_TOKEN
+  keep-history: true
+  local_dir: _result/html
+  on:
+    branch: master
+
 - provider: releases
   file: build/book.spiral.pdf
   on:
     tags: true
   skip_cleanup: true
   api_key:
-    secure: pRfu3fr35BzqQDi1ul0SubPSwO8zcyIidqLRZPz3XIrH4qoy1Zgnq785dmB7ziNQqH+VJyh7askSFY3JLxL0d4P0eUgj2ZDIOhJsUQQ/ihevOBWbxlMOoEPjQfzA11l8WrNCQ566KrcYiISRi7bCg698kPTWSRwOmmvqXOJe5zGkuUbVmMNUV2oxaNV4JC8kVyVWHYy0nNMLEX/hzRZRh1+8K34/ds+fZ7irLrbDWMbKGHCyuLCSqv+zJJdu99nWLTclrCxFzK4DEHaMlFiO7wkUpyQLwZ38EDnb3E7iv045jSqCx3XB+DMRG1Da2/9BIXl0mho5ELdEvfGVAbjI2no5FWd0H1cs4/banAePCFnM7ZscJBaPWgVajB7EzrcADJUoxpmU6+6n1aIC3CnjscfAHqSAKGv8CO/Jh+Uirc8ATRpSqa73f2Nnj9tRCqwCOnFOCEzu0w5l3Ppz2Qpif04P+QbebZehSVaBJ4W01R2i8Rac3IuZDhZVaek1X24HFxUOd/rvHpbhz8eeANdnsWCTkAm+0sD+iKsWKICRMxFZfCK/SPldAcjXZsOsEMTqfx7ZWyCc7GeesQWcmW+z3shziyQd9tdeArJWLwacly3hH3WeyuUD5JyPF9klvDBtHgTVajdU4yp+3oXsrtTmetnBz+RESxQGdLgZRlQBQog=
+secure: RUnXI5z8rdRyI4MntVRVBfhrGGBXQdj33g3F3T0cJTyerBdExlROQWtHQlCVYA6VNEZ4PyPY9OyolR8nwL7OU+u8MndOxjOdRQzTzsiDUmwX0V28Jb1FbUoZpkjfJoZ5BzaePCtZ61MHrzOzZmtuw4tg0MGOswP72J61Wq4RIKPDiJ6rE8gNJZP1oG8CwKcvpTuYv2YBTdJxE2JzTIkhVmu1RDtGW2HP8cClHia3J070WAQzHIDMh5ygRCADErfSwGZt4nlVdbOLN10g32elGeCOBW69v8mX2d70BJpIBroIXGxJ66WIaWTFFzDb3sn4w7QxO74FxfbTRHRiYGz6FMA+kURVi2NzXkeB9ZHGtJ66xHhYbF55XSbnHQ2zITaHYIvhQUsHYnTBOXooDJf/xpO35VFdPy6LRteQF3t6V4tzeuF2pfLu/4TWFH05FJGKkdOod2SNRCSpQ2IyePPO1+My9SQOiJis833NmLpK27GgR6H/GGKp8UMHDIa3nYOozz/AcPvfzzd82Bv2mtrhiDEzdGUWrMXFHJJYG/nsnHGSaT7lTKE709WzNxvvQCFBmxlPsQS0ZuL/1v1PirpZ+laPtyW/iwUdTaMMpB4Z6Q0bWwvjupn4pB/mPsLkbs8lLl0BZTjONr+ipm5rM0Zl2BiE6nUAQHj4X7O0e7s2w/0=
+
