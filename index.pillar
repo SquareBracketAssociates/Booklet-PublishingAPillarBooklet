@@ -17,3 +17,8 @@ ${inputFile:path=Chapters/TravisBintray.pillar}$
 ${inputFile:path=Chapters/DeployingHtmlBook.pillar}$
 
 ${inputFile:path=Chapters/CheatSheet.pillar}$
+
+${inputFile:path=Chapters/5minTutorial2.pillar}$
+
+${inputFile:path=Chapters/academic-process.pillar}$
+
