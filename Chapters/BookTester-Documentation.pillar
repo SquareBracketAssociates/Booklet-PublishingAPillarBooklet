@@ -7,12 +7,12 @@ What does it mean to ‘test a book’ and why would you do it? Testing a book m
 !!!!Codeblock types
 
 Pillar syntax allows you to write codeblocks, showing a part of code. The inside of a codeblock allows one to display any part of code you might want to. For example:
-[[[
-\[\[\[
-YourClass \>\> yourMethod
-\^ \‘bla\’
-\]\]\]
-]]]
+%[[[
+%  [[[
+%	  YourClass >> yourMethod
+%	^ ‘bla’
+%  ]]]
+%]]]
 This codeblock presents a method definition, the other two possible codeblocks that can be tested are the following: 
 
 -Class definitions

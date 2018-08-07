@@ -1,16 +1,14 @@
-!!About Pillar 
+!! About Pillar 
 
 Pillar is a system to manage documents (books, presentations, web sites). It is able to emit resulting documents in multiple formats (html, markdown, latex, AsciiDoc). 
 It is composed of several modules such as importers, transformers, document model and outputers.
 
 This book describes Pillar in its current version 7.0. Pillar is currently developed and maintained by Stéphane Ducasse and Guillermo Polito.
-The original author of Pillar was Damien Cassou. Many people have also contributed to Pillar: Ben Coman, Guillermo Polito, Lukas Renggli (original author of Pier from which a first version of Pillar has been extracted), Benjamin van Ryseghem, Cyril Ferlicot-Delbecque, Thibault Arloing and Yann Dubois.
+The original author of Pillar was Damien Cassou. Many people have also contributed to Pillar: Ben Coman, Guillermo Polito, Lukas Renggli (original author of Pier from which a first version of Pillar has been extracted), Benjamin van Ryseghem, Cyril Ferlicot-Delbecque, Thibault Arloing, Yann Dubois, Quentin Ducasse and Asbathou Sama Biyalou. Special thanks to Asbathou Sama Biyalou!
 
 This book adapts, extends, clarifies the chapter explaining Pillar in the ''Enterprise Pharo: a Web Perspective'' book.
 
 Pillar was sponsored by *ESUG>http://www.esug.org*.
-
-
 
 !!!Introduction
 Pillar (hosted at *http://github.com/pillar-markup*) is a markup language and associated tools to write and generate documentation, books (such as this one), web sites, and slide-based presentations. The Pillar screenshot in Figure *@voyageDocExample* shows the HTML version of chapter Voyage.
@@ -39,14 +37,12 @@ This book was written in Pillar. If you want to see how Pillar is used, have a l
 
 !!! Pillar 70 planned features
 
-Pillar 70 saw some major refactorings and cleaning: it does not rely on Grease, Magritte and make use anymore. Still some issues will be implemented to reach the version 70 we envision. Here is a little list of features that we are working on or will soon:
+Pillar 70 saw some major refactorings and cleaning: it does not rely on Grease, Magritte. Still some issues will be implemented to reach the version 70 we envision. Here is a little list of features that we are working on or will soon:
 
 - Incremental recompilation. Since we remove the use of make (so that Windows users can use Pillar) we should introduce a way to avoid to recompile complete book when just one chapter changed.
-- Markdown syntax. 
+- Markdown syntax.
 - Release of Ecstatic. Pillar supports the deployment of web sites named Ecstatic and we are working on a second version of Ecstatic.
 - Better table support.
-
-
 
 !!! Conclusion
 Pillar is still in active development: maintainers keep improving its implementation. The current version of Pillar is Pillar 70. This booklet only documents Pillar 70. This booklet will be synchronised with future enhancements. 
