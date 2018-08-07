@@ -15,3 +15,5 @@ ${inputFile:path=Chapters/InPharo.pillar}$
 ${inputFile:path=Chapters/TravisBintray.pillar}$
 
 ${inputFile:path=Chapters/CheatSheet.pillar}$ 
+
+${inputFile:path=Chapters/BookTester-Documentation.pillar}$ 
