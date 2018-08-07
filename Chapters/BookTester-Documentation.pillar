@@ -4,6 +4,7 @@ What does it mean to ‘test a book’ and why would you do it? Testing a book m
 
 Pillar comes with a book tester.
 
+
 !!! Typical codeblocks
 
 Pillar syntax allows you to write codeblocks, showing a part of code. The body of a codeblock allows one to display any part of code you might want to. For instance, example, method and class definitions can be tested.
@@ -17,6 +18,10 @@ Pillar syntax allows you to write codeblocks, showing a part of code. The body o
 ]]]
 
 !!!! Method definition
+
+
+This codeblock presents a method definition.
+
 [[[
   [[[
 	YourClass >> yourMethod
@@ -24,9 +29,11 @@ Pillar syntax allows you to write codeblocks, showing a part of code. The body o
   ]]]
 ]]]
 
-This codeblock presents a method definition, the other two possible codeblocks that can be tested are the following: 
-
 !!!! Class definition
+
+
+This codeblock presents a class definition.
+
 [[[
    [[[
    Object subclass: #YourClass
@@ -36,84 +43,106 @@ This codeblock presents a method definition, the other two possible codeblocks t
    ]]]
 ]]]
 
-!!! Testing codeblocks
+As we show next, using parameters we can indicate that the expression inside a codeblock should be validated
 
-Using parameters we can indicate that the expression inside a codeblock should be validated.
+!!! Testing codeblock examples 
 
-!!!! Testing examples 
-
-Using the parameter ==example== and the ==>>>=== helps you to validate 
+Using the parameter ==example== and the ==>>>=== helps you to validate your examples.
+For example 
 
 [[[
    [[[example=true
-   ==3\+4==
-   \>\>\>7
+   3 + 4
+   >>> 7
    ]]]
 ]]]
 
-The book tester interprets the following parametrized codeblock as an assertion 
- ==self assert: (3 + 4 ) equals: 7==
- 
-The use of \‘\>\>\>\’ and parameters in the codeblock will help us testing the code within it. The BookTester turns examples into tests.
+The book tester interprets the previous parametrized codeblock as an assertion 
+ ==self assert: (3 + 4 ) equals: 7==. 
 
-- __Testing method and class definitions:__
- 
-Testing method or class definitions resumes itself in testing if the compilation does not raise any error. It can help making sure your book is up to date with the latest Pharo version. Those codeblocks are put up for testing as example: stating methodDefinition=true or classDefinition=true as code block parameters
+The book tester follows the following pattern with only one ==>>>== per codeblock.
 
-!!!!Making your codeblocks edible for testing
-
-The first rule to make your codeblock testable is to choose the parameter that defines the type of codeblock it is among those three: ==classDefinition==, ==methodDefinition== and ==example==.
-
-That being said, some rules have to be followed in order for the testing to proceed:
--Method definitions should follow this format:
 [[[
-\[\[\[ methodDefinition\=true
-YourClass \>\> yourMethod
-	methodBody
-\]\]\]
+    [[[example=true
+       Action 
+    >>> ExpectedResult
+    ]]]
 ]]]
-with an emphasis laid on the \'\>\>\' between your class and method.
 
--Class definitions should follow this format:
-[[[
-\[\[\[ classDefinition\=true
-YourSuperClass subclass\: \#YourClass
-               instanceVariableNames\: \'\'
-               classVariableNames\: \'\'
-               package: \'YourPackage\'
-\]\]\]
-]]]
-the common class definition.
 
--Examples should follow this format:
+
+!!! Testing method and class definitions
+The booktester checks that class and method definitions are valid (do not raise syntactical errors at compilation). You should use the following parameters:  ==methodDefinition=true== or classDefinition=true as code block. It makes sure your book is up to date with the latest Pharo version.
+
+
+!!!! Method definitions
+Method definitions should follow this format:
 [[[
-\[\[\[ example\=true
-Action 
-\>\>\> ExpectedResult
-\]\]\]
+	[[[methodDefinition=true
+		YourClass >> yourMethod
+		methodBody
+	]]]
 ]]]
-with an emphasis laid on \'\>\>\>\' at the beginning of a new line.
+with an emphasis laid on the ==>>== between your class and method.
+
+It is important to understand that the class (here ==YourClass==) should be present in the system producing the Pillar book. To load code, see the ==\${loader}\$== annotation presented in the following chapter.
+
+
+
+!!!! Class definitions
+ Class definitions should follow this format:
+[[[
+   [[[classDefinition=true
+	   YourSuperClass subclass: #YourClass
+          instanceVariableNames: ''
+          classVariableNames: ''
+          package: 'YourPackage'
+	]]]
+]]]
+
+In addition to validate that the class definition is valid, the parameter defines the class in the environment 
+in which the book is defined. It supports the definition of testing other methods. 
+
+As a general principle, any method definition refering to classes not defined in the system, should be defined after by a class definition or a loading instruction (see ==\$loader\$== as shown in the following).
 
 !!! Practical testing
+There are currently two ways of testing your book: (1) using the command line and (2) from within Pharo.
+Now from the command line two options are supported. 
 
-There are currently two ways of testing your book.  However, you can also use the following:
 
+!!!! Check file
 [[[language=bash
-$ $PHARO_VM $IMAGE clap checkBook
-]]]
-''executed within your book folder (it will inspect your book index)''
-
-This first version uses Clap, a Pharo module handling command line.
-
-[[[language=bash
-$ $PHARO_VM $IMAGE pillar build checkBook --baseDirectory=`pwd`
+> $PHARO_VM $IMAGE clap checkFile yourfolder/f1.pillar
 ]]]
 
-This second version uses the already existing ==build== command for Pillar and extending it (it migt be confusing and not the best way).
+When a path is not explicitely stated, the book tester takes the first file matching ==*.pillar==.
+
+@@todo Add the help output.
+
+
+!!!! Check all files
+[[[language=bash
+> $PHARO_VM $IMAGE clap checkRepository yourfolder/f1.pillar
+]]]
+
+When a path is not explicitely stated, the book tester takes the first file matching ==*.pillar==.
+
+[[[language=bash
+> $PHARO_VM $IMAGE clap checkRepository --help
+]]] 
+
+!!!! Check full book
+[[[language=bash
+> $PHARO_VM $IMAGE pillar build checkBook --baseDirectory=`pwd`
+]]]
+
+This second version uses the already existing ==build== command for Pillar. Pay attention the key difference is that the build version works on expanded text version where annotations have been processed while the clap version only on the pillar textual input.
 
 However, using one method or the other leads you to obtaining a report on all tests made. The passed ones are not displayed, however the failed ones are shown by stating first the explanation of the failure (name of the exception or if the assertion failed). Note that only codeblocks with one of the three following parameters will be tested: ==example==, ==methodDefinition== and ==classDefinition==. And they will be tested using the methods used above.
 
-!!! For Pharoers
+@@todo Add a report 
+
+!!! From within Pharo
 
 You can also test a pillar file from within Pharo itself. To do so you should use a ==PRBookTesterVisitor== to check a file using ==checkFileNamed:==. This can be useful to inspect each of the results. In particular the successful one.
 
@@ -160,44 +189,105 @@ with ==yourAge== and ==myAge== as variables for example.
  
 
 
+!! Improving Book Writability
 
-
-
-!!! Improving Book Writability
-
-Some annotations are also added along with the booktester to help you write your book and especially everything linked to the code within it.
+BookTester can do a lot more for you. Indeed you can load a specific version of your code and display it instead of copying it from your code repository to your pillar. In addition you can run your tests.
 
 !!!Loading your code
 
 How to test something you have defined but not loaded? This certainly is the question, especially when using class or methods that you just defined (which happens in nearly every book you might want to write).
-In order to answer that question, the following annotation has been implemented:
-[[[
-==\$\{loader\:account\=YourGitAccount\|project\=YourGitProject\|tag\=YourGitTag\|baseline=\YourBaselineName\}\$==
-]]]
-This annotation will load your git project at the given tag. The tag is useful to note your chapter's prerequisites (precedent chapter or more). Note that a proper use of this annotation requires you to tag every step of your code in order to cut it in chapters later on. The baseline parameter will take by default the name of the project, but it is present in case they are different.
+To answer that question, the following annotation has been implemented:
 
-!!!Test-driven Developement
-
-A habit, both depicted in books or simply used by programmers is to use test-driven developpement and that is why running the test right after you defined it is not meaningful. Every codeblock with the parameter ==methodDefinition== will have its compilation tested but the test will not be run until the ==run== annotation is used. 
 [[[
-==\$\{run:testClass:YorTestClassName\}\$==
+${loader:account=YourGitAccount|
+	project=YourGitProject|
+	tag=YourGitTag|
+	baseline=YourBaselineName}$
 ]]]
+
+This annotation loads your git project at the given tag. The tag is useful to specify your chapter's prerequisites (precedent chapter for example). Note that a proper use of this annotation requires you to tag every step of your code to create milestones. The baseline parameter takes by default the name of the project, but it is present in case they are different.
+
+!!!Support test-driven development writing
+When writing book to teach TDD, authors often place test first and only after method definitions. This is why validating a test just after its definition may be not work. 
+
+This is why every codeblock with the parameter ==methodDefinition== has its compilation tested but a test will not be run until the ==run== annotation is encountered.
+
+[[[
+${run:testClass=YourTestClassName}$
+]]]
+
 The run annotation will run every test defined with ==methodDefinition== within a given test class and report the results in the booktester report.
+
+
+!!!! Typical TDD booklet 
+A typical sequence will be then:
+
+[[[
+   [[[classDefinition=true
+	   TestCase subclass: #MyTestCase
+   ]]]
+
+   [[[methodDefinition=true
+       MyTestCase >> testFoo
+             self assert: Foo new name equals: 'foo'
+   ]]]
+   
+   [[[methodDefinition=true
+      MyTestCase >> testFoo2
+        self assert: Foo new friendName equals: 'bar'
+   ]]]
+   
+    [[[classDefinition=true
+		Object subclass: #Foo
+   ]]]
+
+   [[[methodDefinition=true
+	   Foo >> name 
+        ^ 'foo'
+  ]]]
+
+     ${run:testClass=MyTestCase}$
+
+   [[[methodDefinition=true
+  	   Foo >> friend 
+          ^ 'bar'
+    ]]]
+	
+    ${run:testClass=MyTestCase}$
+]]]
+   
+
+
+!!!! About method definition
+It is possible to define a method that will be used in a test but without showing its definition in the text using the ==hidden== parameter. For example, when the author does not want to show accessors but want to use them in tests.
+
+The following method will be compiled to the class ==Foo== but will not be shown in the book output.
+[[[
+	[[[methodDefinition=true,hidden=true
+		Foo >> addedButNotShown
+			^42 
+	]]]
+]]]
+
+
 
 !!!Helping Tools
 
-More than the loader and runner annotations, we added three other annotations: ==showClass==, ==showMethod== and ==screenshot==.
+In addition to the previous annotations, book tester offer three other annotations: ==showClass==, ==showMethod==, and ==screenshot==.
 
-- __==showClass==__:
+!!!! showClass
 The ==showClass== annotation allows you to display the class definition of your choice and is used as follows
+
 [[[
-==\$\{showClass:class\=YourClassName\}\$==
+${showClass:class=YourClassName}$
 ]]]
 For example, using the annotation like this:
 [[[
-\$\{showClass:class\=Integer\}\$
+${showClass:class=Integer}$
 ]]]
-will result in obtaining the following:
+
+displays the following in the text
+
 [[[
 Number subclass: #Integer
 	instanceVariableNames: ''
@@ -207,16 +297,16 @@ Number subclass: #Integer
 
 Note that currently the displayed class definition is not parametered as ==classDefinition== because we supposed there is no need to test the compilation of it. Whether you defined it somewhere else and want to show it again or it is already defined in the system and therefore does not need to be compilation-tested.
 
--__==showMethod==__:
-The ==showClass== annotation allows you to display the class definition of your choice and is used as follows
+!!!! showMethod
+
+The ==showMethod== annotation allows you to display the class definition of your choice and is used as follows
+
 [[[
-==\$\{showClass:class\=YourClassName\}\$==
+${showMethod:method=isPowerOfTwo|class=Integer}$
 ]]]
-For example, using the annotation like this:
-[[[
-==\$\{showClass:method\=isPowerOfTwo\|class\=Integer\}\$==
-]]]
-will result in obtaining the following:
+
+displays the following method in the document:
+
 [[[
 Integer>>isPowerOfTwo
 	"Return true if the receiver is an integral power of two."
@@ -225,14 +315,19 @@ Integer>>isPowerOfTwo
 
 For the same reasons as ==showClass==, the displayed method definition is not parametered as ==methodDefinition==.
 
--__==screenshot==__:
+!!!! screenshot
+
 The ==screenshot== annotation is used as follows:
 [[[
-==\$\{screenshot:class\=YourClassName\|method\=yourMethodName\|caption\=yourCaption\|width\=yourWidth\|label\=yourLabel}\$==
+${screenshot:class=YourClassName|method=yourMethodName|caption=yourCaption|width=yourWidth|label=yourLabel}$
 ]]]
+
 This annotation uses the class and method names to create both:
---__PNG File__ corresponding to a System Browser opened on the given method definition found in the given class method dictionary ; this file is stored under YourChapter/figures/screenshot/YourClassName>>YourMethodName-Date.png 
---__Figure Reference__ replacing the annotation with the fresh created PNG file and given caption/width/label
+- ""PNG File"" corresponds to a System Browser opened on the given method definition found in the given class method dictionary ; this file is stored under YourChapter/figures/screenshot/YourClassName>>YourMethodName-Date.png 
+- ""Figure Reference"" replaces the annotation with the fresh created PNG file and given caption/width/label
 
 The default value of ==caption== is ==YourClassName>>YourMethodName==. The default value of ==label== is ==lbl_yourMethodName==. The default value of width is ==50==.
 
+!!! Conclusion
+
+This chapter shows that Pillar offers strong support to synchronise your code and its documentation. First it provides ways to test that examples or definitions are correct. Second it offers ways to link your versioned code can be loaded and displayed. Finally, even tests in the code loaded can be verified.
