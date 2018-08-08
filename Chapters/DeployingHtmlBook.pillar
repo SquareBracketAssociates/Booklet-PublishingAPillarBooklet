@@ -1,0 +1,181 @@
+!! Deploy your html books using Travis and Github Pages
+
+Not available
+
+First of all, be sure you have a *github>www.github.com* account and *travis>www.travis-ci.org* one if possible. As explained for setting up Travis and Bintray, you will enable travis integration from your github repository containing your html files.
+
+Next step is to create some files which will be used during the deployment.
+
+Let's start by creating a ==Makefile== at the top level of your repository. 
+
+That is the content of this file:
+
+[[[
+SITE=_result/html
+
+.pillar:
+	git clone https://github.com/pillar-markup/pillar.git .pillar -b dev-7
+	cd .pillar && ./scripts/build.sh && cd ..
+
+build:	.pillar
+	.pillar/build/pillar build html
+
+deploy:	build
+	./scripts/prepare_for_deploy.sh $(SITE)
+	cd $(SITE) && git push -f origin HEAD:gh-pages
+
+
+clonedeploy:
+	rm -rf $(SITE)
+	git clone -b master `git config --get remote.origin.url` $(SITE)
+
+
+clean:
+	rm -rf $(SITE)
+
+]]]
+
+
+This file will be used by travis to install the last version of pillar and generate your book in html format. After that, it delegates the deployment to another script.
+
+
+No changes needed for this file. Perhaps you will have to modify the branch (part after -b) from which pillar is cloned, in order to have the latest version.
+
+The ==gh-pages== branch will be automatically created, so you are not obliged to create it on github. The gh-pages branch is recognized by github to be a special branch on which 
+static html files can be stored in order to be served. So pushing the generated html files on that branch will provide you a site available at ==https://<git-username>.github.io/<your-repo-name>/==.
+
+
+Now you will create the ==scripts/prepare_for_deploy.sh== which is a bash file initializing a repository for your generated files.
+
+That file looks like: 
+
+[[[
+#!/usr/bin/env bash
+# Bash3 Boilerplate. Copyright (c) 2014, kvz.io
+
+set -o errexit
+set -o pipefail
+set -o nounset
+# set -o xtrace
+
+# Set magic variables for current file & dir
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
+__base="$(basename ${__file} .sh)"
+__root="${__dir}/.." # <-- change this as it depends on your app
+
+
+# The repository send as parameter where html files are located
+if [ $# -lt 1 ]
+then 
+  echo "parameter missing: Repository name expected"
+else 
+  __site=$1
+fi
+
+cd ${__root}/${__site}
+touch .nojekyll
+git init
+git add .
+git commit -m "Generated from source branch: `cd ${__root} && git log -1 --oneline`"
+git remote add origin "https://$GH_TOKEN@github.com/${TRAVIS_REPO_SLUG}.git"
+echo "GH PAGES Setup finished"
+]]]
+
+
+The ""TRAVIS_REPO_SLUG"" variable contains your github username and repository name like this ""toto/book_pillar"".
+
+An important thing which has to be done here is the generation of the token, which is needed by travis.
+
+This token will be encrypted and will be stored in a ==.travis.yml== file.
+
+You will need to add these instructions to your existing ==.travis.yml== file. Those lines will trigger the deployment process and will install some necessary librairies for pillar installation :
+
+[[[
+language: c
+addons:
+  apt:
+    packages:
+    - libasound2:i386
+    - lib32z1
+    - lib32bz2-1.0
+    - libssl1.0.0:i386
+    - libfreetype6:i386
+script:
+- if [[ ${TRAVIS_BRANCH} == "master" ]]; then make deploy; fi
+]]]
+
+
+!!! Generate the token in Github
+
+Go to your *github>www.github.com* account, go to the Developer Settings (located in general settings of your account).
+
+In Personal access tokens, click on Generate new token. Provide a description and generate it. Copy it in a safe file, you will have to encrypt it. And for every new book repository you can use 
+the same token, you will just need to encrypt it.
+
+Now just use this command at the top route of your repository:
+
+[[[
+$ travis encrypt GH_TOKEN=<your_token> --add env.global
+]]]
+
+This will add the encrypted token to your ==.travis.yml== file.
+
+You are not so comfortable with bash scripts !! No problem, the next section is for you
+
+!!! For non geeks
+
+Here we are going to present another of doing the deploy without dealing with too many scripts. 
+
+See by your self :
+
+[[[
+language: smalltalk
+
+
+os:
+    - linux
+
+
+smalltalk:
+    - Pharo-6.1
+
+env:
+  matrix:
+    - JOB=test TYPE=System ARCHETYPE=book OUTPUT=html
+
+install:
+    # Pillar installation
+    - git clone https://github.com/pillar-markup/pillar.git .pillar -b dev-7  # Clone pillar
+    - cd .pillar && ./scripts/build.sh && cd ..
+
+script:
+    - .pillar/build/pillar build html
+    - cd _result/html && touch .nojekyll && cd ..
+
+deploy:
+   provider: pages
+   skip-cleanup: true
+   github-token: $GH_TOKEN
+   keep-history: true
+   local_dir: _result/html
+   on:
+     branch: master
+
+]]]
+
+
+!!! Recap
+
+Now you can commit and push your repo. 
+
+Before doing that, just let us check some points
+
+- You have the Makefile at the top level of your repository
+- The prepare_for_deploy.sh file in scripts directory ''scripts/prepare_for_deploy.sh''
+- Travis integration is enabled on github
+- You have an encrypted token in ==.travis.yml== labelled ""GH_TOKEN""
+
+If so, you can safely do your commit. And enjoy travis integration. Your book will be served on ==https://<git-username>.github.io/<your-repo-name>/==
+
+""Pay attention to have an index file in your repository and set base_url to your repository name"" (pillar.conf)
