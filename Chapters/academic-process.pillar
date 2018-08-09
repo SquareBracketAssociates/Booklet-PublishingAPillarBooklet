@@ -10,7 +10,10 @@ Clone pillar, check out that branch and then proceed with a normal pillar instal
 
 [[[language=bash|caption=Clone and Install Pillar
 # Clone and build pillar
+# cloning with SSH
 $ git clone git@github.com:samakhov/pillar.git -b feature/server-command
+# or with HTTPS
+$ git clone https://github.com/samakhov/pillar.git -b feature/server-command
 $ cd pillar
 $ ./scripts/build.sh
 
@@ -25,11 +28,11 @@ $ echo 'export PATH="$PATH:~/.pillar"' >> ~/.bashrc
 
 !! Setup your GitHub repository
 
-Now we are going to create a repository on GitHub for our website. In this part, we are considering two different cases:
+Now we are going to create a repository on GitHub for our website. In this part, we are considering two different scenarios:
 #You want to set a repository for your personal website as ""myAccount.github.io""
 #Or you want to have a website for a project which will be reached via ""myAccount.github.io/myProject""
 
-For both cases, GitHub provides you a service named GitHub Pages which allows you to host free your website.
+For both cases, GitHub provides you a service named GitHub Pages which allows you to host your website for free.
 But especially for the second case, you need to have a personal website (by following first case), before hosting another project on your GitHub account.
 
 Both in these cases, creating the repository on GitHub is the same.
@@ -37,20 +40,32 @@ Both in these cases, creating the repository on GitHub is the same.
 For that, we need to follow these steps:
 
 - In the upper-right corner of any page, click ""+"", and then click ""New repository"" as: 
-+New repository>file://new.png+
++New repository>file://figures/new.png+
 - Type a name for your repository.
 -# For personal website you need to named it as ""myAccount.github.io""
 -# For the second case, you can named it as you want, ""myProject"" for example.
 - Optionally, add a description for your repository like "My personal web site" 
-- According to informations which will be on your website, you have to chose between "Private" and "Public". Generaly it is public. For private, you need to pay to GitHub.
+- According to informations which will be on your website, you have to chose between "Private" and "Public". Generaly it is public. For private option, you need to pay.
 - Select ""Initialize this repository with a README"".
 - Add .gitignore by selecting Smalltalk as default language.
 - Now click ""Create repository"".
 
 Your GitHub repository is now created and look like that.
-+GitHub repository>file://repo_created.png+
++GitHub repository>file://figures/repo_created.png+
 
 
+!! Generate Token for Travis
+
+We are now going to generate a token on Github and add it as an environement variable named ==GH_TOKEN== in Travis.
+In the both cases, this token will be used to allow a dialog between Travis and Github for automating website build.
+
+
++Travis settings>file://figures/travis_settings.png+
+
+On your project Settings in Travis, you have a menu labelled ""Environment variables""
+where you can add variables (those variables will be automatically encrypted).
+
++Add Token>file://figures/settings.png+
 
 
 
@@ -79,7 +94,7 @@ $ pillar serve -p xxxx -w &
 ]]]
 
 After these steps, you will get a default website as: 
-+Skeleton website>file://default.png+
++Skeleton website>file://figures/default.png+
 
 !! Editing your site
 
@@ -163,7 +178,7 @@ We can notice that ==toc.pillar== is the file used to declare different menus.
 
 Now you should get a page like that:
 
-+New Page>file://teach.png+
++New Page>file://figures/teach.png+
 
 @@note We have not cover all the syntax of Pillar here. So for more, you can click *here>https://samakhov.github.io/Booklet-PublishingAPillarBooklet/Chapters/CheatSheet.html#pillar%20cheatsheet*.
 
@@ -180,7 +195,7 @@ This way, on every commit we can build our site and push our html to our website
 Automatic building and hosting of our website is using Travis Continuous Integration. So let's launch to Travis via our GitHub account following *this>https://trailhead.salesforce.com/en/modules/sfdx_travis_ci/units/sfdx_travis_ci_setup#Tdxn4tBKheading7*.
 
 We can now activate our GitHub repository in Travis:
-+Travis activation>file://activate.png+
++Travis activation>file://figures/activate.png+
 
 This will automatically add travis as a service in your GitHub repository.
 
@@ -222,15 +237,6 @@ deploy:
 ]]]
 
 @@note This script globally download Pillar, build the site from pillar files pushed on ""source"" branch and push generated files (located in ''_result/html'') on ""master"" GitHub branch. It means we should create ""master"" and ""source"" branch and only push to ""source"" branch.
-
-We are now going to generate a token on Github and add it as an environement variable named ==GH_TOKEN== in Travis
-
-+Travis settings>file://travis_settings.png+
-
-On your project Settings in Travis, you have a menu labelled ""Environment variables""
-where you can add variables (those variables will be automatically encrypted).
-
-+Add Token>file://settings.png+
 
 After all of that, you can commit your changes to GitHub and wait for your website on:
 ""https://myAccount.github.io/""
