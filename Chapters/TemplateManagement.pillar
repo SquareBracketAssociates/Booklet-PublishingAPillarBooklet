@@ -1,0 +1,49 @@
+!!Template Management
+
+In the new version of Pillar, we have a new way of managing templates files. Normally, by default, we should specify templates files location in ==pillar.conf==.
+
+Main features:
+-By default, we don't need to specify template files
+-Specify template files per pillar files
+
+
+
+!!!Default templates values
+
+Previously for archetypes, all template files were located in ==templates== directory under ==_support== of the project directory. 
+We were then obliged to specify all the path to the mustche files in ==pillar.conf==. 
+Now we refactor archetypes in order to have templates files in related writer directories under ==templates== directory. For example, in ==book== archetype,
+we have ==epub==, ==latex==, ==html== directories under ==templates== directory.
+Then now all templates files in those files are named ""main.mustache"" instead of different and long names.
+We just only need to specify the template name ""main.mustchae"" in general case and acording to the writer, the file will be resolved from the good directory.
+We then set that as default values, so we don't specify mustache files in ==pillar.conf==. Now in our ==pillar.conf== we don't have information about template files, only about writers.
+
+
+
+!!!Mustache template per pillar file
+
+With these new features, we can have a website or book with pages generated from different mustache templates files.
+All we have to do is to specify using ""template"" property the name of the template files. We put our mustache template in the corresponding directory.
+Then we just specify the basename of the template file.
+As an example, for my website I want ==projects== page to use a template different from the default one, I just put ==testing.mustache== under ==html== directory
+and specify it in ==projects.pillar== :
+
+
+[[[
+{
+	"template": "_support/templates/html/testing.mustache"
+}
+
+
+! My Projects
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus feugiat in ante metus. Arcu cursus vitae congue mauris rhoncus aenean vel. Ac odio tempor orci dapibus ultrices in iaculis nunc sed. Quis ipsum suspendisse ultrices gravida dictum fusce ut. Sagittis nisl rhoncus mattis rhoncus urna neque. Aenean euismod elementum nisi quis. Nibh sit amet commodo nulla facilisi nullam vehicula. Tortor condimentum lacinia quis vel eros donec ac odio tempor. Amet mattis vulputate enim nulla. Nam at lectus urna duis convallis convallis. Nisi lacus sed viverra tellus in. Morbi tristique senectus et netus et malesuada fames. Sit amet nisl purus in. Fusce id velit ut tortor pretium.
+
+]]]
+
+It is then possible to have websites with different mustache templates per pages. 
+
+
+!!!Error cases
+
+For default templates files, when they are not present, we have a FileNotFound Exception stopping the generation process. 
