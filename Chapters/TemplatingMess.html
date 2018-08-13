@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon" />
+<link href="/_support/html/css/font-awesome.min.css" rel="stylesheet">
+<link href="/_support/html/css/nucleus.css" rel="stylesheet">
+<link href="/_support/html/css/flex.css" rel="stylesheet">
+<link rel="stylesheet" href="/_support/html/highlightjs/styles/default.css">
+<link rel="stylesheet" href="/_support/html/css/highlight-commands.css">
+<link rel="stylesheet" href="/_support/html/css/bootstrap.min.css">
+<script src="/_support/html/js/jquery-2.x.min.js"></script>
+<script src="/_support/html/highlightjs/highlight.pack.js"></script>
+<script src="/_support/html/js/highlight-commands.js"></script>
+<meta name="description" content="">
+<meta name="author" content="Stéphane Ducasse and Guillermo Polito">
+  </head>
+  <body>
+    <header>
+  <div class="logo">
+    <a class="baselink" href=""></a>
+  </div>
+  <div class="burger"><a href="javascript:void(0);" style="font-size:15px;">&#9776;</a></div>
+  
+</header>
+<article>
+  <aside>
+    <ul class="menu">
+   		<li data-nav-id="123" class="dd-item">
+    		<a href="">
+		       <i class="fa fa-fw fa-home"></i>
+	    	</a>
+        </li>
+
+		
+    </ul>
+  </aside>
+
+  <section class="page">
+    
+	<h1>Publishing Documents with Pillar 7.0</h1>
+		
+	
+
+
+<h3>A template</h3>
+
+<p>
+Then we have to create a template, for instance let's create welcome.html.template in the Pharo directory and fill in this template example:
+</p><figure><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+	&lt;head&gt;
+		&lt;title&gt;{{{title}}}&lt;/title&gt;
+	&lt;/head&gt;
+
+	&lt;body&gt;
+		&lt;div class=&quot;container&quot;&gt;
+			{{{content}}}
+		&lt;/div&gt;
+	&lt;/body&gt;
+&lt;/html&gt;</code></pre><figcaption></figcaption></figure>
+
+<p>
+Each template variable will be replaced by its values
+</p>
+
+
+
+
+<p>
+You can check the result in the stdout file which is placed in the Pharo directory
+</p>
+<ul>
+<li>Exportation in latex</li>
+</ul>
+<p>
+The procedure is the same with other kind of document. This is an another example with latex
+</p>
+<p>
+In this example we show how to add a bibliography and how to export the result as pdf with pdflatex provided by (MiKTeX distribution)
+</p>
+<p>
+Let's set some attributes (title, content) in testLatex.pillar for instance
+</p>
+<figure><pre><code>{
+    &quot;metadata&quot;: {
+      &quot;title&quot;:&quot;My latex bibliography test with Pillar !&quot;
+    }
+}
+
+my bibliography test
+{{{latex: \bibliographystyle{abbrv}
+\bibliography{rmod}
+}}}</code></pre><figcaption></figcaption></figure>
+
+<p>
+We create testLatex.tex.json with the following command
+</p>
+<figure><pre><code>Pharo.exe Pillar.image pillar export --to=latex --outputFile=testLatex testLatex.pillar</code></pre><figcaption></figcaption></figure>
+
+<p>
+Then, let's create the template in testLatex.latex.template file for instance
+</p>
+<figure><pre><code>\documentclass{article}
+
+\begin{document}
+
+Cite : first \cite{ref}, second \cite{ref2}, third \cite{ref3}.
+
+{{{content}}}
+
+\end{document}</code></pre><figcaption></figcaption></figure>
+
+<p>
+We generate the document in the stdout file with the following command
+</p>
+<figure><pre><code>Pharo.exe Pillar.image mustache --data=testLatex.tex.json --template=testLatex.latex.template</code></pre><figcaption></figcaption></figure>
+
+<p>
+Create a bibliography if it doesn't exists and place it in the Pharo directory. In our example this is rmod.bib file
+</p>
+<p>
+Then, link the bibliography with the latex document
+</p><figure><pre><code>bibtex stdout</code></pre><figcaption></figcaption></figure>
+
+<p>
+Create your pdf
+</p><figure><pre><code>pdflatex stdout</code></pre><figcaption></figcaption></figure>
+
+
+
+
+<h3>Creating a first page</h3>
+<p>
+You can create a first page naemd <code>first.pillar</code> file with this content:
+</p>
+<figure><pre><code class="pillar">!Hello World</code></pre><figcaption></figcaption></figure>
+
+<p>
+And finally compiling it from a terminal (see Section <a href="#commandLineInterface"></a> for more information about the command-line interface). 
+</p>
+<figure><pre><code class="bash">make build/first.html</code></pre><figcaption></figcaption></figure>
+
+<p>
+This will generate a <em>first.html</em> file you can open in a web browser. The content of this file will be something like:
+</p>
+<figure><pre><code class="json">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+    &lt;title&gt;&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div class=&quot;container&quot;&gt;
+      &lt;section&gt;
+        &lt;h1&gt;1. Hello World&lt;/h1&gt;
+      &lt;/section&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre><figcaption></figcaption></figure>
+
+<h2>Configuring a Document</h2>
+
+<p>
+As you can see, there is no document title in the generated <em>first.html</em> file. This is because we did not specify any. To specify a title, we have to add it with a configuration
+at the beginning of the <em>first.pillar</em> file:
+</p>
+<figure><pre><code class="pillar">{
+   &quot;metadata&quot;: {
+     &quot;title&quot;: &quot;My first document while reading the 5 minutes Pillar tutorial&quot;
+    }
+}
+
+!Hello World</code></pre><figcaption></figcaption></figure>
+
+<p>
+When you compile using the same command line,
+</p>
+<figure><pre><code class="bash">make build/first.html</code></pre><figcaption></figcaption></figure>
+
+<p>
+you should now get a web page with a title:
+</p>
+<figure><pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+   &lt;head&gt;
+      &lt;title&gt;My first document while reading the 5 minutes Pillar tutorial&lt;/title&gt;
+   &lt;/head&gt;</code></pre><figcaption></figcaption></figure>
+
+<p>
+Another way to achieve the same is to use a dedicated configuration file. This configuration is typically named <code>pillar.conf</code> and is written in the
+STON format (see Section <a href="#configuring"></a> for more information about the configuration file). Create your
+first <code>pillar.conf</code> file:
+</p>
+<figure><pre><code class="ston">{
+     &quot;title&quot; : &quot;My first document from pillar.conf&quot;
+}</code></pre><figcaption></figcaption></figure>
+
+<p>
+Meta-information specified in Pillar files take precedence over configuration in the <code>pillar.conf</code> file. To see the new title, you thus have to remove the one in <code>first.pillar</code>.
+</p>
+<h2>Exporting a Different Content Using a Template</h2>
+
+<p>
+If you want to tweak the content of the exported file, for example to reference your CSS or to add a footer, you need to create your own template (see Section
+<a href="#templating"></a> for more information about templating). You must write such template in its own file, e.g., <code>myhtml.template</code>:
+</p>
+<figure><pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+   &lt;head&gt;
+      &lt;title&gt;{{{title}}}&lt;/title&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+      &lt;div class=&quot;container&quot;&gt;
+         {{{content}}}
+      &lt;/div&gt;
+      &lt;footer&gt;
+         &lt;p&gt;{{author}}, {{year}}&lt;/p&gt;
+      &lt;/footer&gt;
+   &lt;/body&gt;
+&lt;/html&gt;</code></pre><figcaption></figcaption></figure>
+
+<p>
+Then, to use this template, you need to replace the <code>HTMLTEMPLATE</code> variable in the <code>Makefile</code>. So, edit your <code>Makefile</code>:
+</p>
+<figure><pre><code class="bash">HTMLTEMPLATE = myhtml.template</code></pre><figcaption></figcaption></figure>
+
+<p>
+Now, write your name in <code>first.pillar</code> :
+</p>
+<figure><pre><code class="pillar">{
+  &quot;author&quot;: &quot;Damien Cassou&quot;
+}
+
+!Hello World</code></pre><figcaption></figcaption></figure>
+
+<p>
+You can also write the year in the <code>pillar.conf</code> file:
+</p>
+<figure><pre><code class="ston">{
+  &quot;title&quot;:&quot;My first document from pillar.conf&quot;,
+  &quot;year&quot;:&quot;2016&quot;
+}</code></pre><figcaption></figcaption></figure>
+
+<p>
+Finally, compile <code>first.pillar</code> one last time
+</p>
+<figure><pre><code class="bash">@@Update make book-result/first.html</code></pre><figcaption></figcaption></figure>
+
+<p>
+to generate a file containing:
+</p>
+<figure><pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+   &lt;head&gt;
+      &lt;title&gt;My first document from pillar.conf&lt;/title&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+      &lt;div class=&quot;container&quot;&gt; [...]
+         &lt;h1&gt;Hello World&lt;/h1&gt;
+      &lt;/div&gt;
+      &lt;footer&gt;
+         &lt;p&gt;Damien Cassou, 2016&lt;/p&gt;
+      &lt;/footer&gt;
+   &lt;/body&gt;
+&lt;/html&gt;</code></pre><figcaption></figcaption></figure>
+
+<p>
+Look at how the HTML template (<code>myhtml.template</code>) references <code>title</code>, <code>author</code> and <code>year</code>. These variables are referenced by enclosing them in 3 curly braces. The templating
+engine that transforms your templates in documents is Mustache (see chapter <a href="#cha:mustache"></a>. As you can see, I decided to put the author of the document in the <code>first.pillar</code> file whereas the year and title are specified in <code>pillar.conf</code>: this is arbitrary and you can do whatever suits you
+best: the differences being that the <code>pillar.conf</code> file applies to all Pillar files of the project and that file meta-information takes precedence.
+</p>
+<p>
+This concludes our 5 minutes tutorial.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </section>
+
+</article>
+
+<footer>
+
+<div class="footline">
+    <div class="github-link">
+      <a href="" target="blank"><i class="fa fa-code-fork"></i>Github</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/_support/html/js/clipboard.min.js"></script>
+
+<link href="/_support/html/css/featherlight.min.css" rel="stylesheet">
+<script src="/_support/html/js/featherlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/_support/html/js/flex.js"></script>
+<!-- Prettify annotated paragraphs-->
+    <script src="_support/html/js/annotated-paragraphs.js"></script>
+
+  </body>
+</html>

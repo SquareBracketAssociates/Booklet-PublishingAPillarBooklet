@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon" />
+<link href="/_support/html/css/font-awesome.min.css" rel="stylesheet">
+<link href="/_support/html/css/nucleus.css" rel="stylesheet">
+<link href="/_support/html/css/flex.css" rel="stylesheet">
+<link rel="stylesheet" href="/_support/html/highlightjs/styles/default.css">
+<link rel="stylesheet" href="/_support/html/css/highlight-commands.css">
+<link rel="stylesheet" href="/_support/html/css/bootstrap.min.css">
+<script src="/_support/html/js/jquery-2.x.min.js"></script>
+<script src="/_support/html/highlightjs/highlight.pack.js"></script>
+<script src="/_support/html/js/highlight-commands.js"></script>
+<meta name="description" content="">
+<meta name="author" content="Stéphane Ducasse and Guillermo Polito">
+  </head>
+  <body>
+    <header>
+  <div class="logo">
+    <a class="baselink" href=""></a>
+  </div>
+  <div class="burger"><a href="javascript:void(0);" style="font-size:15px;">&#9776;</a></div>
+  
+</header>
+<article>
+  <aside>
+    <ul class="menu">
+   		<li data-nav-id="123" class="dd-item">
+    		<a href="">
+		       <i class="fa fa-fw fa-home"></i>
+	    	</a>
+        </li>
+
+		
+    </ul>
+  </aside>
+
+  <section class="page">
+    
+	<h1>Publishing Documents with Pillar 7.0</h1>
+		
+	<h2>About Pillar </h2>
+
+<p>
+Pillar is a system to manage documents (books, presentations, web sites). It is able to emit resulting documents in multiple formats (html, markdown, latex, AsciiDoc). 
+It is composed of several modules such as importers, transformers, document model and outputers.
+</p>
+<p>
+This book describes Pillar in its current version 7.0. Pillar is currently developed and maintained by Stéphane Ducasse and Guillermo Polito.
+The original author of Pillar was Damien Cassou. Many people have also contributed to Pillar: Ben Coman, Guillermo Polito, Lukas Renggli (original author of Pier from which a first version of Pillar has been extracted), Benjamin van Ryseghem, Cyril Ferlicot-Delbecque, Thibault Arloing, Yann Dubois, Quentin Ducasse and Asbathou Sama Biyalou. Special thanks to Asbathou Sama Biyalou!
+</p>
+<p>
+This book adapts, extends, clarifies the chapter explaining Pillar in the <em>Enterprise Pharo: a Web Perspective</em> book.
+</p>
+<p>
+Pillar was sponsored by <a href="http://www.esug.org">ESUG</a>.
+</p>
+<h3>Introduction</h3>
+<p>
+Pillar (hosted at <a href="http://github.com/pillar-markup">http://github.com/pillar-markup</a>) is a markup language and associated tools to write and generate documentation, books (such as this one), web sites, and slide-based presentations. The Pillar screenshot in Figure <a href="#voyageDocExample"></a> shows the HTML version of chapter Voyage.
+</p>
+<p>
+<a id="voyageDocExample"></a>
+<figure>
+	<img src="figures/voyageDocExample-small.png" width="60%" id="voyageDocExample" alt="An example Pillar output"/>
+	<figcaption>An example Pillar output</figcaption>
+</figure>
+</p>
+<p>
+Pillar has many features, helpful tools, and documentation:
+</p><ul>
+<li>simple markup syntax with references, tables, pictures, captions, syntax-highlighted code blocks;</li>
+<li>export documents to HTML, LaTeX, Markdown, AsciiDoc, ePuB and Pillar itself, and presentations to Beamer and Deck.js;</li>
+<li>many tests with good coverage (94% with more than a 2100 executed tests), which are regularly run by a <a href="https://ci.inria.fr/pharo-contribution/job/Pillar">continuous integration job</a></li>
+<li>a command-line interface and dedicated plugins for several text editors: <a href="https://github.com/pillar-markup/pillar-mode">Emacs</a>, <a href="https://github.com/cdlm/vim-pillar">Vim</a>, <a href="https://github.com/Uko/Pillar.tmbundle">TextMate</a>, and <a href="https://github.com/Uko/language-pillar">Atom</a></li>
+<li>a cheat sheet (see Chapter <a href="#chacheat"></a>). </li>
+</ul>
+
+
+<h3>Pillar users</h3>
+<a id="pillarUSERS"></a>
+<p>
+This book was written in Pillar. If you want to see how Pillar is used, have a look at its source code (<a href="http://github.com/SquareBracketAssociates/">http://github.com/SquareBracketAssociates/</a>), or check the following other real-world projects:
+</p>
+<ul>
+<li>the Updated Pharo by Example book (<a href="https://github.com/SquareBracketAssociates/UpdatedPharoByExample">https://github.com/SquareBracketAssociates/UpdatedPharoByExample</a>),</li>
+<li>the Pharo MOOC - Massive open online course (<a href="https://github.com/SquareBracketAssociates/PharoMooc">https://github.com/SquareBracketAssociates/PharoMooc</a>,</li>
+<li>Any of the Pharo booklets (<a href="https://github.com/SquareBracketAssociates/Booklet-XXXX">https://github.com/SquareBracketAssociates/Booklet-XXXX</a>,</li>
+<li>the PillarHub open-access shared blog (<a href="http://pillarhub.pharocloud.com">http://pillarhub.pharocloud.com</a>).</li>
+</ul>
+
+
+<h3>Pillar 70 planned features</h3>
+
+<p>
+Pillar 70 saw some major refactorings and cleaning: it does not rely on Grease, Magritte. Still some issues will be implemented to reach the version 70 we envision. Here is a little list of features that we are working on or will soon:
+</p>
+<ul>
+<li>Incremental recompilation. Since we remove the use of make (so that Windows users can use Pillar) we should introduce a way to avoid to recompile complete book when just one chapter changed.</li>
+<li>Markdown syntax.</li>
+<li>Release of Ecstatic. Pillar supports the deployment of web sites named Ecstatic and we are working on a second version of Ecstatic.</li>
+<li>Better table support.</li>
+</ul>
+
+<h3>Conclusion</h3>
+<p>
+Pillar is still in active development: maintainers keep improving its implementation. The current version of Pillar is Pillar 70. This booklet only documents Pillar 70. This booklet will be synchronised with future enhancements. 
+</p>
+
+
+
+  </section>
+
+</article>
+
+<footer>
+
+<div class="footline">
+    <div class="github-link">
+      <a href="" target="blank"><i class="fa fa-code-fork"></i>Github</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/_support/html/js/clipboard.min.js"></script>
+
+<link href="/_support/html/css/featherlight.min.css" rel="stylesheet">
+<script src="/_support/html/js/featherlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/_support/html/js/flex.js"></script>
+<!-- Prettify annotated paragraphs-->
+    <script src="_support/html/js/annotated-paragraphs.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon" />
+<link href="/_support/html/css/font-awesome.min.css" rel="stylesheet">
+<link href="/_support/html/css/nucleus.css" rel="stylesheet">
+<link href="/_support/html/css/flex.css" rel="stylesheet">
+<link rel="stylesheet" href="/_support/html/highlightjs/styles/default.css">
+<link rel="stylesheet" href="/_support/html/css/highlight-commands.css">
+<link rel="stylesheet" href="/_support/html/css/bootstrap.min.css">
+<script src="/_support/html/js/jquery-2.x.min.js"></script>
+<script src="/_support/html/highlightjs/highlight.pack.js"></script>
+<script src="/_support/html/js/highlight-commands.js"></script>
+<meta name="description" content="">
+<meta name="author" content="Stéphane Ducasse and Guillermo Polito">
+  </head>
+  <body>
+    <header>
+  <div class="logo">
+    <a class="baselink" href=""></a>
+  </div>
+  <div class="burger"><a href="javascript:void(0);" style="font-size:15px;">&#9776;</a></div>
+  
+</header>
+<article>
+  <aside>
+    <ul class="menu">
+   		<li data-nav-id="123" class="dd-item">
+    		<a href="">
+		       <i class="fa fa-fw fa-home"></i>
+	    	</a>
+        </li>
+
+		
+    </ul>
+  </aside>
+
+  <section class="page">
+    
+	<h1>Publishing Documents with Pillar 7.0</h1>
+		
+	<h2>Pillar from Pharo (To be updated)</h2>
+
+<a id="chapillarpharo"></a>
+<p>
+Pillar has a document model (the root of which being <code>PRDocument</code>), a parser (<code>PRPillarParser</code>) and several export types (subclasses of <code>PRDocumentWriter</code>) implemented as visitors over the document model. Pillar also has phases (subclasses of <code>PRPhase</code>) that take a document model as input and produce a modified document model as output.
+</p>
+<p class="todo">update this with the architecture</p>
+<p>
+In this chapter we will show you also that Pillar can be directed edited in Pharo itself. Then we will show some points to code Pillar directly. 
+</p>
+<h3>Preview: Editing Pillar with GT Bloc</h3>
+
+<p>
+The team developing Bloc is currently working on an editor for Pillar directly in Pharo. To put it in perspective, let us take a look at one screenshot showing an inspector presentation containing a Brick editor opened on a Pillar file that includes some text, a code snippet and a reference to a picture:
+</p>
+
+<p>
+<a id="pharoLogo"></a>
+<figure>
+	<img src="figures/pharo-logo.png" width="50%" id="pharoLogo" alt="Caption."/>
+	<figcaption>Caption.</figcaption>
+</figure>
+</p>
+<p>
+But, the more interesting thing is that below the picture reference, we get to see the actual picture (which happens to be another inspector screenshot). In fact, this picture is actually just another text attribute (called an adornment) that can be dynamically added to any text elements. This opens up a whole lot of expression power and it is all easily composeable. This is another reason why we say that this editor is moldable and you should expect new applications making use of this moldability and combining it with the liveliness of Pharo.
+</p>
+
+<p>
+The latest Brick code is loadable through:
+</p>
+<figure><pre><code>	Metacello new
+		baseline: 'Brick';
+		repository: 'github://pharo-graphics/Brick/src';
+		load: #development.</code></pre><figcaption></figcaption></figure>
+
+<p>
+If you want to play with Pillar, load the following extra code and just inspect a Pillar file:
+</p>
+<figure><pre><code>	((IceRepository registry detect: [ :each | each name = 'Brick' ])
+		packageNamed: 'Brick-Editor-Pillar') loadLatest.</code></pre><figcaption></figcaption></figure>
+
+<p>
+There are still issues left to deal with. But, the most important challenges are now behind us and that the design of the editor code is stable and robust.
+</p>
+<h3>How to create a Pillar document</h3>
+
+<p>
+It is possible to create a Pillar document by parsing a string or by instantiating the document model.
+</p>
+<p>
+Creating a document by parsing a <code>String</code> requires using the <code>PRPillarParser</code>:
+</p>
+<figure><pre><code>| wiki |
+wiki := '!My Document'.
+PRPillarParser parse: wiki</code></pre><figcaption></figcaption></figure>
+
+<p>
+Or from a file:
+</p><figure><pre><code>PRPillarParser parse: (FileSystem workingDirectory / 'foo.pillar') readStream</code></pre><figcaption></figcaption></figure>
+
+<p>
+You can also instantiate the document model, one node after the other, starting with <code>PRDocument</code> and adding sub-instances of <code>PRDocumentItem</code>:
+</p>
+<figure><pre><code>| document title figure|
+document := PRDocument new.
+title := PRHeader new
+   level: 1;
+   add: (PRText content: 'foo');
+   yourself.
+figure := PRFigure new
+   add: (PRText content: 'Alias');
+   reference: 'file://test.png';
+   yourself.
+document add: title; add: figure.</code></pre><figcaption></figcaption></figure>
+
+
+<h3>How to export a document</h3>
+
+<p>
+Once you have your document, you may want to export it. But exporting, there's an optional step: transforming your document.
+A transformer is an abstraction that visits a document and changes it by transforming nodes. For instance, <code>PRScriptEvaluator</code> replaces a script with <code>eval=true</code>
+ by the result of its evaluation. 
+ 
+ Exporting is done with a subclass of <code>PRDocumentWriter</code>, like this:
+</p>
+<figure><pre><code>PRHTMLWriter write: document</code></pre><figcaption></figcaption></figure>
+
+<p>
+To specify export parameters, you may want to use a configuration.
+</p>
+<figure><pre><code>| configuration |
+configuration := PRPillarConfiguration new.
+configuration outputType: PRHTMLWriter.
+PRExportPhase executeOn: { document } with: configuration.</code></pre><figcaption></figcaption></figure>
+
+
+
+
+  </section>
+
+</article>
+
+<footer>
+
+<div class="footline">
+    <div class="github-link">
+      <a href="" target="blank"><i class="fa fa-code-fork"></i>Github</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/_support/html/js/clipboard.min.js"></script>
+
+<link href="/_support/html/css/featherlight.min.css" rel="stylesheet">
+<script src="/_support/html/js/featherlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/_support/html/js/flex.js"></script>
+<!-- Prettify annotated paragraphs-->
+    <script src="_support/html/js/annotated-paragraphs.js"></script>
+
+  </body>
+</html>

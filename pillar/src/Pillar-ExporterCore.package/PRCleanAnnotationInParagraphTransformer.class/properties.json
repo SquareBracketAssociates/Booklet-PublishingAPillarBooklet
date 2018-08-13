@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "DamienCassou 7/20/2016 16:21",
+	"super" : "PRNodeTransformer",
+	"category" : "Pillar-ExporterCore-Export",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"goal"
+	],
+	"name" : "PRCleanAnnotationInParagraphTransformer",
+	"type" : "normal"
+}

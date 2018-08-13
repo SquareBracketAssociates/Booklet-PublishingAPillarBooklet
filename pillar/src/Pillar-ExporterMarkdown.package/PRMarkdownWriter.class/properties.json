@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "PeterUhnak 8/26/2017 22:18",
+	"super" : "PRDocumentWriter",
+	"category" : "Pillar-ExporterMarkdown",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"nesting"
+	],
+	"name" : "PRMarkdownWriter",
+	"type" : "normal"
+}

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon" />
+<link href="/_support/html/css/font-awesome.min.css" rel="stylesheet">
+<link href="/_support/html/css/nucleus.css" rel="stylesheet">
+<link href="/_support/html/css/flex.css" rel="stylesheet">
+<link rel="stylesheet" href="/_support/html/highlightjs/styles/default.css">
+<link rel="stylesheet" href="/_support/html/css/highlight-commands.css">
+<link rel="stylesheet" href="/_support/html/css/bootstrap.min.css">
+<script src="/_support/html/js/jquery-2.x.min.js"></script>
+<script src="/_support/html/highlightjs/highlight.pack.js"></script>
+<script src="/_support/html/js/highlight-commands.js"></script>
+<meta name="description" content="">
+<meta name="author" content="Stéphane Ducasse and Guillermo Polito">
+  </head>
+  <body>
+    <header>
+  <div class="logo">
+    <a class="baselink" href=""></a>
+  </div>
+  <div class="burger"><a href="javascript:void(0);" style="font-size:15px;">&#9776;</a></div>
+  
+</header>
+<article>
+  <aside>
+    <ul class="menu">
+   		<li data-nav-id="123" class="dd-item">
+    		<a href="">
+		       <i class="fa fa-fw fa-home"></i>
+	    	</a>
+        </li>
+
+		
+    </ul>
+  </aside>
+
+  <section class="page">
+    
+	<h1>Publishing Documents with Pillar 7.0</h1>
+		
+	<h2>Pillar core syntactic elements</h2>
+<a id="chawriting"></a>
+<p>
+In this Chapter we present the Pillar syntax. Have a look at the
+Chapter <a href="#chacheat"></a>: it contains a two pages summary. We use the current text as example, notice however, that some results may be different on other support like HTML because of different common practices (for example creating an anchor with the reference instead of a footnote for an external link).
+</p>
+<p>
+It is important to see that since Pillar is extensible, plugins may extend the default markup. The extension mechanisms
+allow one not to learn new syntax but just new tags and parameters as will present later.
+</p>
+<h3>Meta-Information</h3>
+
+<p>
+Meta-information of a particular file is written at the start of the file between curly braces using the STON syntax (a super set of JSON). A meta-information starts with a word between quotation marks acting as a key, is followed by a colon <code>:</code>, and finishes with a value.
+</p>
+<p>
+For example, the following Pillar file,
+</p>
+<figure><pre><code class="pillar">{
+	&quot;title&quot;: &quot;A first document&quot;,
+	&quot;author&quot;: &quot;John Doe&quot;
+}
+
+!Hello World</code></pre><figcaption></figcaption></figure>
+
+<p>
+represents a Pillar document with the title and author set. You can use whatever keys you like. The metadata keys can be used in templates (see Chapter <a href="#templating"></a> for more information about templating).
+</p>
+<h3>Headings: Chapters &amp; sections</h3>
+<a id="chapterAndSections"></a>
+<p>
+A line starting with <code>!</code> represents a heading. Use multiple <code>!</code> to create sections and subsections.
+</p>
+<figure><pre><code>!!!Headings: Chapters &amp; Sections</code></pre><figcaption></figcaption></figure>
+
+<p>
+is the way the current section is created. The exporter and template may interpret the section the way they want (.i.e., for example outputing <code>subsection</code> instead of <code>section</code>).
+</p>
+<p>
+Some exporters support the possibility to specify a level of interpretation for <code>!</code>.
+<code>headingLevelOffset</code> controls how to convert from the level of a Pillar heading to the level of heading in your exported document.
+For example, a <code>headingLevelOffset</code> of 3 converts a 1st level Pillar heading to an <code>&lt;h4&gt;</code> in HTML.
+</p>
+<figure><pre><code>&quot;headingLevelOffset&quot; : 3</code></pre><figcaption></figcaption></figure>
+
+<h3>References and links</h3>
+
+<h4>Anchor definition</h4>
+<p>
+ To refer to a section or chapter, put an anchor (equivalent to <code>\label{chapterAndSections}</code> in LaTeX) using the <code>@chapterAndSections</code> syntax on a <em>separate line</em>. 
+ 
+</p><figure><pre><code>@chapterAndSections</code></pre><figcaption></figcaption></figure>
+<p>
+ 
+</p><h4>Anchor reference</h4>
+<p>
+When you want to refer to an anchor (equivalent to <code>\ref{chapterAndSections}</code> in LaTeX), use the <code>*@chapterAndSections*</code> syntax. Anchors are invisible and links will be rendered as: <a href="#chapterAndSections"></a>.
+</p>
+<figure><pre><code>*@chapterAndSections*</code></pre><figcaption></figcaption></figure>
+
+<h4>Alias</h4>
+
+<p>
+You can create alias for links. Tthis is especially adapted for web sites containing reference to other pages.
+</p>
+<figure><pre><code>*Chapters&gt;chapterAndSections*</code></pre><figcaption></figcaption></figure>
+
+<p>
+creates the link <a href="chapterAndSections">Chapters</a>. Again the template may interpret this differently than a LaTeX footnote.
+</p>
+<p>
+To create a link to another pillar file, use the <code>*Alias&gt;File.pillar@AnchorName*</code>. The alias and anchor parts are optional but you will need them in some cases (for example if you have an inter-file link and you export in LaTeX, or if you have an inter-file link and you export all your file in the same html file).
+</p>
+<h4>External links</h4>
+
+<p>
+To create links to external resources, use the <code>*Pharo&gt;http://pharo.org/*</code> syntax which is rendered as <a href="http://pharo.org/">Pharo</a>. 
+</p>
+<figure><pre><code>*http://www.pharo.org*</code></pre><figcaption></figcaption></figure>
+
+<p>
+The same syntax can also represent email addresses: write <code>*dupond@free.fr*</code> to get <a href="mailto:dupond@free.fr">dupond@free.fr</a>.
+</p>
+
+<h3>Lists</h3>
+<p>
+Pillar offers three default lists: Bullet, numbered and labelled. 
+</p>
+<h4>Bulleted lists</h4>
+
+<figure><pre><code class="pillar">-A block of lines,
+-where each line starts with ==-==
+-is transformed to a bulleted list</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates
+</p>
+<ul>
+<li>A block of lines,</li>
+<li>where each line starts with <code>-</code></li>
+<li>is transformed to a bulleted list</li>
+</ul>
+
+<h4>Numbered lists</h4>
+
+<figure><pre><code class="pillar">#A block of lines,
+#where each line starts with ==#==
+#is transformed to a numbered list</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates
+</p>
+<ol><li>A block of lines,</li>
+<li>where each line starts with <code>#</code></li>
+<li>is transformed to a numbered list</li>
+</ol>
+
+<h4>Definition lists</h4>
+
+<p>
+Definition lists (<em>aka.</em> description lists) are lists with labels:
+</p>
+<figure><pre><code class="pillar">;blue.
+:color of the sky
+;red.
+:color of the fire</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates
+</p>
+<dl><dt>blue.</dt>
+<dd>color of the sky</dd>
+<dt>red.</dt>
+<dd>color of the fire</dd>
+</dl>
+
+<h4>List nesting</h4>
+
+<figure><pre><code class="pillar">-Lists can also be nested.
+-#Thus, a line starting with ==-#==
+-#is an element of an unordered list that is part of an ordered list.</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates
+</p>
+<ul>
+<li>Lists can also be nested.<ol><li>Thus, a line starting with <code>-#</code></li>
+<li>is an element of a bulleted list that is part of an ordered list.</li>
+</ol>
+</li>
+</ul>
+
+<h3>Commented lines</h3>
+
+<p>
+Lines that start with a <code>%</code> are considered comments and will not be rendered in the resulting document.
+</p>
+<h3>Escaping characters</h3>
+
+<p>
+Special characters (e.g., <code>+</code> and <code>*</code>) must be escaped with a backslash: to get a <code>+</code>, you actually have to write <code>\+</code>. The list of characters to escape is:
+</p>
+<figure><pre><code>| characters |
+characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
+stream nextPutAll: '[[['; cr.
+characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
+stream cr; nextPutAll: ']]]'; cr.</code></pre><figcaption></figcaption></figure>
+
+
+<h3>Formatting</h3>
+<p>
+There is some syntax for text formatting:
+</p>
+<ul>
+<li>To make something <strong>bold</strong>, write <code>&quot;&quot;bold&quot;&quot;</code> (with 2 double quotes)</li>
+<li>To make something <em>italic</em>, write <code>''italic''</code> (with 2 single quotes)</li>
+<li>To make something <code>monospaced</code>, write <code>==monospaced==</code></li>
+<li>To make something <s>strikethrough</s>, write <code>--strikethrough--</code></li>
+<li>To make something <sub>subscript</sub>, write <code>@@subscript@@</code></li>
+<li>To make something <sup>superscript</sup>, write <code>^^superscript^^</code></li>
+<li>To make something <u>underlined</u>, write <code>__underlined__</code></li>
+</ul>
+
+
+<h3>Pictures</h3>
+<p>
+To include a picture, use the syntax <code>+caption&gt;file://filename|parameters+</code>:
+</p>
+<figure><pre><code class="pillar">+Caption of the picture.&gt;file://figures/pharo-logo.png|width=50|label=pharoLogo+</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates Figure <a href="#pharoLogo"></a> (this reference has been generated using <code>*@pharoLogo*</code>).
+</p>
+<p>
+Parameters are pairs <code>&quot;label&quot;=&quot;value&quot;</code> separated by <code>|</code>.
+</p>
+<p>
+<a id="pharoLogo"></a>
+<figure>
+	<img src="figures/pharo-logo.png" width="50%" id="pharoLogo" alt="Caption of the picture."/>
+	<figcaption>Caption of the picture.</figcaption>
+</figure>
+</p>
+
+<h3>Tables</h3>
+<p>
+To create a table, start the lines with <code>|</code> and separate the elements with <code>|</code>. Each new line represents a new row of the table. Add a single <code>!</code> to let the cell become a table heading.
+</p>
+<figure><pre><code class="pillar">|!Country |!Capital
+|France | Paris
+|Belgium | Brussels</code></pre><figcaption></figcaption></figure>
+
+<table style="border: solid thin"><tr><th>Country</th>
+<th>Capital</th>
+</tr>
+<tr><td>France</td>
+<td>Paris</td>
+</tr>
+<tr><td>Belgium</td>
+<td>Brussels</td>
+</tr>
+</table>
+
+
+<p>
+The contents of cells can be aligned left, centered or aligned right by using <code>|{</code>, <code>||</code> or <code>|}</code> respectively.
+</p>
+<figure><pre><code class="pillar">||centered||!centered header||centered
+|{ left |} right || center</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates:
+</p>
+<table style="border: solid thin"><tr><td style="text-align: center">centered</td>
+<th style="text-align: center">centered header</th>
+<td style="text-align: center">centered</td>
+</tr>
+<tr><td style="text-align: left">left</td>
+<td style="text-align: right">right</td>
+<td style="text-align: center">center</td>
+</tr>
+</table>
+
+
+
+<h3>Preformatted</h3>
+<p>
+To create a preformatted block, begin each line with <code>=</code>. A preformatted block uses equally spaced text so that spacing is preserved. In general you should prefer code block over preformatted blocks. Code blocks more powerful. 
+</p>
+<pre>= this is preformatted text
+= this line as well</pre>
+<h3>Code block</h3>
+<a id="scripts"></a>
+<p>
+Use code blocks when you want to add code snippets to your document.
+Code blocks are delimited by <code>[[[</code> and <code>]]]</code>.
+</p>
+<pre>[[[
+foo bar
+]]]</pre>
+<p>
+generates
+</p>
+<figure><pre><code>foo bar</code></pre><figcaption></figcaption></figure>
+
+<h4>Code block with a label or caption</h4>
+
+<p>
+If you want either a label (to reference the code later) or a caption (to give a nice title to the code block), write the following:
+</p>
+<pre>[[[label=foobar|caption=My code block that works|language=smalltalk
+self foo bar
+]]]</pre>
+<p>
+which produces script <a href="#foobar"></a> (this reference is produced with <code>*@foobar*</code>).
+</p>
+<figure><pre><code class="smalltalk">self foo bar</code></pre><figcaption><a id="foobar"></a>My code block that works</figcaption></figure>
+
+<h4>Code block syntax highlighting</h4>
+<a id="sec:syntaxHighlighting"></a>
+<p>
+To specify the syntax a code block is written in, you need to use the <code>language</code> parameter.
+For example on <a href="#foobar"></a> we used the <code>smalltalk</code> value for the <code>language</code> parameter.
+</p>
+
+<figure><pre><code>| languages |
+stream nextPutAll: '@@note The currently supported languages are '.
+languages := PRRealScriptLanguage withAllConcreteClasses collect: #standardName.
+languages asStringOn: stream delimiter: ', ' last: ' and '</code></pre><figcaption></figcaption></figure>
+
+<p>
+If you don't want syntax highlighting for a particular script, specify <code>no language</code> as value to the <code>language</code> parameter.
+</p>
+<h4>Code block with line numbers</h4>
+
+<p>
+If you need to explain a long piece of code, you may want a code block to have line numbers:
+</p>
+<pre>[[[lineNumber=true
+self foo bar.
+self bar foo.
+]]]</pre>
+<p>
+produces
+</p>
+<figure><pre><code>self foo bar.
+self bar foo.</code></pre><figcaption></figcaption></figure>
+
+<h4>Code block from an external file</h4>
+
+<p>
+If you want you can also include a code block from a external file. For example if you have a file `myProject.html` and you want to take the code from line 15 to
+line 45, instead of copy/pasting the code you can use:
+</p>
+<pre>[[[language=html|fromFile=myProject.html|firstLine=15|lastLine=45
+]]]</pre>
+<p>
+The <code>firstLine</code> and <code>lastLine</code> parameters are optional.
+</p>
+
+
+
+<h4>Generate a part of your document with a script</h4>
+
+<p>
+If you want you can also evaluate a script to generate a part of your document.
+Notice that some pillar version may disable it for security reasons.
+</p>
+<p>
+For example if you write a project's documentation and want to give some metrics about its code, you can write something like this:
+</p>
+<pre>[[[eval=true
+| packages classes |
+packages := RPackageOrganizer default packages select: [ :each |
+               each name includesSubstring: 'Pillar' ].
+classes := packages flatCollect: [ :each | each classes ].
+stream
+   nextPutAll: 'The Pillar project contains:';
+   lf;
+   nextPutAll: '- ==';
+   print: packages size;
+   nextPutAll: ' packages==.';
+   lf;
+   nextPutAll: '- ==';
+   print: classes size;
+   nextPutAll: ' classes=='.
+]]]</pre>
+<p>
+will generate:
+</p>
+<figure><pre><code>| packages classes |
+packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
+classes := packages flatCollect: [ :each | each classes ].
+stream
+   nextPutAll: 'The Pillar project contains:';
+   lf;
+   nextPutAll: '- ==';
+   print: packages size;
+   nextPutAll: ' packages==.';
+   lf;
+   nextPutAll: '- ==';
+   print: classes size;
+   nextPutAll: ' classes=='.</code></pre><figcaption></figcaption></figure>
+
+<h3>Annotated paragraphs</h3>
+
+<p>
+An empty line starts a new paragraph.
+</p>
+<p>
+An annotated paragraph starts with <code>@@</code> followed by a keyword such as <code>todo</code> and <code>note</code>. For example,
+</p>
+<figure><pre><code class="pillar">@@note this is a note annotation.</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates
+</p>
+<p class="note">this is a note annotation.</p>
+<p>
+And,
+</p>
+<figure><pre><code class="pillar">@@todo this is a todo annotation</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates a todo annotation
+</p>
+<p class="todo">this is a todo annotation</p>
+<p>
+By default the templates support <code>@@todo</code> and <code>@@note</code>. 
+</p>
+
+<h4>Nice HTML</h4>
+<p>
+Note that the annotation (e.g., <code>todo</code> and <code>note</code>) can be any word that is meaningful to the author. In HTML, an annotated paragraph triggers the generation of a paragraph with the annotation as the paragraph <code>class</code>. In LaTeX, an environment with the annotation name is generated. In HTML, you can tweak the output to make it look nice, for example with such JavaScript code:
+</p>
+<figure><pre><code class="javascript">// Wraps paragraphs with class pClass inside a div and adds an H4 element with pTitle.
+function transformAnnotatedParagraphs(pClass, pTitle) {
+   $(&quot;p.&quot; + pClass).wrap( &quot;&lt;div class='annotated-paragraph &quot;
+         + pClass + &quot;' /&gt;&quot; ).prepend(&quot;&lt;h4&gt;&quot;+ pTitle +&quot;&lt;/h4&gt;&quot;);
+}
+
+transformAnnotatedParagraphs(&quot;note&quot;, &quot;Note&quot;);
+transformAnnotatedParagraphs(&quot;todo&quot;, &quot;To do&quot;);</code></pre><figcaption></figcaption></figure>
+
+<p>
+Above code will prepend the titles &quot;Note&quot; and &quot;To do&quot; to the <code>@@note</code> and <code>@@todo</code> paragraphs. You can make that looks nice using a little bit of CSS:
+</p>
+<figure><pre><code class="css">.annotated-paragraph {
+   margin: 20px 0;
+   padding: 15px 30px 15px 15px;
+   border-left: 5px solid #eee;
+}
+.annotated-paragraph h4 {
+   margin-top: 0;
+}
+.annotated-paragraph p:last-child {
+   margin-bottom: 0;
+}
+.note {
+   background-color: #f0f7fd;
+   border-color: #d0e3f0;
+}
+.note h4 {
+   color: #3a87ad;
+}
+.todo {
+   background-color: #dff0d8;
+   border-color: #d6e9c6;
+}
+.todo h4 {
+   color: #3c763d;
+}</code></pre><figcaption></figcaption></figure>
+
+
+
+<h3>Raw</h3>
+
+<p>
+If you want to include raw text into a page you must enclose it between <code>{{{</code> and <code>}}}</code>, otherwise Pillar ensures that text appears as you type it which might require transformations.
+</p>
+<p>
+A good practice is to always specify for which kind of export the raw text must be outputted by starting the block with <code>{{{latex:</code> or <code>{{{html:</code>. For example, the following shows a formula, either using LaTeX or plain text depending on the kind of export.
+</p>
+<pre>{{{latex:
+\begin{equation}
+   \label{eq:1}
+   \frac{1+\sqrt{2}}{2}
+\end{equation}
+}}}
+{{{html:
+(1+sqrt(2)) / 2
+}}}</pre>
+<p>
+<strong>Take care:</strong> Avoid terminating the verbatim text with a <code>}</code> as
+this will confuse the parser, better add a space or two. So, don't write <code>{{{\begin{scriptsize}}}}</code> but <code>{{{\begin{scriptsize} }}}</code> instead.
+</p>
+
+
+<h3>Annotations: supporting extensions</h3>
+
+<p>
+Pillar proposes two extensions mechanisms: tags and parameters. Pay attention that each plugin should handle the tag or parameter processing. 
+</p>
+
+<p>
+Annotations are the Pillar way to have extensible syntax. An annotation has this syntax:
+</p>
+<figure><pre><code class="pillar">${tag:parameter=value|parameter2=value2}$</code></pre><figcaption></figcaption></figure>
+
+<h4>InputFile annotation</h4>
+
+<p>
+You can include a file into another pillar file. The <code>inputFile</code> annotation takes as parameter the path of the file relative to <code>baseDirectory</code> (if you don't change the base directory, it is your working directory). In this example, 2 files are included:
+</p>
+<figure><pre><code class="pillar">${inputFile:test.pillar}$
+
+${inputFile:chapter2/chapter2.pillar}$</code></pre><figcaption></figcaption></figure>
+
+<h4>Footnote annotation</h4>
+
+<p>
+You can add footnotes to explain or annotate words. The <code>footnote</code> annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
+</p>
+<figure><pre><code>Foo${footnote:Some Explanation for Foo}$</code></pre><figcaption></figcaption></figure>
+
+<h4>Parameters</h4>
+
+<p>
+Pictures and scripts are both using parameters to specify different options and variations. Parameters are pairs <code>&quot;label&quot;=&quot;value&quot;</code> separated by <code>|</code>.
+</p>
+<p>
+Here are two examples within the same expressions: Code blocks and captions use parameters.
+</p>
+<pre>[[[label=foobar|caption=My code block that works|language=pillar
++Caption of the picture.&gt;file://figures/pharo-logo.png|width=50|label=pharoLogo+
+]]]</pre>
+
+
+<h2>Specific markup</h2>
+<p>
+This chapter presents extensions specific to a given support such as LaTeX or slides.
+</p>
+<h3>LaTeX</h3>
+
+<h4>Citations</h4>
+
+<p>
+Citations are only available for LaTeX.
+You can add citations to your document to reference an element in a LaTeX bibliography. The <code>cite</code> annotationtakes as parameter the key of the reference in the bibliography.
+</p>
+<figure><pre><code>${cite:reference}$</code></pre><figcaption></figcaption></figure>
+
+<p>
+The exemple above wil render as <code>cite{reference}</code>
+</p>
+<p>
+If you want to use other type of citations like <code>citep</code> or <code>citet</code>, please overwrite the command in your LaTeX template:
+<code>renewcommand{cite}{citep}</code>
+</p>
+<p>
+Future versions will support also the definition in pillar.conf of the bibliography file. Right now you should harcode it in the template. 
+</p>
+
+<h3>Slides</h3>
+<p>
+Pillar offers the possibility to define slides. Slides requires the use of the presentation archetype. 
+</p>
+<h4>Slide annotation</h4>
+<a id="sec:slide"></a>
+<p>
+This annotation is used to create slides structure for a <code>beamer</code> or a <code>deck.js</code> export.
+The parameter <strong>title</strong> is required.
+The <strong>label</strong> parameter can be used to refer to this slide in another slide:
+</p>
+<figure><pre><code class="pillar">${slide:title=My slide|label=sld:mySlide}$</code></pre><figcaption></figcaption></figure>
+
+<h4>Columns</h4>
+
+<p>
+With Pillar you can put text and other contents in columns.
+To do that, you need to delimit an environment with the <code>columns</code> and <code>endColumns</code> annotations.
+Then you can create columns with the <code>column</code> annotation.
+The column annotation takes 1 required parameter: the width of the column. Here is an example:
+</p>
+<figure><pre><code class="pillar">${columns}$
+
+   ${column:width=60}$
+      bla
+   ${column:40}$
+      bla
+
+${endColumns}$</code></pre><figcaption></figcaption></figure>
+
+<p class="note">The column annotations currently works only for the beamer, HTML and Deck.js export.</p>
+
+<h3>Under development</h3>
+
+<h4>Semantic links</h4>
+
+<p>
+Semantic links are a way to simplify links to standard websites such as Wikipedia and Youtube.
+</p>
+<p>
+To create semantic links ressources, use the <code>*Wikipedia Pharo&gt;wikipedia:Pharo*</code> syntax which is rendered as <a href="https://en.wikipedia.org/wiki/Pharo">Wikipedia Pharo</a>.
+To specify a language, you can use the <code>*Wikipedia Pharo&gt;wikipedia:Pharo|lang=en*</code> syntax which is rendered as <a href="https://en.wikipedia.org/wiki/Pharo">Wikipedia Pharo</a>.
+</p>
+<p>
+Same for Youtube links : <code>*Youtube Pharo&gt;youtube:KDvNuOjdjY4*</code>, the result is : <a href="https://www.youtube.com/watch?v=KDvNuOjdjY4">Youtube Pharo</a>.
+</p>
+<p>
+Note that such feature will be probably revised to be more generic and let the user define other semantic links. 
+</p>
+<h4>Structures</h4>
+
+<p>
+You can create structures to render all structures with the same name as the same object.
+Structures use the scripts syntax (see <a href="#scripts"></a>) with a particular parameter <code>structure</code>
+</p>
+<pre>[[[structure=exercise
+{
+  &quot;question&quot;:&quot;What is the answer to life, the universe and everything ?&quot;,
+  &quot;answer&quot;:&quot;42&quot;
+}
+]]]</pre>
+<p>
+There is two kind of structures for the moment:
+</p><ul>
+<li>exercise, rendered as a definition list</li>
+<li>city, rendered as a table</li>
+<li>country, rendered as a table</li>
+</ul>
+
+
+
+
+
+  </section>
+
+</article>
+
+<footer>
+
+<div class="footline">
+    <div class="github-link">
+      <a href="" target="blank"><i class="fa fa-code-fork"></i>Github</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/_support/html/js/clipboard.min.js"></script>
+
+<link href="/_support/html/css/featherlight.min.css" rel="stylesheet">
+<script src="/_support/html/js/featherlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/_support/html/js/flex.js"></script>
+<!-- Prettify annotated paragraphs-->
+    <script src="_support/html/js/annotated-paragraphs.js"></script>
+
+  </body>
+</html>

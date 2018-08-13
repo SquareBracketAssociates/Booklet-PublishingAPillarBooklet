@@ -1,0 +1,50 @@
+!! About Pillar 
+
+Pillar is a system to manage documents (books, presentations, web sites). It is able to emit resulting documents in multiple formats (html, markdown, latex, AsciiDoc). 
+It is composed of several modules such as importers, transformers, document model and outputers.
+
+This book describes Pillar in its current version 7.0. Pillar is currently developed and maintained by Stéphane Ducasse and Guillermo Polito.
+The original author of Pillar was Damien Cassou. Many people have also contributed to Pillar: Ben Coman, Guillermo Polito, Lukas Renggli (original author of Pier from which a first version of Pillar has been extracted), Benjamin van Ryseghem, Cyril Ferlicot-Delbecque, Thibault Arloing, Yann Dubois, Quentin Ducasse and Asbathou Sama Biyalou. Special thanks to Asbathou Sama Biyalou!
+
+This book adapts, extends, clarifies the chapter explaining Pillar in the ''Enterprise Pharo: a Web Perspective'' book.
+
+Pillar was sponsored by *ESUG>http://www.esug.org*.
+
+!!!Introduction
+Pillar (hosted at *http://github.com/pillar-markup*) is a markup language and associated tools to write and generate documentation, books (such as this one), web sites, and slide-based presentations. The Pillar screenshot in Figure *@voyageDocExample* shows the HTML version of chapter Voyage.
+
++An example Pillar output>file://figures/voyageDocExample-small.png|label=voyageDocExample|width=60+
+
+Pillar has many features, helpful tools, and documentation:
+- simple markup syntax with references, tables, pictures, captions, syntax-highlighted code blocks;
+- export documents to HTML, LaTeX, Markdown, AsciiDoc, ePuB and Pillar itself, and presentations to Beamer and Deck.js;
+%- customization of the export through a dedicated STON configuration file (see chapter Missing Chapter *@cha:ston*) and Mustache templates (see chapter *@templating*).
+- many tests with good coverage (94% with more than a 2100 executed tests), which are regularly run by a *continuous integration job>https://ci.inria.fr/pharo-contribution/job/Pillar*
+- a command-line interface and dedicated plugins for several text editors: *Emacs>https://github.com/pillar-markup/pillar-mode*, *Vim>https://github.com/cdlm/vim-pillar*, *TextMate>https://github.com/Uko/Pillar.tmbundle*, and *Atom>https://github.com/Uko/language-pillar*
+- a cheat sheet (see Chapter *@chacheat*). 
+
+
+!!!Pillar users
+@pillarUSERS
+
+This book was written in Pillar. If you want to see how Pillar is used, have a look at its source code (*http://github.com/SquareBracketAssociates/*), or check the following other real-world projects:
+
+- the Updated Pharo by Example book (*https://github.com/SquareBracketAssociates/UpdatedPharoByExample*),
+- the Pharo MOOC - Massive open online course (*https://github.com/SquareBracketAssociates/PharoMooc*,
+- Any of the Pharo booklets (*https://github.com/SquareBracketAssociates/Booklet-XXXX*,
+- the PillarHub open-access shared blog (*http://pillarhub.pharocloud.com*).
+
+
+!!! Pillar 70 planned features
+
+Pillar 70 saw some major refactorings and cleaning: it does not rely on Grease, Magritte. Still some issues will be implemented to reach the version 70 we envision. Here is a little list of features that we are working on or will soon:
+
+- Incremental recompilation. Since we remove the use of make (so that Windows users can use Pillar) we should introduce a way to avoid to recompile complete book when just one chapter changed.
+- Markdown syntax.
+- Release of Ecstatic. Pillar supports the deployment of web sites named Ecstatic and we are working on a second version of Ecstatic.
+- Better table support.
+
+!!! Conclusion
+Pillar is still in active development: maintainers keep improving its implementation. The current version of Pillar is Pillar 70. This booklet only documents Pillar 70. This booklet will be synchronised with future enhancements. 
+
+

@@ -1,0 +1,565 @@
+!! Pillar core syntactic elements
+@chawriting
+
+In this Chapter we present the Pillar syntax. Have a look at the
+Chapter *@chacheat*: it contains a two pages summary. We use the current text as example, notice however, that some results may be different on other support like HTML because of different common practices (for example creating an anchor with the reference instead of a footnote for an external link).
+
+It is important to see that since Pillar is extensible, plugins may extend the default markup. The extension mechanisms
+allow one not to learn new syntax but just new tags and parameters as will present later.
+
+!!! Meta-Information
+
+Meta-information of a particular file is written at the start of the file between curly braces using the STON syntax (a super set of JSON). A meta-information starts with a word between quotation marks acting as a key, is followed by a colon ==:==, and finishes with a value.
+
+For example, the following Pillar file,
+
+[[[language=pillar
+{
+	"title": "A first document",
+	"author": "John Doe"
+}
+
+!Hello World
+]]]
+
+represents a Pillar document with the title and author set. You can use whatever keys you like. The metadata keys can be used in templates (see Chapter *@templating* for more information about templating).
+
+!!! Headings: Chapters & sections
+@chapterAndSections
+
+A line starting with ==!== represents a heading. Use multiple ==!== to create sections and subsections.
+
+[[[
+!!!Headings: Chapters & Sections
+]]]
+
+is the way the current section is created. The exporter and template may interpret the section the way they want (.i.e., for example outputing ==\subsection== instead of ==\section==).
+
+Some exporters support the possibility to specify a level of interpretation for ==!==.
+==headingLevelOffset== controls how to convert from the level of a Pillar heading to the level of heading in your exported document.
+For example, a ==headingLevelOffset== of 3 converts a 1st level Pillar heading to an ==<h4>== in HTML.
+
+[[[
+"headingLevelOffset" : 3
+]]]
+
+!!! References and links
+
+!!!!Anchor definition
+ To refer to a section or chapter, put an anchor (equivalent to ==\\label\{chapterAndSections\}== in LaTeX) using the ==@chapterAndSections== syntax on a ''separate line''. 
+ 
+[[[
+@chapterAndSections
+]]]
+ 
+!!!!Anchor reference
+When you want to refer to an anchor (equivalent to ==\\ref\{chapterAndSections\}== in LaTeX), use the ==\*@chapterAndSections\*== syntax. Anchors are invisible and links will be rendered as: *@chapterAndSections*.
+
+[[[
+*@chapterAndSections*
+]]]
+
+!!!!Alias
+
+You can create alias for links. Tthis is especially adapted for web sites containing reference to other pages.
+
+[[[
+*Chapters>chapterAndSections*
+]]]
+
+creates the link *Chapters>chapterAndSections*. Again the template may interpret this differently than a LaTeX footnote.
+
+To create a link to another pillar file, use the ==\*Alias>File.pillar@AnchorName\*==. The alias and anchor parts are optional but you will need them in some cases (for example if you have an inter-file link and you export in LaTeX, or if you have an inter-file link and you export all your file in the same html file).
+
+!!!!External links
+
+To create links to external resources, use the ==\*Pharo>http://pharo.org/\*== syntax which is rendered as *Pharo>http://pharo.org/*. 
+
+[[[
+*http://www.pharo.org*
+]]]
+
+The same syntax can also represent email addresses: write ==\*dupond@free.fr\*== to get *dupond@free.fr*.
+
+
+!!! Lists
+Pillar offers three default lists: Bullet, numbered and labelled. 
+
+!!!! Bulleted lists
+
+[[[language=pillar
+-A block of lines,
+-where each line starts with ==-==
+-is transformed to a bulleted list
+]]]
+
+generates
+
+-A block of lines,
+-where each line starts with ==-==
+-is transformed to a bulleted list
+
+!!!!Numbered lists
+
+[[[language=pillar
+#A block of lines,
+#where each line starts with ==#==
+#is transformed to a numbered list
+]]]
+
+generates
+
+#A block of lines,
+#where each line starts with ==#==
+#is transformed to a numbered list
+
+!!!!Definition lists
+
+Definition lists (''aka.'' description lists) are lists with labels:
+
+[[[language=pillar
+;blue.
+:color of the sky
+;red.
+:color of the fire
+]]]
+
+generates
+
+;blue.
+:color of the sky
+;red.
+:color of the fire
+
+!!!!List nesting
+
+[[[language=pillar
+-Lists can also be nested.
+-#Thus, a line starting with ==-#==
+-#is an element of an unordered list that is part of an ordered list.
+]]]
+
+generates
+
+-Lists can also be nested.
+-#Thus, a line starting with ==-#==
+-#is an element of a bulleted list that is part of an ordered list.
+
+!!!Commented lines
+
+Lines that start with a ==%== are considered comments and will not be rendered in the resulting document.
+
+!!!Escaping characters
+
+Special characters (e.g., ==\+== and ==\*==) must be escaped with a backslash: to get a ==\+==, you actually have to write ==\\\+==. The list of characters to escape is:
+
+[[[eval=true
+| characters |
+characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
+stream nextPutAll: '[[['; cr.
+characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
+stream cr; nextPutAll: ']]]'; cr.
+]]]
+
+
+!!!Formatting
+There is some syntax for text formatting:
+
+-To make something ""bold"", write ==\""bold\""== (with 2 double quotes)
+-To make something ''italic'', write ==\''italic\''== (with 2 single quotes)
+-To make something ==monospaced==, write ==\=\=monospaced\=\===
+-To make something --strikethrough--, write ==\--strikethrough\--==
+-To make something @@subscript@@, write ==\@@subscript\@@==
+-To make something ^^superscript^^, write ==\^^superscript\^^==
+-To make something __underlined__, write ==\__underlined\__==
+
+
+!!!Pictures
+To include a picture, use the syntax ==\+caption>file://filename|parameters+==:
+
+[[[language=pillar
++Caption of the picture.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
+]]]
+
+generates Figure *@pharoLogo* (this reference has been generated using ==\*@pharoLogo*==).
+
+Parameters are pairs =="label"="value"== separated by ==\|==.
+
++Caption of the picture.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
+
+
+!!!Tables
+To create a table, start the lines with ==|== and separate the elements with ==|==. Each new line represents a new row of the table. Add a single ==!== to let the cell become a table heading.
+
+[[[language=pillar
+|!Country |!Capital
+|France | Paris
+|Belgium | Brussels
+]]]
+
+|!Country |!Capital
+|France | Paris
+|Belgium | Brussels
+
+
+The contents of cells can be aligned left, centered or aligned right by using ==|{==, ==||== or ==|}== respectively.
+
+[[[language=pillar
+||centered||!centered header||centered
+|{ left |} right || center
+]]]
+
+generates:
+
+||centered||!centered header||centered
+|{ left |} right || center
+
+
+
+!!!Preformatted
+To create a preformatted block, begin each line with ==\===. A preformatted block uses equally spaced text so that spacing is preserved. In general you should prefer code block over preformatted blocks. Code blocks more powerful. 
+
+= = this is preformatted text
+= = this line as well
+
+!!!Code block
+@scripts
+
+Use code blocks when you want to add code snippets to your document.
+Code blocks are delimited by ==\[\[\[== and ==\]\]\]==.
+
+= [[[
+= foo bar
+= ]]]
+
+generates
+
+[[[
+foo bar
+]]]
+
+!!!! Code block with a label or caption
+
+If you want either a label (to reference the code later) or a caption (to give a nice title to the code block), write the following:
+
+= [[[label=foobar|caption=My code block that works|language=smalltalk
+= self foo bar
+= ]]]
+
+which produces script *@foobar* (this reference is produced with ==\*@foobar\*==).
+
+[[[label=foobar|caption=My code block that works|language=smalltalk
+self foo bar
+]]]
+
+!!!! Code block syntax highlighting
+@sec:syntaxHighlighting
+
+To specify the syntax a code block is written in, you need to use the ==language== parameter.
+For example on *@foobar* we used the ==smalltalk== value for the ==language== parameter.
+
+
+[[[eval=true
+| languages |
+stream nextPutAll: '@@note The currently supported languages are '.
+languages := PRRealScriptLanguage withAllConcreteClasses collect: #standardName.
+languages asStringOn: stream delimiter: ', ' last: ' and '
+]]]
+
+If you don't want syntax highlighting for a particular script, specify ==no language== as value to the ==language== parameter.
+
+!!!! Code block with line numbers
+
+If you need to explain a long piece of code, you may want a code block to have line numbers:
+
+= [[[lineNumber=true
+= self foo bar.
+= self bar foo.
+= ]]]
+
+produces
+
+[[[lineNumber=true
+self foo bar.
+self bar foo.
+]]]
+
+!!!! Code block from an external file
+
+If you want you can also include a code block from a external file. For example if you have a file `myProject.html` and you want to take the code from line 15 to
+line 45, instead of copy/pasting the code you can use:
+
+= [[[language=html|fromFile=myProject.html|firstLine=15|lastLine=45
+= ]]]
+
+The ==firstLine== and ==lastLine== parameters are optional.
+
+
+
+
+!!!! Generate a part of your document with a script
+
+If you want you can also evaluate a script to generate a part of your document.
+Notice that some pillar version may disable it for security reasons.
+
+For example if you write a project's documentation and want to give some metrics about its code, you can write something like this:
+
+= [[[eval=true
+= | packages classes |
+= packages := RPackageOrganizer default packages select: [ :each |
+=                each name includesSubstring: 'Pillar' ].
+= classes := packages flatCollect: [ :each | each classes ].
+= stream
+=    nextPutAll: 'The Pillar project contains:';
+=    lf;
+=    nextPutAll: '- ==';
+=    print: packages size;
+=    nextPutAll: ' packages==.';
+=    lf;
+=    nextPutAll: '- ==';
+=    print: classes size;
+=    nextPutAll: ' classes=='.
+= ]]]
+
+will generate:
+
+[[[eval=true
+| packages classes |
+packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
+classes := packages flatCollect: [ :each | each classes ].
+stream
+   nextPutAll: 'The Pillar project contains:';
+   lf;
+   nextPutAll: '- ==';
+   print: packages size;
+   nextPutAll: ' packages==.';
+   lf;
+   nextPutAll: '- ==';
+   print: classes size;
+   nextPutAll: ' classes=='.
+]]]
+
+!!! Annotated paragraphs
+
+An empty line starts a new paragraph.
+
+An annotated paragraph starts with ==\@@== followed by a keyword such as ==todo== and ==note==. For example,
+
+[[[language=pillar
+@@note this is a note annotation.
+]]]
+
+generates
+
+@@note this is a note annotation.
+
+And,
+
+[[[language=pillar
+@@todo this is a todo annotation
+]]]
+
+generates a todo annotation
+
+@@todo this is a todo annotation
+
+By default the templates support ==@\@todo== and ==@\@note==. 
+
+
+!!!! Nice HTML
+Note that the annotation (e.g., ==todo== and ==note==) can be any word that is meaningful to the author. In HTML, an annotated paragraph triggers the generation of a paragraph with the annotation as the paragraph ==class==. In LaTeX, an environment with the annotation name is generated. In HTML, you can tweak the output to make it look nice, for example with such JavaScript code:
+
+[[[language=javascript
+// Wraps paragraphs with class pClass inside a div and adds an H4 element with pTitle.
+function transformAnnotatedParagraphs(pClass, pTitle) {
+   $("p." + pClass).wrap( "<div class='annotated-paragraph "
+         + pClass + "' />" ).prepend("<h4>"+ pTitle +"</h4>");
+}
+
+transformAnnotatedParagraphs("note", "Note");
+transformAnnotatedParagraphs("todo", "To do");
+]]]
+
+Above code will prepend the titles "Note" and "To do" to the ==@\@note== and ==@\@todo== paragraphs. You can make that looks nice using a little bit of CSS:
+
+[[[language=css
+.annotated-paragraph {
+   margin: 20px 0;
+   padding: 15px 30px 15px 15px;
+   border-left: 5px solid #eee;
+}
+.annotated-paragraph h4 {
+   margin-top: 0;
+}
+.annotated-paragraph p:last-child {
+   margin-bottom: 0;
+}
+.note {
+   background-color: #f0f7fd;
+   border-color: #d0e3f0;
+}
+.note h4 {
+   color: #3a87ad;
+}
+.todo {
+   background-color: #dff0d8;
+   border-color: #d6e9c6;
+}
+.todo h4 {
+   color: #3c763d;
+}
+]]]
+
+
+
+!!!Raw
+
+If you want to include raw text into a page you must enclose it between =={\{{== and ==}\}}==, otherwise Pillar ensures that text appears as you type it which might require transformations.
+
+A good practice is to always specify for which kind of export the raw text must be outputted by starting the block with ==\{{{latex:== or ==\{{{html:==. For example, the following shows a formula, either using LaTeX or plain text depending on the kind of export.
+
+= {{{latex:
+= \begin{equation}
+=    \label{eq:1}
+=    \frac{1+\sqrt{2}}{2}
+= \end{equation}
+= }}}
+= {{{html:
+= (1+sqrt(2)) / 2
+= }}}
+
+""Take care:"" Avoid terminating the verbatim text with a ==}== as
+this will confuse the parser, better add a space or two. So, don't write ==\{{{\\begin{scriptsize}}}}== but ==\{{{\\begin{scriptsize} }}}== instead.
+
+
+
+!!! Annotations: supporting extensions
+
+Pillar proposes two extensions mechanisms: tags and parameters. Pay attention that each plugin should handle the tag or parameter processing. 
+
+
+Annotations are the Pillar way to have extensible syntax. An annotation has this syntax:
+
+[[[language=pillar
+${tag:parameter=value|parameter2=value2}$
+]]]
+
+!!!!InputFile annotation
+
+You can include a file into another pillar file. The ==inputFile== annotation takes as parameter the path of the file relative to ==baseDirectory== (if you don't change the base directory, it is your working directory). In this example, 2 files are included:
+
+[[[language=pillar
+${inputFile:test.pillar}$
+
+${inputFile:chapter2/chapter2.pillar}$
+]]]
+
+!!!!Footnote annotation
+
+You can add footnotes to explain or annotate words. The ==footnote== annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
+
+[[[
+Foo${footnote:Some Explanation for Foo}$
+]]]
+
+!!!!Parameters
+
+Pictures and scripts are both using parameters to specify different options and variations. Parameters are pairs =="label"="value"== separated by ==\|==.
+
+Here are two examples within the same expressions: Code blocks and captions use parameters.
+
+= [[[label=foobar|caption=My code block that works|language=pillar
+= +Caption of the picture.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
+= ]]]
+
+
+
+!! Specific markup
+This chapter presents extensions specific to a given support such as LaTeX or slides.
+
+!!!LaTeX
+
+!!!!Citations
+
+Citations are only available for LaTeX.
+You can add citations to your document to reference an element in a LaTeX bibliography. The ==cite== annotationtakes as parameter the key of the reference in the bibliography.
+
+[[[
+${cite:reference}$
+]]]
+
+The exemple above wil render as ==\cite{reference}==
+
+If you want to use other type of citations like ==citep== or ==citet==, please overwrite the command in your LaTeX template:
+==\renewcommand{\cite}{\citep}==
+
+Future versions will support also the definition in pillar.conf of the bibliography file. Right now you should harcode it in the template. 
+
+
+!!!Slides
+Pillar offers the possibility to define slides. Slides requires the use of the presentation archetype. 
+
+!!!!Slide annotation
+@sec:slide
+
+This annotation is used to create slides structure for a ==beamer== or a ==deck.js== export.
+The parameter ""title"" is required.
+The ""label"" parameter can be used to refer to this slide in another slide:
+
+[[[language=pillar
+${slide:title=My slide|label=sld:mySlide}$
+]]]
+
+!!!!Columns
+
+With Pillar you can put text and other contents in columns.
+To do that, you need to delimit an environment with the ==columns== and ==endColumns== annotations.
+Then you can create columns with the ==column== annotation.
+The column annotation takes 1 required parameter: the width of the column. Here is an example:
+
+[[[language=pillar
+${columns}$
+
+   ${column:width=60}$
+      bla
+   ${column:40}$
+      bla
+
+${endColumns}$
+]]]
+
+@@note The column annotations currently works only for the beamer, HTML and Deck.js export.
+
+
+!!!Under development
+
+!!!!Semantic links
+
+Semantic links are a way to simplify links to standard websites such as Wikipedia and Youtube.
+
+To create semantic links ressources, use the ==\*Wikipedia Pharo>wikipedia:Pharo\*== syntax which is rendered as *Wikipedia Pharo>wikipedia:Pharo*.
+To specify a language, you can use the ==\*Wikipedia Pharo>wikipedia:Pharo|lang=en\*== syntax which is rendered as *Wikipedia Pharo>wikipedia:Pharo|lang=en*.
+
+Same for Youtube links : ==\*Youtube Pharo>youtube:KDvNuOjdjY4\*==, the result is : *Youtube Pharo>youtube:KDvNuOjdjY4*.
+
+Note that such feature will be probably revised to be more generic and let the user define other semantic links. 
+
+!!!!Structures
+
+You can create structures to render all structures with the same name as the same object.
+Structures use the scripts syntax (see *@scripts*) with a particular parameter ==structure==
+
+= [[[structure=exercise
+= {
+=   "question":"What is the answer to life, the universe and everything ?",
+=   "answer":"42"
+= }
+= ]]]
+
+There is two kind of structures for the moment:
+-exercise, rendered as a definition list
+-city, rendered as a table
+-country, rendered as a table
+
+
+

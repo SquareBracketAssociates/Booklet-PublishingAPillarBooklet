@@ -1,0 +1,95 @@
+!! Pillar from Pharo (To be updated)
+
+@chapillarpharo
+
+Pillar has a document model (the root of which being ==PRDocument==), a parser (==PRPillarParser==) and several export types (subclasses of ==PRDocumentWriter==) implemented as visitors over the document model. Pillar also has phases (subclasses of ==PRPhase==) that take a document model as input and produce a modified document model as output.
+
+@@todo update this with the architecture
+
+In this chapter we will show you also that Pillar can be directed edited in Pharo itself. Then we will show some points to code Pillar directly. 
+
+!!! Preview: Editing Pillar with GT Bloc
+
+The team developing Bloc is currently working on an editor for Pillar directly in Pharo. To put it in perspective, let us take a look at one screenshot showing an inspector presentation containing a Brick editor opened on a Pillar file that includes some text, a code snippet and a reference to a picture:
+
+%+Pillar live edition and rendering in Bloc.>file://figures/pillarGTEditor.png+
+
++Caption.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
+
+But, the more interesting thing is that below the picture reference, we get to see the actual picture (which happens to be another inspector screenshot). In fact, this picture is actually just another text attribute (called an adornment) that can be dynamically added to any text elements. This opens up a whole lot of expression power and it is all easily composeable. This is another reason why we say that this editor is moldable and you should expect new applications making use of this moldability and combining it with the liveliness of Pharo.
+
+
+The latest Brick code is loadable through:
+
+[[[
+	Metacello new
+		baseline: 'Brick';
+		repository: 'github://pharo-graphics/Brick/src';
+		load: #development.
+]]]
+
+If you want to play with Pillar, load the following extra code and just inspect a Pillar file:
+
+[[[
+	((IceRepository registry detect: [ :each | each name = 'Brick' ])
+		packageNamed: 'Brick-Editor-Pillar') loadLatest.
+]]]
+
+There are still issues left to deal with. But, the most important challenges are now behind us and that the design of the editor code is stable and robust.
+
+!!! How to create a Pillar document
+
+It is possible to create a Pillar document by parsing a string or by instantiating the document model.
+
+Creating a document by parsing a ==String== requires using the ==PRPillarParser==:
+
+[[[
+| wiki |
+wiki := '!My Document'.
+PRPillarParser parse: wiki
+]]]
+
+Or from a file:
+[[[
+PRPillarParser parse: (FileSystem workingDirectory / 'foo.pillar') readStream
+]]]
+
+You can also instantiate the document model, one node after the other, starting with ==PRDocument== and adding sub-instances of ==PRDocumentItem==:
+
+[[[
+| document title figure|
+document := PRDocument new.
+title := PRHeader new
+   level: 1;
+   add: (PRText content: 'foo');
+   yourself.
+figure := PRFigure new
+   add: (PRText content: 'Alias');
+   reference: 'file://test.png';
+   yourself.
+document add: title; add: figure.
+]]]
+
+
+!!! How to export a document
+
+Once you have your document, you may want to export it. But exporting, there's an optional step: transforming your document.
+A transformer is an abstraction that visits a document and changes it by transforming nodes. For instance, ==PRScriptEvaluator== replaces a script with ==eval=true==
+ by the result of its evaluation. 
+ 
+ Exporting is done with a subclass of ==PRDocumentWriter==, like this:
+
+[[[
+PRHTMLWriter write: document
+]]]
+
+To specify export parameters, you may want to use a configuration.
+
+[[[
+| configuration |
+configuration := PRPillarConfiguration new.
+configuration outputType: PRHTMLWriter.
+PRExportPhase executeOn: { document } with: configuration.
+]]]
+
+

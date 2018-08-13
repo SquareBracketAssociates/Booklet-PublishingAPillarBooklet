@@ -1,0 +1,17 @@
+{
+	"classtraitcomposition" : "PRTParametrizable classTrait",
+	"classvars" : [ ],
+	"instvars" : [
+		"parameters",
+		"hadAllKeys",
+		"isValid"
+	],
+	"name" : "PRAbstractAnnotation",
+	"commentStamp" : "StephaneDucasse 3/31/2018 11:35",
+	"super" : "PRDocumentGroup",
+	"traitcomposition" : "PRTParametrizable",
+	"type" : "normal",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"category" : "Pillar-Model-Document"
+}

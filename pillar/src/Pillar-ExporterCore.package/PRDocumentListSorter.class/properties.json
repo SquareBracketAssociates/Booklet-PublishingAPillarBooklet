@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "<historical>",
+	"super" : "Object",
+	"category" : "Pillar-ExporterCore-Document-List",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"direction",
+		"files"
+	],
+	"name" : "PRDocumentListSorter",
+	"type" : "normal"
+}

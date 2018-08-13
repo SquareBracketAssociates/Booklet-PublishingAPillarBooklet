@@ -1,0 +1,272 @@
+!! Setting Up Travis 
+
+Travis is a service similar to Jenkins that is useful to automate your process.
+Once configured, a travis job will run each time you commit to your book github repository. This is what we will see now. 
+
+!!! Configuring your github account
+The first to start with is to enable the travis integration from your github repository. You will find the integration in Settings and the menu integration services. You should look for Travis CI and enable it as shown in Figure *@github*.
+
++Enabling the travis service in your github account.>file://figures/configuringServices.png|label=github|width=80+
+
+
+Once this is done, you should go to your travis account *http://travis-ci.com* and enable your project as shown in Figure *traviside*. 
+
++Enabling your github project on travis.>file://figures/travis.png|label=traviside|width=80+
+
+Note that this setup may take a while to sync. So do not worry if these systems start to off right in the minute. It may take a while, so let us pass to the next item. 
+
+!!! Add and edit the .travis.yml file
+
+Here is the ==.travis.yml== of this booklet. You can find it online at *https://github.com/SquareBracketAssociates/Booklet-PublishingAPillarBooklet*:
+
+[[[
+sudo: required
+services:
+- docker
+
+before_install:
+- docker pull dpollet/texlive:pillar
+
+script:
+- docker run --tty --rm --volume $PWD:/work dpollet/texlive:pillar make spiralbook
+]]]
+
+Add a similar configuration file to your repository. Once the travis github get synchronised and travis is kicked in, you will be able to check on the travis log that your project has been successfully built. 
+
+
+!!! Some explanations
+Let us explain some parts:
+
+[[[
+sudo: required
+services:
+- docker
+
+before_install:
+- docker pull dpollet/texlive:pillar
+
+script:
+- docker run --tty --rm --volume $PWD:/work dpollet/texlive:pillar make spiralbook
+]]]
+
+Our script uses the docker container containing an installed version of texlive and pillar. The script invokes make to build the book. ==make spiralbook== builds the book in spiral lulu format. You may want to adapt it to other formats. 
+
+!!! Using badges to indicate build status
+
+You can now use the status of a travis build right in the github repository using markdown badges in the project ==README.md== file.
+
+
+[[[
+# A booklet explaining how to build a booklet 
+
+[![Build status][badge]][travis]
+
+[travis]: https://travis-ci.org/SquareBracketAssociates/Booklet-PublishingAPillarBooklet
+[badge]: https://travis-ci.org/SquareBracketAssociates/
+Booklet-PublishingAPillarBooklet.svg?branch=master
+
+## To contribute
+- Fork
+- Do pull Request 
+
+## To latex it locally
+
+```
+make
+make bootstrap
+make book spiral
+```
+]]]
+
+At the stage you should get already important feedback since you will know if your project fully builds or not. 
+
+!! Deploying your documents
+
+In this chapter, we present two ways to deploy your documents: first your work in progress using bintray and second released versions using github.
+
+!!! Deploying your work in progresss artefacts in bintray
+
+Bintray is a service that can host artefacts produced by Travis.
+We will use bintray to store the latest pdf produced by travis and we will use github to store the released (tagged) pdf.
+
+!!!! Create a bintray account
+
+You should have an account on bintray *https://bintray.com/*.
+You may link it or not to your github account.
+
+!!!! Encoding your bintray API key for Travis
+
+In your bintray profile, get your API key (copy it to your copy paste buffer). This is key is important because without it you will not be able to make Travis use Bintray. To be used in Travis it should be encrypted.
+
+Note that this encrypted key cannot be shared between different project, therefore it should be generated from the bintray API key for each new project. 
+
+In your machine in the folder of your project execute the following expressions:
+
+[[[
+travis login --auto
+travis encrypt 'Your API Key from Bintray'
+]]]
+
+You will use the resulting key in your .travis.yml configuration file.
+
+!!!! Enable bintray
+
+To enable bintray, we extend the ==.travis.yml== description with the following section:
+
+[[[
+deploy:
+- provider: bintray
+  file: .bintray.json
+  on:
+    repo: SquareBracketAssociates/Booklet-PublishingAPillarBooklet
+  skip_cleanup: true
+  user: ducasse
+  key:
+    secure: DLT5e+3+U3jaooTLVN6JPcavMS+5XzFwNIfsK7QLYefzOZfBR8lt2vHtX2OxcdyKNfuzh0EaIDUR9a6+/Eg/wAcxjFDEO94ftb7rD7YHJ1Tc7r4AaeKwrdwyL6VgbN0ZNZqtXsTWGg+4XgHvSq0KVAR9K1IKSwJYPWwjJwDexakY2/ZpRg6R0OgaZwhtTEbbUn/pnoVQl3VfNlCjiI+ZLDqPKf/UfovVv7tzqdHeLK73MJN36Ri8IGTP5QaSYHBBko8mTv4EoVH7HuuSLAa60NBOScksYY5LjsS7OdzIwipmk4xwxcp2QXtVjf2uNKCKIISVRMzesdmUnsuL/qReJh7pfn21a38ZEEjJPPWSnwA8iI+GHUiCcLuHdw1+ilmIqxF3w8gSunM3aUv4a/qQm641DpGPawnYBbnFGPyEkxpCB1HXIsRRJeBs2UEkFmhOHyGWGl0+jx3iihwe72HMKRYeXcDHKOn1gU+pJQ50PBXFsTotOr7wkZ6OGsKO0XecNsZGodsQ4lPVxfJolnKhkxIouzCagd3wO0iseG1vOyi5JrRT+NPsZp7TKBrHIDAUb0LG+F8qC/IXHhTYo7ZywF5ZjIV9UZo/kZP0EQ8pstUlD4V4DWRYV1KQSpORM01wpdcZFDb5ExLvEck6Sv1cuW9QYBst+lDVpoSpbXSnSDc=
+]]]
+
+The deploy section indicates to use the file ==.bintray.== as a specification to store the result of the build to the bintray repository for the account ==ducasse== and this is there that you should paste your encrypted key.
+
+Note that the ==skyp_cleanup: true== is a way to circumvent some strange behavior.
+
+
+!!!! Add and edit the .bintray.json file 
+Now we should add a ==.bintray.json== configuration file that you should version with your project.
+
+Here is the one of the *https://github.com/SquareBracketAssociates/Booklet-PublishingAPillarBooklet*
+
+[[[
+more .bintray.json
+]]]
+
+[[[
+
+{
+  "package": {
+      "name": "Booklet-PublishingABooklet",
+      "repo": "wip",
+      "subject": "squarebracketassociates",
+      "desc": "Distributing",
+      "licenses": ["MIT"],
+      "website_url": "https://github.com/SquareBracketAssociates/Booklet-PublishingAPillarBooklet",
+      "issue_tracker_url": "https://github.com/SquareBracketAssociates/Booklet-PublishingAPillarBooklet/issues",
+      "vcs_url": "https://github.com/SquareBracketAssociates/Booklet-PublishingAPillarBooklet.git",
+      "labels": ["work-in-progress"]
+    },
+
+    "version": {
+        "name": "latest",
+        "desc": "Latest successful build"
+    },
+
+    "files": [
+        {
+            "includePattern": "build/(learningoop).pdf",
+            "uploadPattern": "$1-wip.pdf",
+            "matrixParams": { "override": 1 }
+        }
+    ],
+    "publish": true
+}
+]]]
+
+The most important is probably the files part. It lets you specify the files that you select in the build and how the files can be renamed when uploaded to bintray. ==$1== denotes the part in ==()==. 
+
+- =="includePattern": "build/(learningoop).pdf",== states that the file to grab is named learningoop.pdf and is found in the ==build== folder. 
+- =="uploadPattern": "$1-wip.pdf",== states that when the file will be uploaded to bintray we renaming it ==learningoop-wip.pdf==.
+
+!!!! Put a point to bintray in your README
+
+Now it is also a good point to add a link to your bintray for example in your readme file. 
+Here is a possible version: 
+
+The result from the latest successful Travis build can be found [on Bintray (PDF)](https://bintray.com/squarebracketassociates/wip/download_file?file_path=learningoop-wip.pdf).
+
+
+!!! Github deployment 
+
+For a given checkout you should generate the associated token.
+In your github repository you should mention to travis that you will be interested by sotring releases files 
+in the github release tab. 
+
+[[[
+> travis setup releases
+]]]
+
+Here is the full ==.travis.yml== with the github integration: ==\-provider: releases==
+
+[[[
+sudo: required
+services:
+- docker
+
+before_install:
+- docker pull dpollet/texlive:pillar
+
+script:
+- docker run --tty --rm --volume $PWD:/work dpollet/texlive:pillar make spiralbook
+
+deploy:
+- provider: bintray
+  file: .bintray.json
+  on:
+    repo: SquareBracketAssociates/LearningOOPWithPharo
+  skip_cleanup: true
+  user: ducasse
+  key:
+    secure: ThnjhD8OMRlL5NmsK8dGQR4mpzXG2Kj2NeWHA5oHCO4YTaK0fKLPHF8YcjlyQorESX6+Z/Q0ihtTq1/3GguH8rzjAS8DrgArB3Stcg6npfyB3svyeVWXTKP8EPLHtenBnLANWTj/tYfHd6egDltJlxGMrEd5tHzl8CNlD+mmfQA1VhXUEmh8pw8P6VfFDWiL+bHG/Am1DI8SspcuQbYcKzh6ZdadvXwpEfQr07VTc0w4zygRk6h8z+76wX8N7xebr66aLe9FipZ0d3dYYfhZl3mtsOoUJmvGpnsSYt3h3I9TnOTeZjGAUEfzxdoZ6CRMIExUhNU7VEBMN4FKP8Oic8Eu1i/Ay7cM74mwGgJCX8DE0M/y0DJqJoKEk+NojoZfSgSzwslE1hXSZSaAJoTr9EDkZwEpVDCep42TVZyOYa+GICZCWpO999KYZlm8ItD4EJsqu8s2pipEMmcLGbGDBejuQ/30NRvelNG6xcT0wTg4595zNuP4k9cOYG9RddlqDzy8E333oz+cJ2R9zolsQpNHZtsQvKvbamRt0fsKjOgGv/a4Wslp1ZczWezRbBCxWC8wvtYSn1MWraQUGh6E3OrljoplbgUmOY/XLsAJeeFxIAmOwUzo2PK5S43nEhKQQNr/CmP4TAL9P3wbsBhQ/WXa4f8lUSeexDzrK7qY8J0=
+- provider: releases
+  file: build/learningoop.spiral.pdf
+  on:
+    tags: true
+  skip_cleanup: true
+  api_key:
+    secure: pRfu3fr35BzqQDi1ul0SubPSwO8zcyIidqLRZPz3XIrH4qoy1Zgnq785dmB7ziNQqH+VJyh7askSFY3JLxL0d4P0eUgj2ZDIOhJsUQQ/ihevOBWbxlMOoEPjQfzA11l8WrNCQ566KrcYiISRi7bCg698kPTWSRwOmmvqXOJe5zGkuUbVmMNUV2oxaNV4JC8kVyVWHYy0nNMLEX/hzRZRh1+8K34/ds+fZ7irLrbDWMbKGHCyuLCSqv+zJJdu99nWLTclrCxFzK4DEHaMlFiO7wkUpyQLwZ38EDnb3E7iv045jSqCx3XB+DMRG1Da2/9BIXl0mho5ELdEvfGVAbjI2no5FWd0H1cs4/banAePCFnM7ZscJBaPWgVajB7EzrcADJUoxpmU6+6n1aIC3CnjscfAHqSAKGv8CO/Jh+Uirc8ATRpSqa73f2Nnj9tRCqwCOnFOCEzu0w5l3Ppz2Qpif04P+QbebZehSVaBJ4W01R2i8Rac3IuZDhZVaek1X24HFxUOd/rvHpbhz8eeANdnsWCTkAm+0sD+iKsWKICRMxFZfCK/SPldAcjXZsOsEMTqfx7ZWyCc7GeesQWcmW+z3shziyQd9tdeArJWLwacly3hH3WeyuUD5JyPF9klvDBtHgTVajdU4yp+3oXsrtTmetnBz+RESxQGdLgZRlQBQog=
+]]]
+
+
+The expression file: ==build/learningoop.pdf== identifies the file produced by ==make==. Pay attention because spiralbook produces learningoop.spiral.pdf
+
+The expression 
+[[[
+  on:
+    tags: true
+]]]
+
+expresses the fact that the script will only trigger for tagged releases.
+
+Note: We should add how we generated the key. It is not your bintray key. Probably travis encrypt your github token key. 
+
+!!!! How to add a new released file in your git hub account 
+
+To release a pdf that will be stored on github in the booklet repository, we should issue an annotated tag as follow:
+
+[[[
+git tag -a v1.0-Pharo50
+git push --tags
+]]]
+
+!!! Conclusion
+
+Now you are ready to manage and automatically build documents in various formats.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

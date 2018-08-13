@@ -1,0 +1,13 @@
+${slide:title=First slide}$
+
+${columns}$
+
+${column:width=50}$
+
+- First column
+
+${column:width=50}$
+
+- Second column
+
+${endColumns}$

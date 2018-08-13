@@ -1,0 +1,44 @@
+environment:
+  CYG_ROOT: C:\cygwin
+  CYG_BASH: C:\cygwin\bin\bash
+  CYG_CACHE: C:\cygwin\var\cache\setup
+  CYG_EXE: C:\cygwin\setup-x86.exe
+  CYG_MIRROR: http://cygwin.mirror.constant.com
+  SMALLTALK_CI_BUILD: /cygdrive/c/SMALLTALKCI-master/_builds
+  SCI_RUN: /cygdrive/c/SMALLTALKCI-master/run.sh
+
+  matrix:
+    - SMALLTALK: Pharo-7.0
+      SMALLTALK_CONFIG: .smalltalk.Unit.ston
+    - SMALLTALK: Pharo-5.0
+      SMALLTALK_CONFIG: .smalltalk.Unit.ston
+    - SMALLTALK: Pharo-7.0
+      SMALLTALK_CONFIG: .smalltalk.Integration.ston
+    - SMALLTALK: Pharo-6.1
+      SMALLTALK_CONFIG: .smalltalk.Integration.ston
+    - SMALLTALK: Pharo-5.0
+      SMALLTALK_CONFIG: .smalltalk.Integration.ston
+
+platform:
+  - x86
+
+# MiKTeX installation inspired from https://github.com/open62541/open62541/blob/master/appveyor.yml
+install:
+  - '%CYG_EXE% -dgnqNO -R "%CYG_ROOT%" -s "%CYG_MIRROR%" -l "%CYG_CACHE%" -P unzip'
+  - ps: Start-FileDownload "https://github.com/hpi-swa/SMALLTALKCI/archive/master.zip" "C:\SMALLTALKCI.zip"
+  - 7z x C:\SMALLTALKCI.zip -oC:\ -y > NULL
+  # Install miktex to get pdflatex, if we don't get it from the cache
+  - if not exist c:\miktex\texmfs\install\miktex\bin\pdflatex.exe appveyor DownloadFile http://mirrors.ctan.org/systems/windows-x86/miktex/setup/miktex-portable.exe
+  - if not exist c:\miktex\texmfs\install\miktex\bin\pdflatex.exe 7z x miktex-portable.exe -oc:\miktex >NUL
+  - set "PATH=%PATH%;c:\miktex\texmfs\install\miktex\bin"
+  # autoinstall latex packages (0=no, 1=autoinstall, 2=ask)
+  # this adds this to the registry!
+  - initexmf --set-config-value [MPM]AutoInstall=1
+  - initexmf --update-fndb
+  # Copy archetypes to build folder to run integration tests
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; mkdir -p $SMALLTALK_CI_BUILD; cp -r archetypes $SMALLTALK_CI_BUILD"'
+
+build: false
+
+test_script:
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; exec 0</dev/null; $SCI_RUN $SMALLTALK_CONFIG"'

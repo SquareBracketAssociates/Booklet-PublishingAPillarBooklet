@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon" />
+<link href="/_support/html/css/font-awesome.min.css" rel="stylesheet">
+<link href="/_support/html/css/nucleus.css" rel="stylesheet">
+<link href="/_support/html/css/flex.css" rel="stylesheet">
+<link rel="stylesheet" href="/_support/html/highlightjs/styles/default.css">
+<link rel="stylesheet" href="/_support/html/css/highlight-commands.css">
+<link rel="stylesheet" href="/_support/html/css/bootstrap.min.css">
+<script src="/_support/html/js/jquery-2.x.min.js"></script>
+<script src="/_support/html/highlightjs/highlight.pack.js"></script>
+<script src="/_support/html/js/highlight-commands.js"></script>
+<meta name="description" content="">
+<meta name="author" content="Stéphane Ducasse and Guillermo Polito">
+  </head>
+  <body>
+    <header>
+  <div class="logo">
+    <a class="baselink" href=""></a>
+  </div>
+  <div class="burger"><a href="javascript:void(0);" style="font-size:15px;">&#9776;</a></div>
+  
+</header>
+<article>
+  <aside>
+    <ul class="menu">
+   		<li data-nav-id="123" class="dd-item">
+    		<a href="">
+		       <i class="fa fa-fw fa-home"></i>
+	    	</a>
+        </li>
+
+		
+    </ul>
+  </aside>
+
+  <section class="page">
+    
+	<h1>Publishing Documents with Pillar 7.0</h1>
+		
+	<h2>Deploy your html books using Travis and Github Pages</h2>
+
+<p>
+Not available
+</p>
+<p>
+First of all, be sure you have a <a href="www.github.com">github</a> account and <a href="www.travis-ci.org">travis</a> one if possible. As explained for setting up Travis and Bintray, you will enable travis integration from your github repository containing your html files.
+</p>
+<p>
+Next step is to create some files which will be used during the deployment.
+</p>
+<p>
+Let's start by creating a <code>Makefile</code> at the top level of your repository. 
+</p>
+<p>
+That is the content of this file:
+</p>
+<figure><pre><code>SITE=_result/html
+
+.pillar:
+	git clone https://github.com/pillar-markup/pillar.git .pillar -b dev-7
+	cd .pillar &amp;&amp; ./scripts/build.sh &amp;&amp; cd ..
+
+build:	.pillar
+	.pillar/build/pillar build html
+
+deploy:	build
+	./scripts/prepare_for_deploy.sh $(SITE)
+	cd $(SITE) &amp;&amp; git push -f origin HEAD:gh-pages
+
+
+clonedeploy:
+	rm -rf $(SITE)
+	git clone -b master `git config --get remote.origin.url` $(SITE)
+
+
+clean:
+	rm -rf $(SITE)</code></pre><figcaption></figcaption></figure>
+
+
+<p>
+This file will be used by travis to install the last version of pillar and generate your book in html format. After that, it delegates the deployment to another script.
+</p>
+
+<p>
+No changes needed for this file. Perhaps you will have to modify the branch (part after -b) from which pillar is cloned, in order to have the latest version.
+</p>
+<p>
+The <code>gh-pages</code> branch will be automatically created, so you are not obliged to create it on github. The gh-pages branch is recognized by github to be a special branch on which 
+static html files can be stored in order to be served. So pushing the generated html files on that branch will provide you a site available at <code>https://&lt;git-username&gt;.github.io/&lt;your-repo-name&gt;/</code>.
+</p>
+
+<p>
+Now you will create the <code>scripts/prepare_for_deploy.sh</code> which is a bash file initializing a repository for your generated files.
+</p>
+<p>
+That file looks like: 
+</p>
+<figure><pre><code>#!/usr/bin/env bash
+# Bash3 Boilerplate. Copyright (c) 2014, kvz.io
+
+set -o errexit
+set -o pipefail
+set -o nounset
+# set -o xtrace
+
+# Set magic variables for current file &amp; dir
+__dir=&quot;$(cd &quot;$(dirname &quot;${BASH_SOURCE[0]}&quot;)&quot; &amp;&amp; pwd)&quot;
+__file=&quot;${__dir}/$(basename &quot;${BASH_SOURCE[0]}&quot;)&quot;
+__base=&quot;$(basename ${__file} .sh)&quot;
+__root=&quot;${__dir}/..&quot; # &lt;-- change this as it depends on your app
+
+
+# The repository send as parameter where html files are located
+if [ $# -lt 1 ]
+then 
+  echo &quot;parameter missing: Repository name expected&quot;
+else 
+  __site=$1
+fi
+
+cd ${__root}/${__site}
+touch .nojekyll
+git init
+git add .
+git commit -m &quot;Generated from source branch: `cd ${__root} &amp;&amp; git log -1 --oneline`&quot;
+git remote add origin &quot;https://$GH_TOKEN@github.com/${TRAVIS_REPO_SLUG}.git&quot;
+echo &quot;GH PAGES Setup finished&quot;</code></pre><figcaption></figcaption></figure>
+
+
+<p>
+The <strong>TRAVIS_REPO_SLUG</strong> variable contains your github username and repository name like this <strong>toto/book_pillar</strong>.
+</p>
+<p>
+An important thing which has to be done here is the generation of the token, which is needed by travis.
+</p>
+<p>
+This token will be encrypted and will be stored in a <code>.travis.yml</code> file.
+</p>
+<p>
+You will need to add these instructions to your existing <code>.travis.yml</code> file. Those lines will trigger the deployment process and will install some necessary librairies for pillar installation :
+</p>
+<figure><pre><code>language: c
+addons:
+  apt:
+    packages:
+    - libasound2:i386
+    - lib32z1
+    - lib32bz2-1.0
+    - libssl1.0.0:i386
+    - libfreetype6:i386
+script:
+- if [[ ${TRAVIS_BRANCH} == &quot;master&quot; ]]; then make deploy; fi</code></pre><figcaption></figcaption></figure>
+
+
+<h3>Generate the token in Github</h3>
+
+<p>
+Go to your <a href="www.github.com">github</a> account, go to the Developer Settings (located in general settings of your account).
+</p>
+<p>
+In Personal access tokens, click on Generate new token. Provide a description and generate it. Copy it in a safe file, you will have to encrypt it. And for every new book repository you can use 
+the same token, you will just need to encrypt it.
+</p>
+<p>
+Now just use this command at the top route of your repository:
+</p>
+<figure><pre><code>$ travis encrypt GH_TOKEN=&lt;your_token&gt; --add env.global</code></pre><figcaption></figcaption></figure>
+
+<p>
+This will add the encrypted token to your <code>.travis.yml</code> file.
+</p>
+<p>
+You are not so comfortable with bash scripts !! No problem, the next section is for you
+</p>
+<h3>For non geeks</h3>
+
+<p>
+Here we are going to present another of doing the deploy without dealing with too many scripts. 
+</p>
+<p>
+See by your self :
+</p>
+<figure><pre><code>language: smalltalk
+
+
+os:
+    - linux
+
+
+smalltalk:
+    - Pharo-6.1
+
+env:
+  matrix:
+    - JOB=test TYPE=System ARCHETYPE=book OUTPUT=html
+
+install:
+    # Pillar installation
+    - git clone https://github.com/pillar-markup/pillar.git .pillar -b dev-7  # Clone pillar
+    - cd .pillar &amp;&amp; ./scripts/build.sh &amp;&amp; cd ..
+
+script:
+    - .pillar/build/pillar build html
+    - cd _result/html &amp;&amp; touch .nojekyll &amp;&amp; cd ..
+
+deploy:
+   provider: pages
+   skip-cleanup: true
+   github-token: $GH_TOKEN
+   keep-history: true
+   local_dir: _result/html
+   on:
+     branch: master</code></pre><figcaption></figcaption></figure>
+
+
+<h3>Recap</h3>
+
+<p>
+Now you can commit and push your repo. 
+</p>
+<p>
+Before doing that, just let us check some points
+</p>
+<ul>
+<li>You have the Makefile at the top level of your repository</li>
+<li>The prepare_for_deploy.sh file in scripts directory <em>scripts/prepare_for_deploy.sh</em></li>
+<li>Travis integration is enabled on github</li>
+<li>You have an encrypted token in <code>.travis.yml</code> labelled <strong>GH_TOKEN</strong></li>
+</ul>
+
+<p>
+If so, you can safely do your commit. And enjoy travis integration. Your book will be served on <code>https://&lt;git-username&gt;.github.io/&lt;your-repo-name&gt;/</code>
+</p>
+<p>
+<strong>Pay attention to have an index file in your repository and set base_url to your repository name</strong> (pillar.conf)
+
+</p>
+
+  </section>
+
+</article>
+
+<footer>
+
+<div class="footline">
+    <div class="github-link">
+      <a href="" target="blank"><i class="fa fa-code-fork"></i>Github</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/_support/html/js/clipboard.min.js"></script>
+
+<link href="/_support/html/css/featherlight.min.css" rel="stylesheet">
+<script src="/_support/html/js/featherlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/_support/html/js/flex.js"></script>
+<!-- Prettify annotated paragraphs-->
+    <script src="_support/html/js/annotated-paragraphs.js"></script>
+
+  </body>
+</html>

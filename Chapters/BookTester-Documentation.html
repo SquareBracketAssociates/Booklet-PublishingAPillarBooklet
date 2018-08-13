@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon" />
+<link href="/_support/html/css/font-awesome.min.css" rel="stylesheet">
+<link href="/_support/html/css/nucleus.css" rel="stylesheet">
+<link href="/_support/html/css/flex.css" rel="stylesheet">
+<link rel="stylesheet" href="/_support/html/highlightjs/styles/default.css">
+<link rel="stylesheet" href="/_support/html/css/highlight-commands.css">
+<link rel="stylesheet" href="/_support/html/css/bootstrap.min.css">
+<script src="/_support/html/js/jquery-2.x.min.js"></script>
+<script src="/_support/html/highlightjs/highlight.pack.js"></script>
+<script src="/_support/html/js/highlight-commands.js"></script>
+<meta name="description" content="">
+<meta name="author" content="Stéphane Ducasse and Guillermo Polito">
+  </head>
+  <body>
+    <header>
+  <div class="logo">
+    <a class="baselink" href=""></a>
+  </div>
+  <div class="burger"><a href="javascript:void(0);" style="font-size:15px;">&#9776;</a></div>
+  
+</header>
+<article>
+  <aside>
+    <ul class="menu">
+   		<li data-nav-id="123" class="dd-item">
+    		<a href="">
+		       <i class="fa fa-fw fa-home"></i>
+	    	</a>
+        </li>
+
+		
+    </ul>
+  </aside>
+
+  <section class="page">
+    
+	<h1>Publishing Documents with Pillar 7.0</h1>
+		
+	<h2>Testing Your Documents</h2>
+<p>
+ 
+What does it mean to ‘test a book’ and why would you do it? Testing a book means checking the code it displays is up to date. This can be done by checking if examples are correct or verifying that method and class definitions compile without raising an error in the last Pharo version. Being able to test a book means updating it more easily and therefore more frequently. On the long term, easier updates means more frequent updates but also a documentation improvement along with more ressources available for the community.
+</p>
+<p>
+Pillar comes with a book tester.
+</p>
+
+<h3>Typical codeblocks</h3>
+
+<p>
+Pillar syntax allows you to write codeblocks, showing a part of code. The body of a codeblock allows one to display any part of code you might want to. For instance, example, method and class definitions can be tested.
+</p>
+<h4>Examples</h4>
+<figure><pre><code>   [[[
+	   1 + 1
+	&gt;&gt;&gt; 2</code></pre><figcaption></figcaption></figure>
+<p>
+]]]
+</p>
+<h4>Method definition</h4>
+
+
+<p>
+This codeblock presents a method definition.
+</p>
+<figure><pre><code>  [[[
+	YourClass &gt;&gt; yourMethod
+		^ 'bla'
+  ]]]</code></pre><figcaption></figcaption></figure>
+
+<h4>Class definition</h4>
+
+
+<p>
+This codeblock presents a class definition.
+</p>
+<figure><pre><code>   [[[
+   Object subclass: #YourClass
+        instanceVariableNames: ''
+        classVariableNames: ''
+        package: 'YourPackage'
+   ]]]</code></pre><figcaption></figcaption></figure>
+
+<p>
+As we show next, using parameters we can indicate that the expression inside a codeblock should be validated
+</p>
+<h3>Testing codeblock examples </h3>
+
+<p>
+Using the parameter <code>example</code> and the <code>&gt;&gt;&gt;</code>= helps you to validate your examples.
+For example 
+</p>
+<figure><pre><code>   [[[example=true
+   3 + 4
+   &gt;&gt;&gt; 7
+   ]]]</code></pre><figcaption></figcaption></figure>
+
+<p>
+The book tester interprets the previous parametrized codeblock as an assertion 
+ <code>self assert: (3 + 4 ) equals: 7</code>. 
+</p>
+<p>
+The book tester follows the following pattern with only one <code>&gt;&gt;&gt;</code> per codeblock.
+</p>
+<figure><pre><code>    [[[example=true
+       Action 
+    &gt;&gt;&gt; ExpectedResult
+    ]]]</code></pre><figcaption></figcaption></figure>
+
+
+
+<h3>Testing method and class definitions</h3>
+<p>
+The booktester checks that class and method definitions are valid (do not raise syntactical errors at compilation). You should use the following parameters:  <code>methodDefinition=true</code> or classDefinition=true as code block. It makes sure your book is up to date with the latest Pharo version.
+</p>
+
+<h4>Method definitions</h4>
+<p>
+Method definitions should follow this format:
+</p><figure><pre><code>	[[[methodDefinition=true
+		YourClass &gt;&gt; yourMethod
+		methodBody
+	]]]</code></pre><figcaption></figcaption></figure>
+<p>
+with an emphasis laid on the <code>&gt;&gt;</code> between your class and method.
+</p>
+<p>
+It is important to understand that the class (here <code>YourClass</code>) should be present in the system producing the Pillar book. To load code, see the <code>${loader}$</code> annotation presented in the following chapter.
+</p>
+
+
+<h4>Class definitions</h4>
+<p>
+ Class definitions should follow this format:
+</p><figure><pre><code>   [[[classDefinition=true
+	   YourSuperClass subclass: #YourClass
+          instanceVariableNames: ''
+          classVariableNames: ''
+          package: 'YourPackage'
+	]]]</code></pre><figcaption></figcaption></figure>
+
+<p>
+In addition to validate that the class definition is valid, the parameter defines the class in the environment 
+in which the book is defined. It supports the definition of testing other methods. 
+</p>
+<p>
+As a general principle, any method definition refering to classes not defined in the system, should be defined after by a class definition or a loading instruction (see <code>$loader$</code> as shown in the following).
+</p>
+<h3>Practical testing</h3>
+<p>
+There are currently two ways of testing your book: (1) using the command line and (2) from within Pharo.
+Now from the command line two options are supported. 
+</p>
+
+<h4>Check file</h4>
+<figure><pre><code class="bash">&gt; $PHARO_VM $IMAGE clap checkFile yourfolder/f1.pillar</code></pre><figcaption></figcaption></figure>
+
+<p>
+When a path is not explicitely stated, the book tester takes the first file matching <code>*.pillar</code>.
+</p>
+<p class="todo">Add the help output.</p>
+
+<h4>Check all files</h4>
+<figure><pre><code class="bash">&gt; $PHARO_VM $IMAGE clap checkRepository yourfolder/f1.pillar</code></pre><figcaption></figcaption></figure>
+
+<p>
+When a path is not explicitely stated, the book tester takes the first file matching <code>*.pillar</code>.
+</p>
+<figure><pre><code class="bash">&gt; $PHARO_VM $IMAGE clap checkRepository --help</code></pre><figcaption></figcaption></figure>
+
+<h4>Check full book</h4>
+<figure><pre><code class="bash">&gt; $PHARO_VM $IMAGE pillar build checkBook --baseDirectory=`pwd`</code></pre><figcaption></figcaption></figure>
+
+<p>
+This second version uses the already existing <code>build</code> command for Pillar. Pay attention the key difference is that the build version works on expanded text version where annotations have been processed while the clap version only on the pillar textual input.
+</p>
+<p>
+However, using one method or the other leads you to obtaining a report on all tests made. The passed ones are not displayed, however the failed ones are shown by stating first the explanation of the failure (name of the exception or if the assertion failed). Note that only codeblocks with one of the three following parameters will be tested: <code>example</code>, <code>methodDefinition</code> and <code>classDefinition</code>. And they will be tested using the methods used above.
+</p>
+<p class="todo">Add a report </p>
+<h3>From within Pharo</h3>
+
+<p>
+You can also test a pillar file from within Pharo itself. To do so you should use a <code>PRBookTesterVisitor</code> to check a file using <code>checkFileNamed:</code>. This can be useful to inspect each of the results. In particular the successful one.
+</p>
+<h3>What can not be tested</h3>
+
+<p>
+Some codeblocks can not be tested. For example, nested results to show what happens after some iterations such as:
+</p>
+<figure><pre><code>	[[[
+		1 + 1
+		&gt;&gt;&gt; 2
+		&gt;&gt;&gt; 3
+		&gt;&gt;&gt; 4
+	]]]</code></pre><figcaption></figcaption></figure>
+
+<p>
+Local variable definition are not validated:
+</p>
+<figure><pre><code>	[[[
+		|tmp|
+		tmp := 0.
+		tmp &gt;&gt;&gt; 0
+	]]]</code></pre><figcaption></figcaption></figure>
+
+<p>
+Or examples that show an error should be raised such as:
+</p><figure><pre><code>	[[[
+		String \+
+		&gt;&gt;&gt; Error
+	]]]</code></pre><figcaption></figcaption></figure>
+
+<p>
+Or examples without concrete values
+</p><figure><pre><code>	[[[
+		Date today
+		&gt;&gt;&gt; aDate
+	]]]</code></pre><figcaption></figcaption></figure>
+<p>
+with <code>yourAge</code> and <code>myAge</code> as variables for example.
+</p>
+<p>
+ 
+</p>
+
+<h2>Improving Book Writability</h2>
+
+<p>
+BookTester can do a lot more for you. Indeed you can load a specific version of your code and display it instead of copying it from your code repository to your pillar. In addition you can run your tests.
+</p>
+<h3>Loading your code</h3>
+
+<p>
+How to test something you have defined but not loaded? This certainly is the question, especially when using class or methods that you just defined (which happens in nearly every book you might want to write).
+To answer that question, the following annotation has been implemented:
+</p>
+<figure><pre><code>${loader:account=YourGitAccount|
+	project=YourGitProject|
+	tag=YourGitTag|
+	baseline=YourBaselineName}$</code></pre><figcaption></figcaption></figure>
+
+<p>
+This annotation loads your git project at the given tag. The tag is useful to specify your chapter's prerequisites (precedent chapter for example). Note that a proper use of this annotation requires you to tag every step of your code to create milestones. The baseline parameter takes by default the name of the project, but it is present in case they are different.
+</p>
+<h3>Support test-driven development writing</h3>
+<p>
+When writing book to teach TDD, authors often place test first and only after method definitions. This is why validating a test just after its definition may be not work. 
+</p>
+<p>
+This is why every codeblock with the parameter <code>methodDefinition</code> has its compilation tested but a test will not be run until the <code>run</code> annotation is encountered.
+</p>
+<figure><pre><code>${run:testClass=YourTestClassName}$</code></pre><figcaption></figcaption></figure>
+
+<p>
+The run annotation will run every test defined with <code>methodDefinition</code> within a given test class and report the results in the booktester report.
+</p>
+
+<h4>Typical TDD booklet </h4>
+<p>
+A typical sequence will be then:
+</p>
+<figure><pre><code>   [[[classDefinition=true
+	   TestCase subclass: #MyTestCase
+   ]]]
+
+   [[[methodDefinition=true
+       MyTestCase &gt;&gt; testFoo
+             self assert: Foo new name equals: 'foo'
+   ]]]
+   
+   [[[methodDefinition=true
+      MyTestCase &gt;&gt; testFoo2
+        self assert: Foo new friendName equals: 'bar'
+   ]]]
+   
+    [[[classDefinition=true
+		Object subclass: #Foo
+   ]]]
+
+   [[[methodDefinition=true
+	   Foo &gt;&gt; name 
+        ^ 'foo'
+  ]]]
+
+     ${run:testClass=MyTestCase}$
+
+   [[[methodDefinition=true
+  	   Foo &gt;&gt; friend 
+          ^ 'bar'
+    ]]]
+	
+    ${run:testClass=MyTestCase}$</code></pre><figcaption></figcaption></figure>
+<p>
+   
+</p>
+
+<h4>About method definition</h4>
+<p>
+It is possible to define a method that will be used in a test but without showing its definition in the text using the <code>hidden</code> parameter. For example, when the author does not want to show accessors but want to use them in tests.
+</p>
+<p>
+The following method will be compiled to the class <code>Foo</code> but will not be shown in the book output.
+</p><figure><pre><code>	[[[methodDefinition=true,hidden=true
+		Foo &gt;&gt; addedButNotShown
+			^42 
+	]]]</code></pre><figcaption></figcaption></figure>
+
+
+
+<h3>Helping Tools</h3>
+
+<p>
+In addition to the previous annotations, book tester offer three other annotations: <code>showClass</code>, <code>showMethod</code>, and <code>screenshot</code>.
+</p>
+<h4>showClass</h4>
+<p>
+The <code>showClass</code> annotation allows you to display the class definition of your choice and is used as follows
+</p>
+<figure><pre><code>${showClass:class=YourClassName}$</code></pre><figcaption></figcaption></figure>
+<p>
+For example, using the annotation like this:
+</p><figure><pre><code>${showClass:class=Integer}$</code></pre><figcaption></figcaption></figure>
+
+<p>
+displays the following in the text
+</p>
+<figure><pre><code>Number subclass: #Integer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	package: 'Kernel-Numbers'</code></pre><figcaption></figcaption></figure>
+
+<p>
+Note that currently the displayed class definition is not parametered as <code>classDefinition</code> because we supposed there is no need to test the compilation of it. Whether you defined it somewhere else and want to show it again or it is already defined in the system and therefore does not need to be compilation-tested.
+</p>
+<h4>showMethod</h4>
+
+<p>
+The <code>showMethod</code> annotation allows you to display the class definition of your choice and is used as follows
+</p>
+<figure><pre><code>${showMethod:method=isPowerOfTwo|class=Integer}$</code></pre><figcaption></figcaption></figure>
+
+<p>
+displays the following method in the document:
+</p>
+<figure><pre><code>Integer&gt;&gt;isPowerOfTwo
+	&quot;Return true if the receiver is an integral power of two.&quot;
+	^ self ~= 0 and: [(self bitAnd: self-1) = 0]</code></pre><figcaption></figcaption></figure>
+
+<p>
+For the same reasons as <code>showClass</code>, the displayed method definition is not parametered as <code>methodDefinition</code>.
+</p>
+<h4>screenshot</h4>
+
+<p>
+The <code>screenshot</code> annotation is used as follows:
+</p><figure><pre><code>${screenshot:class=YourClassName|method=yourMethodName|caption=yourCaption|width=yourWidth|label=yourLabel}$</code></pre><figcaption></figcaption></figure>
+
+<p>
+This annotation uses the class and method names to create both:
+</p><ul>
+<li><strong>PNG File</strong> corresponds to a System Browser opened on the given method definition found in the given class method dictionary ; this file is stored under YourChapter/figures/screenshot/YourClassName&gt;&gt;YourMethodName-Date.png </li>
+<li><strong>Figure Reference</strong> replaces the annotation with the fresh created PNG file and given caption/width/label</li>
+</ul>
+
+<p>
+The default value of <code>caption</code> is <code>YourClassName&gt;&gt;YourMethodName</code>. The default value of <code>label</code> is <code>lbl_yourMethodName</code>. The default value of width is <code>50</code>.
+</p>
+<h3>Conclusion</h3>
+
+<p>
+This chapter shows that Pillar offers strong support to synchronise your code and its documentation. First it provides ways to test that examples or definitions are correct. Second it offers ways to link your versioned code can be loaded and displayed. Finally, even tests in the code loaded can be verified.
+</p>
+
+  </section>
+
+</article>
+
+<footer>
+
+<div class="footline">
+    <div class="github-link">
+      <a href="" target="blank"><i class="fa fa-code-fork"></i>Github</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/_support/html/js/clipboard.min.js"></script>
+
+<link href="/_support/html/css/featherlight.min.css" rel="stylesheet">
+<script src="/_support/html/js/featherlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/_support/html/js/flex.js"></script>
+<!-- Prettify annotated paragraphs-->
+    <script src="_support/html/js/annotated-paragraphs.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon" />
+<link href="/_support/html/css/font-awesome.min.css" rel="stylesheet">
+<link href="/_support/html/css/nucleus.css" rel="stylesheet">
+<link href="/_support/html/css/flex.css" rel="stylesheet">
+<link rel="stylesheet" href="/_support/html/highlightjs/styles/default.css">
+<link rel="stylesheet" href="/_support/html/css/highlight-commands.css">
+<link rel="stylesheet" href="/_support/html/css/bootstrap.min.css">
+<script src="/_support/html/js/jquery-2.x.min.js"></script>
+<script src="/_support/html/highlightjs/highlight.pack.js"></script>
+<script src="/_support/html/js/highlight-commands.js"></script>
+<meta name="description" content="">
+<meta name="author" content="Stéphane Ducasse and Guillermo Polito">
+  </head>
+  <body>
+    <header>
+  <div class="logo">
+    <a class="baselink" href=""></a>
+  </div>
+  <div class="burger"><a href="javascript:void(0);" style="font-size:15px;">&#9776;</a></div>
+  
+</header>
+<article>
+  <aside>
+    <ul class="menu">
+   		<li data-nav-id="123" class="dd-item">
+    		<a href="">
+		       <i class="fa fa-fw fa-home"></i>
+	    	</a>
+        </li>
+
+		
+    </ul>
+  </aside>
+
+  <section class="page">
+    
+	<h1>Publishing Documents with Pillar 7.0</h1>
+		
+	<h2>Templates (draft)</h2>
+
+<a id="chausingtemplate"></a>
+<p>
+As we showed in the Chapter <a href="#chagettingstarted"></a>, an archetype is a project skeleton that packages together a template, pillar configuration and an example.
+</p>
+<p>
+Basically you have:
+</p><ul>
+<li>pillar.conf</li>
+<li>templates</li>
+<li>... with some differences between archetypes</li>
+</ul>
+
+<p>
+To install a new archetype, launch this command :
+</p>
+<figure><pre><code class="bash">./pillar archetype &lt;archetypeName&gt;</code></pre><figcaption></figcaption></figure>
+
+<p>
+By default Pillar offers the following templates 
+</p><ul>
+<li>Book. This is the template used in recent Pharo books and booklets. </li>
+<li>Presentation. These are the beamer templates used for example in the Pharo mooc. </li>
+<li>Basic-latex. This template is good to generate basic reports. What is nice is that you do not need the latest version of latex packages. </li>
+<li>Welcome. This template is to teach how to build templates. </li>
+</ul>
+
+<p>
+In this chapter we will explain how to define archetypes but first templates, since an archetype is mainly a template example.
+</p>
+<h3>A document</h3>
+<p>
+Imagine that we have a pillar file name <code>MyDocument.pillar</code>.
+</p>
+<figure><pre><code>! Hello from Pillar</code></pre><figcaption></figcaption></figure>
+
+
+<p>
+[[[
+</p>
+<p>
+]]]
+</p>
+
+<h3>A template (update)</h3>
+<a id="templating"></a>
+<p>
+Pillar uses Mustache templating engine. Templates are filled in using Mustache (See the Mustache Chapter in <em>Enterprise Pharo: a Web Perspective</em> available at <a href="http://books.pharo.org">http://books.pharo.org</a>).
+</p>
+<p>
+Here is an example HTML template using Mustache:
+</p>
+<figure><pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+   &lt;head&gt;
+      &lt;title&gt;{{{title}}}&lt;/title&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+      &lt;div class=&quot;container&quot;&gt;
+         {{{content}}}
+      &lt;/div&gt;
+   &lt;/body&gt;
+&lt;/html&gt;</code></pre><figcaption></figcaption></figure>
+
+<p>
+In this example, we can see the use of <code>{{{title}}}</code> and <code>{{{content}}}</code> to refer to the title of the document and its actual content (the one
+exported from Pillar). You have to put such a template in a dedicated file (named <code>chapter.html.template</code> for example) and refers this file from the
+config file or in your pillar document. 
+When you will compile to HTML, Pillar will use this template.
+</p>
+
+<h3>A Configuration (udpate)</h3>
+
+<p>
+We should be able to produce something without a configuration!
+</p>
+
+
+
+<p>
+You can also use <code>mustache</code> alone with command:
+</p>
+<figure><pre><code class="bash">@@TOBEUPDATED ./mustache --data=file.html.json --template=myhtml.template &gt; file.html</code></pre><figcaption></figcaption></figure>
+
+
+
+
+<h3>Configuring your output</h3>
+
+<a id="configuring"></a>
+<p>
+In this section we show how to configure the export.
+</p>
+<h4>Configuration File</h4>
+
+<p>
+Pillar exporting mechanism can be configured using <a href="http://smalltalkhub.com/#!/~SvenVanCaekenberghe/STON">STON</a> (see corresponding chapter In Enterprise Pharo: a Web Perspective), a lightweight, text-based, human-readable data interchange format (similar to the popular JSON). Configuration is done either in <code>pillar.conf</code> or at the beginning of Pillar files.
+</p>
+<h4>Configuration Parameters</h4>
+<a id="configParameters"></a>
+<figure><pre><code>CCDocumentationGeneration of: PRPillarConfiguration on: stream.</code></pre><figcaption></figcaption></figure>
+
+
+<h3>Command-Line Interface</h3>
+<a id="commandLineInterface"></a>
+<p>
+In this section we show how to use the Pillar command-line interface.
+</p>
+<p>
+One of the basic uses of the command line is:
+</p>
+<figure><pre><code class="bash">$ ./pillar export --to=latex PharoSound.pillar</code></pre><figcaption></figcaption></figure>
+
+<figure><pre><code>stream nextPutAll: 'You can select an export type with the parameter ==-\-to==. The possible exports are: '.
+(PRDocumentWriter withAllConcreteClasses collect: #writerName) asStringOn: stream delimiter: ', ' last: ' and '.
+stream nextPutAll: '.'</code></pre><figcaption></figcaption></figure>
+
+<p>
+The <code>Makefile</code> will create a symbolic link named <code>root</code> referencing the output directory into each directory containing output files.
+You can use this symbolic link to reference files in specified in the <code>support</code> collection.
+</p>
+
+
+
+
+
+
+
+  </section>
+
+</article>
+
+<footer>
+
+<div class="footline">
+    <div class="github-link">
+      <a href="" target="blank"><i class="fa fa-code-fork"></i>Github</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/_support/html/js/clipboard.min.js"></script>
+
+<link href="/_support/html/css/featherlight.min.css" rel="stylesheet">
+<script src="/_support/html/js/featherlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/_support/html/js/flex.js"></script>
+<!-- Prettify annotated paragraphs-->
+    <script src="_support/html/js/annotated-paragraphs.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,87 @@
+!! Pillar cheatsheet
+@chacheat
+
+!!!! Headings
+%||!Headings| |
+|{ ==! Heading== | Heading 1 |{ ==!!! Heading== | Heading 3 
+|{ ==!! Heading== | Heading 2 |{ ==!!!! Heading== | Heading 4
+
+
+!!!! Anchors and links 
+%||!Anchors and References | |
+|{ ==@anchor== | anchor 
+|{ ==\*\@Internal Link\*== | Internal link 
+|{ ==\*http://www.pharo.org\*== | External link 
+|{ ==\*Pharo\>http://www.pharo.org\*== | Alias external link
+
+!!!! Lists
+%||!Lists | |
+|{ ==\-bullet== |  Creates one bullet
+|{ ==\#numbered== | Creates one numbered item
+|{ ==\;description :definition== | Creates a description definition item
+
+
+
+!!!!Formatting
+%||!Formatting | |
+| ==\""bold\""== |""bold""
+| ==\''italic\''== | ''italic''
+| ==\=\=monospaced\=\=== |  ==monospaced==
+|  ==\--strikethrough\--== | --strikethrough--
+| ==\@@subscript\@@== | @@subscript@@
+| ==\^^superscript\^^== | ^^superscript^^
+| ==\__underlined\__== | __underlined__
+
+Characters to be escaped using ==\\== are
+[[[eval=true
+| characters |
+characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
+stream nextPutAll: '[[['; cr.
+characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
+stream cr; nextPutAll: ']]]'; cr.
+]]]
+
+%||!Comments | |
+| ==\%== commented line | each line starting with ==\%== is ignored 
+
+
+!!!! Pictures
+= +Caption.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
+
+!!!! Tables
+%[[[language=pillar
+%||centered||!centered header||centered
+%|{ left |} right || center
+%]]]
+
+%|! Tables ||
+| ==\|\! Column1 \| Column2== | Two column header
+| ==\|\|== | centered
+| ==\|\{ left== | left
+| ==\|\} right== | right
+
+
+!!!!Annotated paragraphs
+%||!Annotated Paragraph | |
+| ==@@note== | Produce a note paragraph
+| ==@@todo== | Produces a todo
+
+!!!! Code blocks
+
+= [[[
+= self foo bar
+= ]]]
+
+= [[[label=foobar|caption=My code block that works|language=smalltalk
+= self foo bar
+= ]]]
+
+!!!! Raw
+[[[
+{{{latex:
+latex code here
+}}}
+{{{html:
+plain html here
+}}}
+]]]

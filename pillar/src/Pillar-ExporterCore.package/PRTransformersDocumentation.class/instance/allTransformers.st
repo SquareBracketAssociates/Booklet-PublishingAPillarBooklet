@@ -1,0 +1,4 @@
+accessing
+allTransformers
+	
+	^ PRNodeTransformer withAllConcreteClasses

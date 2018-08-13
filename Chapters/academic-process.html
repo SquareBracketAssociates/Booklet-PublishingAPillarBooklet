@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon" />
+<link href="/_support/html/css/font-awesome.min.css" rel="stylesheet">
+<link href="/_support/html/css/nucleus.css" rel="stylesheet">
+<link href="/_support/html/css/flex.css" rel="stylesheet">
+<link rel="stylesheet" href="/_support/html/highlightjs/styles/default.css">
+<link rel="stylesheet" href="/_support/html/css/highlight-commands.css">
+<link rel="stylesheet" href="/_support/html/css/bootstrap.min.css">
+<script src="/_support/html/js/jquery-2.x.min.js"></script>
+<script src="/_support/html/highlightjs/highlight.pack.js"></script>
+<script src="/_support/html/js/highlight-commands.js"></script>
+<meta name="description" content="">
+<meta name="author" content="Stéphane Ducasse and Guillermo Polito">
+  </head>
+  <body>
+    <header>
+  <div class="logo">
+    <a class="baselink" href=""></a>
+  </div>
+  <div class="burger"><a href="javascript:void(0);" style="font-size:15px;">&#9776;</a></div>
+  
+</header>
+<article>
+  <aside>
+    <ul class="menu">
+   		<li data-nav-id="123" class="dd-item">
+    		<a href="">
+		       <i class="fa fa-fw fa-home"></i>
+	    	</a>
+        </li>
+
+		
+    </ul>
+  </aside>
+
+  <section class="page">
+    
+	<h1>Publishing Documents with Pillar 7.0</h1>
+		
+	<p>
+This tutorial shows how to put into place a personal website using pillar, and automatically deploy it using github pages and travis.
+</p>
+
+
+
+<h2>Setting up the environment</h2>
+
+<p>
+This tutorial requires the development version of pillar that can be found in the <code>feature/server-command</code> branch.
+Clone pillar, check out that branch and then proceed with a normal pillar installation, as displayed in figure 1:
+</p>
+<figure><pre><code class="bash"># Clone and build pillar
+# cloning with SSH
+$ git clone git@github.com:samakhov/pillar.git -b feature/server-command
+# or with HTTPS
+$ git clone https://github.com/samakhov/pillar.git -b feature/server-command
+$ cd pillar
+$ ./scripts/build.sh
+
+# install pillar in your home and update your bashrc
+$ mv build ~/.pillar
+$ echo 'export PATH=&quot;$PATH:~/.pillar&quot;' &gt;&gt; ~/.bashrc </code></pre><figcaption>Clone and Install Pillar</figcaption></figure>
+
+
+<p class="note">For the following sections, we need to have a GitHub account. So check <a href="https://services.github.com/on-demand/intro-to-github/create-github-account">here</a> if you do not have a GitHub account.</p>
+
+<h2>Setup your GitHub repository</h2>
+
+<p>
+Now we are going to create a repository on GitHub for our website. In this part, we are considering two different scenarios:
+</p><ol><li>You want to set a repository for your personal website as <strong>myAccount.github.io</strong></li>
+<li>Or you want to have a website for a project which will be reached via <strong>myAccount.github.io/myProject</strong></li>
+</ol>
+
+<p>
+For both cases, GitHub provides you a service named GitHub Pages which allows you to host your website for free.
+But especially for the second case, you need to have a personal website (by following first case), before hosting another project on your GitHub account.
+</p>
+<p>
+Both in these cases, creating the repository on GitHub is the same.
+</p>
+<p>
+For that, we need to follow these steps:
+</p>
+<ul>
+<li>In the upper-right corner of any page, click <strong>+</strong>, and then click <strong>New repository</strong> as: </li>
+</ul>
+<p>
+
+<figure>
+	<img src="figures/new.png" alt="New repository"/>
+	<figcaption>New repository</figcaption>
+</figure>
+</p><ul>
+<li>Type a name for your repository.<ol><li>For personal website you need to named it as <strong>myAccount.github.io</strong></li>
+<li>For the second case, you can named it as you want, <strong>myProject</strong> for example.</li>
+</ol>
+</li>
+<li>Optionally, add a description for your repository like &quot;My personal web site&quot; </li>
+<li>According to informations which will be on your website, you have to chose between &quot;Private&quot; and &quot;Public&quot;. Generaly it is public. For private option, you need to pay.</li>
+<li>Select <strong>Initialize this repository with a README</strong>.</li>
+<li>Add .gitignore by selecting Smalltalk as default language.</li>
+<li>Now click <strong>Create repository</strong>.</li>
+</ul>
+
+<p>
+Your GitHub repository is now created and look like that.
+
+<figure>
+	<img src="figures/repo_created.png" alt="GitHub repository"/>
+	<figcaption>GitHub repository</figcaption>
+</figure>
+</p>
+
+<h2>Generate Token for Travis</h2>
+
+<p>
+We are now going to generate a token on Github and add it as an environement variable named <code>GH_TOKEN</code> in Travis.
+In the both cases, this token will be used to allow a dialog between Travis and Github for automating website build.
+</p>
+
+<p>
+
+<figure>
+	<img src="figures/travis_settings.png" alt="Travis settings"/>
+	<figcaption>Travis settings</figcaption>
+</figure>
+</p>
+<p>
+On your project Settings in Travis, you have a menu labelled <strong>Environment variables</strong>
+where you can add variables (those variables will be automatically encrypted).
+</p>
+<p>
+
+<figure>
+	<img src="figures/settings.png" alt="Add Token"/>
+	<figcaption>Add Token</figcaption>
+</figure>
+</p>
+
+
+
+
+<h2>Create your pillar website</h2>
+
+<p>
+After the installation, we can proceed to create a new site in a fresh directory.
+We will install the <code>academic</code> archetype and then run a local server.
+This should work out of the box in your local machine, however, you will need to change the <code>baseurl</code> setting in the <code>pillar.conf</code> file to correctly render in github pages.
+</p>
+<figure><pre><code># On a new terminal, so the new bashrc settings are taken
+$ git clone https://github.com/myAccount/myAccount &amp;&amp; cd myAccount
+#Or git clone https://github.com/myAccount/myProject &amp;&amp; cd myProject
+$ pillar archetype academic
+$ pillar build html
+$ pillar serve -w &amp;</code></pre><figcaption>Clone and Install academic archetype</figcaption></figure>
+
+<p>
+Then we will have a skeleton site available on <code>localhost:8080</code>.
+If you want to change the port, you can use the <code>-p</code> parameter as in: 
+</p>
+<figure><pre><code>$ pillar serve -p xxxx -w &amp;</code></pre><figcaption>Change port of your server</figcaption></figure>
+
+<p>
+After these steps, you will get a default website as: 
+
+<figure>
+	<img src="figures/default.png" alt="Skeleton website"/>
+	<figcaption>Skeleton website</figcaption>
+</figure>
+</p>
+<h2>Editing your site</h2>
+
+<p>
+We are going fisrt to customize your profile in <code>pillar.conf</code> file.
+</p>
+<figure><pre><code>
+   &quot;baseurl&quot; : &quot;&quot;,
+   &quot;profile&quot; : [
+		{
+			&quot;name&quot;: &quot;John Doe&quot;,
+	 		&quot;avatar&quot;: &quot;avatar.png&quot;,
+     			&quot;post&quot;: &quot;Research Engineer&quot;,
+     			&quot;firm&quot;: &quot;Space Laboratory&quot;
+		}
+	],
+
+#'Basic website meta-data. Used by the different templates to fill-out information and page metas': #comment,
+   &quot;site_name&quot;: &quot;Personal's Stuff&quot;,</code></pre><figcaption>Change your profile</figcaption></figure>
+
+<p>
+This is the default profile of academic archetype. So, you can set your name, choose an avatar, your post, ...
+</p>
+<p>
+For the naviguation bar of the site, it is managed by a <code>toc.pillar</code> file located at the root of the repository.
+</p>
+<figure><pre><code>
+${inputFile:path=index.pillar}$
+${inputFile:path=projects.pillar}$
+${inputFile:path=research.pillar}$
+${inputFile:path=publications.pillar}$
+${inputFile:path=coordinates.pillar}$</code></pre><figcaption>Menu inclusion</figcaption></figure>
+
+<p>
+This is only used to generate the menu by specifying files of your project having at least one <strong>heading 1</strong> level title. The <code>toc.html</code> is not used.
+</p>
+<p class="note"><strong>Important</strong> : Each Pillar has to contain only one <em>H1</em> title. Indeed this title is automatically taken as the title of the menu representing this page. So all other titles of your page have to be subtitles of the first one. You can define <em>H2</em> or <em>H3</em> titles.</p>
+
+<p>
+Let's create a new page and add it as menu to the navbar.
+</p>
+<p>
+We can choose to manage <strong>Teaching</strong> activities of a research professor.
+</p>
+<p>
+Create <code>teaching.pillar</code> file at the root of your project directory with contents:
+</p>
+<figure><pre><code>
+!Teaching
+
+!!Teaching at Polytech'Lille
+-Test and Maintenance Course - GIS 5th year since 2014-2015 and GIS 5 since 2016-2017
+-Subject Programming Course (Java) - GIS 4th year apprenticeship since 2014-2015
+-Advanced Database Course - GIS 4th year since 2009-2010
+-Data Structures Course - GIS 3rd year 2007-2008 to 2009-2010
+-Software Engineering Course - GIS 5th year from 2008-2009 to 2012-2013
+-Internship Manager - GIS 4th from 2009-2010 to 2012-2013
+-&quot;&quot;In charge of end of study projects - GIS 5th&quot;&quot; since 2014-2015
+
+!!Teaching at Paris 1 University
+-TD UML (Class, Activity, State, Context, Use Case and Sequence Diagrams), HTML and XML
+-TD Introduction to Databases
+-Occasional course Initiation to Php and MySQL
+-TD Course Modeling Events in REMORA
+-Occasional course Integrity constraints in the relational models</code></pre><figcaption>Pillar file's example</figcaption></figure>
+
+<p>
+After this we have to add a new entry in <code>toc.pillar</code>. This will allow us to have <strong>Teaching</strong> as
+a new menu in the naviguation bar.
+</p>
+<figure><pre><code>
+${inputFile:path=teaching.pillar}$</code></pre><figcaption>Add a new menu</figcaption></figure>
+
+<p>
+We can notice that <code>toc.pillar</code> is the file used to declare different menus.
+</p>
+<p>
+Now you should get a page like that:
+</p>
+<p>
+
+<figure>
+	<img src="figures/teach.png" alt="New Page"/>
+	<figcaption>New Page</figcaption>
+</figure>
+</p>
+<p class="note">We have not cover all the syntax of Pillar here. So for more, you can click <a href="https://samakhov.github.io/Booklet-PublishingAPillarBooklet/Chapters/CheatSheet.html#pillar%20cheatsheet">here</a>.</p>
+
+
+<h2>Publish It on GitHub pages</h2>
+
+<p>
+If you want to host your site on GitHub, GitHub provides a free subdomain for their users.
+So if you already have a GitHub account named <code>myAccount</code> you can have a site for your project <code>myProject</code> into <strong>http://myAccount.github.io/myProject</strong>.
+We can already generate our pillar website automatically by calling pillar, and we can now also deploy our website in GitHub pages using travis.
+Travis is a continuous integration service that will execute several scripts every time a new commit/branch/pull request is pushed into our repository.
+This way, on every commit we can build our site and push our html to our website.
+</p>
+<p>
+Automatic building and hosting of our website is using Travis Continuous Integration. So let's launch to Travis via our GitHub account following <a href="https://trailhead.salesforce.com/en/modules/sfdx_travis_ci/units/sfdx_travis_ci_setup#Tdxn4tBKheading7">this</a>.
+</p>
+<p>
+We can now activate our GitHub repository in Travis:
+
+<figure>
+	<img src="figures/activate.png" alt="Travis activation"/>
+	<figcaption>Travis activation</figcaption>
+</figure>
+</p>
+<p>
+This will automatically add travis as a service in your GitHub repository.
+</p>
+<p>
+As for creating our GitHub repository, we are going to consider the two different cases
+</p>
+<h3>For a personal website as myAccount.github.io</h3>
+
+<p>
+Now we install travis scripts in our directory.
+</p>
+<ol><li>Create a <code>.travis.yml</code> file in the root of your site with the following content</li>
+</ol>
+
+<figure><pre><code>language: smalltalk
+
+os:
+    - linux
+
+smalltalk:
+    - Pharo-6.1
+
+install:
+    # Pillar installation
+    - git clone https://github.com/pillar-markup/pillar.git .pillar -b dev-7  # Clone pillar
+    - cd .pillar &amp;&amp; ./scripts/build.sh &amp;&amp; cd ..
+
+script:
+    - .pillar/build/pillar build html
+    - cd _result/html &amp;&amp; touch .nojekyll &amp;&amp; cd ..
+
+deploy:
+   provider: pages
+   target-branch: master
+   skip-cleanup: true
+   github-token: $GH_TOKEN
+   keep-history: true
+   local_dir: _result/html
+   on:
+     branch: source</code></pre><figcaption>Travis configuration</figcaption></figure>
+
+<p class="note">This script globally download Pillar, build the site from pillar files pushed on <strong>source</strong> branch and push generated files (located in <em>_result/html</em>) on <strong>master</strong> GitHub branch. It means we should create <strong>master</strong> and <strong>source</strong> branch and only push to <strong>source</strong> branch.</p>
+<p>
+After all of that, you can commit your changes to GitHub and wait for your website on:
+<strong>https://myAccount.github.io/</strong>
+</p>
+<figure><pre><code class="bash">$ git checkout -b source
+$ git add .
+$ git commit -m &quot;First commit&quot;
+$ git push -u origin source</code></pre><figcaption>Create source branch and commit on it</figcaption></figure>
+
+
+
+
+<h3>For a project myAccount.github.io/myProject</h3>
+
+<p>
+Now we install travis scripts in our directory.
+</p>
+<ol><li>Create a <code>.travis.yml</code> file in the root of your site with the following content</li>
+</ol>
+
+<figure><pre><code>language: smalltalk
+
+os:
+    - linux
+
+smalltalk:
+    - Pharo-6.1
+
+install:
+    # Pillar installation
+    - git clone https://github.com/pillar-markup/pillar.git .pillar -b dev-7  # Clone pillar
+    - cd .pillar &amp;&amp; ./scripts/build.sh &amp;&amp; cd ..
+
+script:
+    - .pillar/build/pillar build html
+    - cd _result/html &amp;&amp; touch .nojekyll &amp;&amp; cd ..
+
+deploy:
+   provider: pages
+   skip-cleanup: true
+   github-token: $GH_TOKEN
+   keep-history: true
+   local_dir: _result/html
+   on:
+     branch: master</code></pre><figcaption>Travis configuration</figcaption></figure>
+
+<p class="note">This script globally download Pillar, build the site from pillar files pushed on <strong>master</strong> branch and push generated files (located in <em>_result/html</em>) on <strong>gh-pages</strong> GitHub branch. It means we should have a default <strong>master</strong> branch. <strong>gh-pages</strong> branch will be automatically created by Travis job.</p>
+<p>
+As in the previous case, we are going to generate a token on Github and add it as an environement variable named <code>GH_TOKEN</code> in Travis
+</p>
+<p>
+In this case, we must change a	bite the configuration. So in <code>pillar.conf</code> file, change the baseurl:
+</p>
+<figure><pre><code>   &quot;baseurl&quot;: &quot;/myProject&quot;,
+   ...</code></pre><figcaption>Change the baseurl</figcaption></figure>
+
+<p class="note">This will make urls start from your project, instead of from your account.</p>
+<p>
+After that, you can commit your changes to GitHub and wait for your website on:
+<strong>https://myAccount.github.io/myProject</strong>
+</p>
+<figure><pre><code class="bash">$ git add .
+$ git commit -m &quot;First commit&quot;
+$ git push -u origin master</code></pre><figcaption>Commit your project on master branch</figcaption></figure>
+
+
+<p>
+You can now enjoy the continuous integration. Every time you modify a Pillar, commit it on github and you will see your website automatically updated.
+
+</p>
+
+  </section>
+
+</article>
+
+<footer>
+
+<div class="footline">
+    <div class="github-link">
+      <a href="" target="blank"><i class="fa fa-code-fork"></i>Github</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/_support/html/js/clipboard.min.js"></script>
+
+<link href="/_support/html/css/featherlight.min.css" rel="stylesheet">
+<script src="/_support/html/js/featherlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/_support/html/js/flex.js"></script>
+<!-- Prettify annotated paragraphs-->
+    <script src="_support/html/js/annotated-paragraphs.js"></script>
+
+  </body>
+</html>

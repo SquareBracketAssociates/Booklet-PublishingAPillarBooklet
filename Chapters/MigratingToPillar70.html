@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon" />
+<link href="/_support/html/css/font-awesome.min.css" rel="stylesheet">
+<link href="/_support/html/css/nucleus.css" rel="stylesheet">
+<link href="/_support/html/css/flex.css" rel="stylesheet">
+<link rel="stylesheet" href="/_support/html/highlightjs/styles/default.css">
+<link rel="stylesheet" href="/_support/html/css/highlight-commands.css">
+<link rel="stylesheet" href="/_support/html/css/bootstrap.min.css">
+<script src="/_support/html/js/jquery-2.x.min.js"></script>
+<script src="/_support/html/highlightjs/highlight.pack.js"></script>
+<script src="/_support/html/js/highlight-commands.js"></script>
+<meta name="description" content="">
+<meta name="author" content="Stéphane Ducasse and Guillermo Polito">
+  </head>
+  <body>
+    <header>
+  <div class="logo">
+    <a class="baselink" href=""></a>
+  </div>
+  <div class="burger"><a href="javascript:void(0);" style="font-size:15px;">&#9776;</a></div>
+  
+</header>
+<article>
+  <aside>
+    <ul class="menu">
+   		<li data-nav-id="123" class="dd-item">
+    		<a href="">
+		       <i class="fa fa-fw fa-home"></i>
+	    	</a>
+        </li>
+
+		
+    </ul>
+  </aside>
+
+  <section class="page">
+    
+	<h1>Publishing Documents with Pillar 7.0</h1>
+		
+	<h2>Migrating from Pillar 50 to Pillar 70</h2>
+
+
+<h3>Uninstall Pillar 50</h3>
+
+<figure><pre><code>rm Pharo.image
+rm Pharo.changes
+rm pharo
+rm pharo-ui
+rm -r pharo-vm
+rm mustache
+rm pillar
+rm Makefile
+rm -r support/makefiles
+rm download.sh</code></pre><figcaption></figcaption></figure>
+
+<h3>Install Pillar 70</h3>
+
+<figure><pre><code>git clone git@github.com:pillar-markup/pillar.git -b newpipeline _pillar
+./_pillar/scripts/build.sh</code></pre><figcaption></figcaption></figure>
+
+
+<p>
+To keep a local pillar 
+</p>
+<figure><pre><code>mv build _pillar/bin/
+export PATH=_pillar/bin:$PATH</code></pre><figcaption></figcaption></figure>
+
+<h3>Updating the templates</h3>
+
+<figure><pre><code>pillar updateTemplate book</code></pre><figcaption></figcaption></figure>
+
+
+<h3>Converting the pillar.conf</h3>
+
+<p>
+Old pillar.conf
+</p>
+<figure><pre><code>	{
+	  &quot;metadata&quot; : {
+	    &quot;title&quot;: &quot;The Pillar Super Book Archetype&quot;,
+	    &quot;attribution&quot;: &quot;The Pillar team&quot;,
+	    &quot;series&quot;: &quot;Square Bracket tutorials&quot;,
+	    &quot;keywords&quot;: &quot;project template, Pillar, Pharo, Smalltalk&quot;
+	  },
+	  &quot;outputDirectory&quot;: &quot;build&quot;,
+	  &quot;mainDocument&quot;: &quot;book&quot;,
+	  &quot;latexTemplate&quot;: &quot;support/templates/main.latex.mustache&quot;,
+	  &quot;latexChapterTemplate&quot;: &quot;support/templates/chapter.latex.mustache&quot;,
+	  &quot;htmlTemplate&quot;: &quot;support/templates/html.mustache&quot;,
+	  &quot;htmlChapterTemplate&quot;: &quot;support/templates/html.mustache&quot;,
+	  &quot;chapters&quot;: [ 
+		&quot;Chapters/Chapter1/chapter1&quot;,
+		&quot;Chapters/Chapter2/chapter2&quot;],
+	  &quot;newLine&quot;: #unix,
+	  &quot;configurations&quot;: {
+	    &quot;LaTeX&quot; : {
+	      &quot;outputType&quot;: #'latex:sbabook',
+	      &quot;separateOutputFiles&quot;: true
+	    },
+	    &quot;HTML&quot; : {
+	      &quot;outputType&quot;: #html,
+	      &quot;separateOutputFiles&quot;: true
+	    }
+	  }
+	}</code></pre><figcaption></figcaption></figure>
+
+<ul>
+<li>We need to first flatten the metadata tag from this:</li>
+</ul>
+
+<figure><pre><code>{
+  &quot;metadata&quot; : {
+    &quot;title&quot;: &quot;The Pillar Super Book Archetype&quot;,
+    &quot;attribution&quot;: &quot;The Pillar team&quot;,
+    &quot;series&quot;: &quot;Square Bracket tutorials&quot;,
+    &quot;keywords&quot;: &quot;project template, Pillar, Pharo, Smalltalk&quot;
+  },
+  ...
+}</code></pre><figcaption></figcaption></figure>
+
+<p>
+to this:
+</p>
+<figure><pre><code>{
+  &quot;title&quot;: &quot;The Pillar Super Book Archetype&quot;,
+  &quot;attribution&quot;: &quot;The Pillar team&quot;,
+  &quot;series&quot;: &quot;Square Bracket tutorials&quot;,
+  &quot;keywords&quot;: &quot;project template, Pillar, Pharo, Smalltalk&quot;,
+  ...
+}</code></pre><figcaption></figcaption></figure>
+
+<ul>
+<li>We then need to replace the configurations entries configure a writer for each of the possible outputs we will use:</li>
+</ul>
+
+<figure><pre><code>{
+	...
+	&quot;latexWriter&quot;: #'latex:sbabook',
+	...
+}</code></pre><figcaption></figcaption></figure>
+
+
+  </section>
+
+</article>
+
+<footer>
+
+<div class="footline">
+    <div class="github-link">
+      <a href="" target="blank"><i class="fa fa-code-fork"></i>Github</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/_support/html/js/clipboard.min.js"></script>
+
+<link href="/_support/html/css/featherlight.min.css" rel="stylesheet">
+<script src="/_support/html/js/featherlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/_support/html/js/flex.js"></script>
+<!-- Prettify annotated paragraphs-->
+    <script src="_support/html/js/annotated-paragraphs.js"></script>
+
+  </body>
+</html>

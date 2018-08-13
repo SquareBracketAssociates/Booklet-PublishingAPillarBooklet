@@ -1,0 +1,16 @@
+{
+	"commentStamp" : "StephaneDucasse 9/17/2017 22:00",
+	"super" : "PRVisitor",
+	"category" : "Pillar-ExporterCore-Base",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"stream",
+		"configuration",
+		"canvas",
+		"writingRaw"
+	],
+	"name" : "PRDocumentWriter",
+	"type" : "normal"
+}
