@@ -12,17 +12,18 @@ smalltalk:
 # System tests test that we can install and use pillar as a black box
 env:
   matrix:
-  - JOB=test TYPE=System ARCHETYPE=book OUTPUT=pdf
+  - JOB=pdf
+  - JOB=html
 
 install:
   # Pillar installation
   - git clone https://github.com/pillar-markup/pillar.git -b dev-7
-  - cd pillar && ./scripts/build.sh && cd ..                              # Run pillar build script. Pillar will be built in `pwd`/build!
-  - . pillar/scripts/ci/ensure_latex.sh                                   # Install latex
-  - ./pillar/scripts/ci/ensure_book_dependencies.sh                       # Install latex dependencies required by pillar
+  - cd pillar && ./scripts/build.sh && cd ..                                            # Run pillar build script. Pillar will be built in `pwd`/build!
+  - if [[ ${JOB} == "pdf" ]]; then . pillar/scripts/ci/ensure_latex.sh; fi              # Install latex
+  - if [[ ${JOB} == "pdf" ]]; then ./pillar/scripts/ci/ensure_book_dependencies.sh; fi  # Install latex dependencies required by pillar
   
 script:
-  - ./pillar/build/pillar build pdf
+  - ./pillar/build/pillar build ${JOB}
   
 
 deploy:
