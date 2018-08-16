@@ -144,26 +144,16 @@ scripts/ci/ensureLatex.sh
   rm -rf $DIRNAME
 ]]]
 
+
+Now you are ready to write your document in Pillar and get them exported in PDF and HTML. 
+
 Once the basic installation is installed you can procceed to install all your required dependencies using TeXLives ==tlmgr== package manager. You'll find an up-to-date bash script that performs the installation of the minimal required packages in:
 
 [[[
 scripts/ci/ensure\_book\_dependencies.sh
 ]]]
 
-This script installs packages to manage fonts and better LaTeX rendering such as:
-
-- fira
-- gentium-tug
-- opensans
-- varwidth
-- footmisc
-- tcolorbox
-- environ
-- trimspaces
-- ctablestack
-- import
-- multirow
-- ifetex
+This script installs packages to manage fonts and better LaTeX rendering such as fira, gentium-tug, footmisc, tcolorbox, environ, trimspaces, import, multirow and ifetex.
 
 !!! A First Pillar Project
 
@@ -303,9 +293,10 @@ $ more book.pillar
 
 The current document is a little tutorial to show you how to begin with the creation of booklet.
 It describes the installation, customisation and integration with travis and bintray online services.
-${inputFile:Chapters/GettingStarted.pillar}$
+${inputFile:path=Chapters/GettingStarted.pillar}$
 
-${inputFile:Chapters/TravisBintray.pillar}$
+
+${inputFile:path=Chapters/TravisBintray.pillar}$
 ]]]
 
 !!!! (To MOVE) Selecting and Installing Book
@@ -335,6 +326,4 @@ produces a book in the folder ==\_result==. Indeed the folder Chapters and figur
 
 
 !!! Conclusion
-
-Now you are ready to write your document in Pillar and get them exported in PDF and HTML. 
 
