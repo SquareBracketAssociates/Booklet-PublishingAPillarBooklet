@@ -25,8 +25,8 @@ install:
 script:
   - ./pillar/build/pillar build ${JOB}
  # - if [[ ${JOB} =="html"]]; then cd _result/html/ && touch .nojekyll; fi
-  - if [[ ${JOB} =="html"]]; then cd _result/html/; fi
-
+  - if [[ ${JOB} == "html" ]]; then cd _result/html/; fi      
+  
 deploy:
 - provider: bintray
   file: .bintray.json
