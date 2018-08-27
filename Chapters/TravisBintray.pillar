@@ -80,7 +80,7 @@ make book spiral
 
 At the stage you should get already important feedback since you will know if your project fully builds or not. 
 
-!! Deploying your documents
+!! Deploying your documents (should be moved into its own file)
 
 In this chapter, we present two ways to deploy your documents: first your work in progress using bintray and second released versions using github.
 
