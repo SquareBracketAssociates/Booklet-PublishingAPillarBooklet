@@ -24,6 +24,7 @@ install:
   
 script:
   - ./pillar/build/pillar build ${JOB}
+  - if [[ ${JOB} =="html"]]; then cd _result/html/; touch .nojekyll; fi
   
 
 deploy:
