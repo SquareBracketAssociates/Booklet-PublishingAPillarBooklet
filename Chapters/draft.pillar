@@ -1,0 +1,44 @@
+!! Editing a Book
+
+!!!! Editing book.pillar
+Now we will edit the file ==book.pillar== (the file listed in == "mainDocument": "book"== in the ==pillar.conf== file).
+
+We can simply add text there and file to be included using the Pillar command ==\$\{inputFile:nameOfTheFIle.pillar\}\$== as follows:
+[[[
+$ more book.pillar
+
+The current document is a little tutorial to show you how to begin with the creation of booklet.
+It describes the installation, customisation and integration with travis and bintray online services.
+${inputFile:path=Chapters/GettingStarted.pillar}$
+
+
+${inputFile:path=Chapters/TravisBintray.pillar}$
+]]]
+
+!!!! (To MOVE) Selecting and Installing Book
+Pillar come with several templates and you can define your own using mustache (see the book Entreprise Pharo: a Web perspective).
+By default Pillar offers the following templates:
+
+- Book. This is the template used in recent Pharo books and booklets. 
+- Presentation. These are the beamer templates used for example in the Pharo mooc. 
+- Basic-latex. This template is good to generate basic reports. What is nice is that you do not need the latest version of latex packages. 
+- Welcome. This template is to teach how to build templates. 
+
+To install a template you should indicate it to pillar using the archetype command as follows: 
+
+[[[
+pillar archetype book
+]]]
+
+Then you can compile the default template to check that it effectively worked. 
+
+[[[
+pillar build pdf 
+]]]
+
+produces a book in the folder ==\_result==. Indeed the folder Chapters and figures contain some samples.
+
+
+
+
+!!! Conclusion

@@ -475,7 +475,7 @@ Here are two examples within the same expressions: Code blocks and captions use 
 
 
 !! Specific markup
-This chapter presents extensions specific to a given support such as LaTeX or slides.
+This chapter presents some extensions specific to a given support such as LaTeX or slides.
 
 !!!LaTeX
 
@@ -485,15 +485,20 @@ Citations are only available for LaTeX.
 You can add citations to your document to reference an element in a LaTeX bibliography. The ==cite== annotationtakes as parameter the key of the reference in the bibliography.
 
 [[[
-${cite:reference}$
+${cite:ref=Duca17a}$
 ]]]
 
-The exemple above wil render as ==\cite{reference}==
+The example above will render as ==\cite{Duca17a}==
 
 If you want to use other type of citations like ==citep== or ==citet==, please overwrite the command in your LaTeX template:
 ==\renewcommand{\cite}{\citep}==
 
 Future versions will support also the definition in pillar.conf of the bibliography file. Right now you should harcode it in the template. 
+
+[[[
+\bibliographystyle{alpha}
+\bibliography{rmod,others,new}
+]]]
 
 
 !!!Slides
@@ -529,37 +534,6 @@ ${endColumns}$
 ]]]
 
 @@note The column annotations currently works only for the beamer, HTML and Deck.js export.
-
-
-!!!Under development
-
-!!!!Semantic links
-
-Semantic links are a way to simplify links to standard websites such as Wikipedia and Youtube.
-
-To create semantic links ressources, use the ==\*Wikipedia Pharo>wikipedia:Pharo\*== syntax which is rendered as *Wikipedia Pharo>wikipedia:Pharo*.
-To specify a language, you can use the ==\*Wikipedia Pharo>wikipedia:Pharo|lang=en\*== syntax which is rendered as *Wikipedia Pharo>wikipedia:Pharo|lang=en*.
-
-Same for Youtube links : ==\*Youtube Pharo>youtube:KDvNuOjdjY4\*==, the result is : *Youtube Pharo>youtube:KDvNuOjdjY4*.
-
-Note that such feature will be probably revised to be more generic and let the user define other semantic links. 
-
-!!!!Structures
-
-You can create structures to render all structures with the same name as the same object.
-Structures use the scripts syntax (see *@scripts*) with a particular parameter ==structure==
-
-= [[[structure=exercise
-= {
-=   "question":"What is the answer to life, the universe and everything ?",
-=   "answer":"42"
-= }
-= ]]]
-
-There is two kind of structures for the moment:
--exercise, rendered as a definition list
--city, rendered as a table
--country, rendered as a table
 
 
 
