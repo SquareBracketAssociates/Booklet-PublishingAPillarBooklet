@@ -9,7 +9,7 @@ This chapter covers also the installation of LaTeX, which is required to generat
 Once Pillar is installed, we will proceed to create a first Pillar project.
 A Pillar project is a directory that will contain several ==.pillar== files with your content, a ==pillar.conf== configuration file and a ==_suppert== directory containing several template-related files which will manage the style of your document.
 
-!!!Building Pillar from sources
+!!!Building Pillar from Sources
 
 This section explains how to build and install Pillar both in Unix based systems (like OSX and Linux) and Windows.
 The first part of this section covers how to download an already built version of pillar or how to build one yourself.
@@ -45,7 +45,7 @@ $ cd pillar
 $ ./scripts/build.sh
 ]]]
 
-!!!! Installing it in your system
+!!!! Installing it in your System
 
 You can then proceed to install that pillar build where you want.
 For example, you can place it in a hidden directory in your home directory:
@@ -63,7 +63,7 @@ export PILLAR_HOME="$HOME/.pillar/build"
 export PATH="$PATH:$PILLAR_HOME"
 ]]]
 
-!!!! Test your installation
+!!!! Test your Installation
 
 To test your pillar installation, open a new terminal and execute the pillar ==\-\-version command==. If everything is ok, that should print out (as in the current version) the version of the Pharo VM. For example:
 
@@ -233,7 +233,7 @@ $ pillar build html index.pillar
 
 this will generate only the output related to the ==index.pillar== file.
 
-!!! Versionning your project
+!!! Versionning your Project
 
 In this section we explain how to share your project in a source code repository such as Git.
 This section guides you through the setup of a Git repository, the selection of the correct files to commit, and the creation of a ==.gitignore== file to avoid auto-generated files.
@@ -258,7 +258,7 @@ cd Booklet-PublishingAPillarBooklet
 ]]]
 
 
-!!!! Versioning your book
+!!!! Versioning your Book
 
 Now to version simply you book you should version all the files except ==_result==. 
 Later we will show you how to add travis and bintray support for automatic compilation so that you do not need to install locally LaTeX on your machine. 
@@ -282,48 +282,5 @@ more .gitignore
 You can remove the folder figures and the chapter samples. 
 Now you are ready to commit your files. 
 
-!! Editing a Book
 
-!!!! Editing book.pillar
-Now we will edit the file ==book.pillar== (the file listed in == "mainDocument": "book"== in the ==pillar.conf== file).
-
-We can simply add text there and file to be included using the Pillar command ==\$\{inputFile:nameOfTheFIle.pillar\}\$== as follows:
-[[[
-$ more book.pillar
-
-The current document is a little tutorial to show you how to begin with the creation of booklet.
-It describes the installation, customisation and integration with travis and bintray online services.
-${inputFile:path=Chapters/GettingStarted.pillar}$
-
-
-${inputFile:path=Chapters/TravisBintray.pillar}$
-]]]
-
-!!!! (To MOVE) Selecting and Installing Book
-Pillar come with several templates and you can define your own using mustache (see the book Entreprise Pharo: a Web perspective).
-By default Pillar offers the following templates:
-
-- Book. This is the template used in recent Pharo books and booklets. 
-- Presentation. These are the beamer templates used for example in the Pharo mooc. 
-- Basic-latex. This template is good to generate basic reports. What is nice is that you do not need the latest version of latex packages. 
-- Welcome. This template is to teach how to build templates. 
-
-To install a template you should indicate it to pillar using the archetype command as follows: 
-
-[[[
-pillar archetype book
-]]]
-
-Then you can compile the default template to check that it effectively worked. 
-
-[[[
-pillar build pdf 
-]]]
-
-produces a book in the folder ==\_result==. Indeed the folder Chapters and figures contain some samples.
-
-
-
-
-!!! Conclusion
 

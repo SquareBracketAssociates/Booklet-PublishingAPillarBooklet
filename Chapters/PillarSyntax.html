@@ -112,7 +112,7 @@
 		   	  	<li class="dd-item  haschildren ">
 					<div>
 						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#building pillar from sources">
-							Building Pillar from sources
+							Building Pillar from Sources
 						</a>
 						<i class="fa fa-angle-right fa-lg category-icon"></i>
 					</div>
@@ -128,11 +128,11 @@
 						</li>
 							
 						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#installing it in your system">Installing it in your system</a>
+							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#installing it in your system">Installing it in your System</a>
 						</li>
 							
 						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#test your installation">Test your installation</a>
+							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#test your installation">Test your Installation</a>
 						</li>
 					
 					</ul>						
@@ -183,7 +183,7 @@
 		   	  	<li class="dd-item  haschildren ">
 					<div>
 						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#versionning your project">
-							Versionning your project
+							Versionning your Project
 						</a>
 						<i class="fa fa-angle-right fa-lg category-icon"></i>
 					</div>
@@ -195,64 +195,12 @@
 						</li>
 							
 						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#versioning your book">Versioning your book</a>
+							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#versioning your book">Versioning your Book</a>
 						</li>
 							
 						<li class="dd-item">
 							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#adding a .gitignore">Adding a .gitignore</a>
 						</li>
-					
-					</ul>						
-				</li>
-				
-			  </ul>
-		  
-		  </li>
-		
-		  <li class="dd-item  haschildren ">
-			<div>
-			  <a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#editing a book">
-					Editing a Book
-			  </a>
-			   <i class="fa fa-angle-right fa-lg category-icon"></i> 
-			</div>
-			  <ul class="dd-item">
-				
-		   	  	<li class="dd-item ">
-					<div>
-						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#editing book.pillar">
-							Editing book.pillar
-						</a>
-						
-					</div>
-
-					<ul class="dd-item">
-					
-					</ul>						
-				</li>
-				
-		   	  	<li class="dd-item ">
-					<div>
-						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#(to move) selecting and installing book">
-							(To MOVE) Selecting and Installing Book
-						</a>
-						
-					</div>
-
-					<ul class="dd-item">
-					
-					</ul>						
-				</li>
-				
-		   	  	<li class="dd-item ">
-					<div>
-						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#conclusion">
-							Conclusion
-						</a>
-						
-					</div>
-
-					<ul class="dd-item">
 					
 					</ul>						
 				</li>
@@ -566,27 +514,6 @@
 							
 						<li class="dd-item">
 							<a href="/Booklet-PublishingAPillarBooklet/Chapters/PillarSyntax.html#columns">Columns</a>
-						</li>
-					
-					</ul>						
-				</li>
-				
-		   	  	<li class="dd-item  haschildren ">
-					<div>
-						<a href="/Booklet-PublishingAPillarBooklet/Chapters/PillarSyntax.html#under development">
-							Under development
-						</a>
-						<i class="fa fa-angle-right fa-lg category-icon"></i>
-					</div>
-
-					<ul class="dd-item">
-							
-						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/PillarSyntax.html#semantic links">Semantic links</a>
-						</li>
-							
-						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/PillarSyntax.html#structures">Structures</a>
 						</li>
 					
 					</ul>						
@@ -1720,7 +1647,7 @@ Here are two examples within the same expressions: Code blocks and captions use 
 
 <h2>Specific markup</h2>
 <p>
-This chapter presents extensions specific to a given support such as LaTeX or slides.
+This chapter presents some extensions specific to a given support such as LaTeX or slides.
 </p>
 <h3>LaTeX</h3>
 
@@ -1730,10 +1657,10 @@ This chapter presents extensions specific to a given support such as LaTeX or sl
 Citations are only available for LaTeX.
 You can add citations to your document to reference an element in a LaTeX bibliography. The <code>cite</code> annotationtakes as parameter the key of the reference in the bibliography.
 </p>
-<figure><pre><code>${cite:reference}$</code></pre><figcaption></figcaption></figure>
+<figure><pre><code>${cite:ref=Duca17a}$</code></pre><figcaption></figcaption></figure>
 
 <p>
-The exemple above wil render as <code>cite{reference}</code>
+The example above will render as <code>cite{Duca17a}</code>
 </p>
 <p>
 If you want to use other type of citations like <code>citep</code> or <code>citet</code>, please overwrite the command in your LaTeX template:
@@ -1742,6 +1669,9 @@ If you want to use other type of citations like <code>citep</code> or <code>cite
 <p>
 Future versions will support also the definition in pillar.conf of the bibliography file. Right now you should harcode it in the template. 
 </p>
+<figure><pre><code>\bibliographystyle{alpha}
+\bibliography{rmod,others,new}</code></pre><figcaption></figcaption></figure>
+
 
 <h3>Slides</h3>
 <p>
@@ -1774,44 +1704,6 @@ The column annotation takes 1 required parameter: the width of the column. Here 
 ${endColumns}$</code></pre><figcaption></figcaption></figure>
 
 <p class="note">The column annotations currently works only for the beamer, HTML and Deck.js export.</p>
-
-<h3>Under development</h3>
-
-<h4>Semantic links</h4>
-
-<p>
-Semantic links are a way to simplify links to standard websites such as Wikipedia and Youtube.
-</p>
-<p>
-To create semantic links ressources, use the <code>*Wikipedia Pharo&gt;wikipedia:Pharo*</code> syntax which is rendered as <a href="https://en.wikipedia.org/wiki/Pharo">Wikipedia Pharo</a>.
-To specify a language, you can use the <code>*Wikipedia Pharo&gt;wikipedia:Pharo|lang=en*</code> syntax which is rendered as <a href="https://en.wikipedia.org/wiki/Pharo">Wikipedia Pharo</a>.
-</p>
-<p>
-Same for Youtube links : <code>*Youtube Pharo&gt;youtube:KDvNuOjdjY4*</code>, the result is : <a href="https://www.youtube.com/watch?v=KDvNuOjdjY4">Youtube Pharo</a>.
-</p>
-<p>
-Note that such feature will be probably revised to be more generic and let the user define other semantic links. 
-</p>
-<h4>Structures</h4>
-
-<p>
-You can create structures to render all structures with the same name as the same object.
-Structures use the scripts syntax (see <a href="#scripts"></a>) with a particular parameter <code>structure</code>
-</p>
-<pre>[[[structure=exercise
-{
-  &quot;question&quot;:&quot;What is the answer to life, the universe and everything ?&quot;,
-  &quot;answer&quot;:&quot;42&quot;
-}
-]]]</pre>
-<p>
-There is two kind of structures for the moment:
-</p><ul>
-<li>exercise, rendered as a definition list</li>
-<li>city, rendered as a table</li>
-<li>country, rendered as a table</li>
-</ul>
-
 
 
 

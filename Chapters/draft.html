@@ -112,7 +112,7 @@
 		   	  	<li class="dd-item  haschildren ">
 					<div>
 						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#building pillar from sources">
-							Building Pillar from sources
+							Building Pillar from Sources
 						</a>
 						<i class="fa fa-angle-right fa-lg category-icon"></i>
 					</div>
@@ -128,11 +128,11 @@
 						</li>
 							
 						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#installing it in your system">Installing it in your system</a>
+							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#installing it in your system">Installing it in your System</a>
 						</li>
 							
 						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#test your installation">Test your installation</a>
+							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#test your installation">Test your Installation</a>
 						</li>
 					
 					</ul>						
@@ -183,7 +183,7 @@
 		   	  	<li class="dd-item  haschildren ">
 					<div>
 						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#versionning your project">
-							Versionning your project
+							Versionning your Project
 						</a>
 						<i class="fa fa-angle-right fa-lg category-icon"></i>
 					</div>
@@ -195,64 +195,12 @@
 						</li>
 							
 						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#versioning your book">Versioning your book</a>
+							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#versioning your book">Versioning your Book</a>
 						</li>
 							
 						<li class="dd-item">
 							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#adding a .gitignore">Adding a .gitignore</a>
 						</li>
-					
-					</ul>						
-				</li>
-				
-			  </ul>
-		  
-		  </li>
-		
-		  <li class="dd-item  haschildren ">
-			<div>
-			  <a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#editing a book">
-					Editing a Book
-			  </a>
-			   <i class="fa fa-angle-right fa-lg category-icon"></i> 
-			</div>
-			  <ul class="dd-item">
-				
-		   	  	<li class="dd-item ">
-					<div>
-						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#editing book.pillar">
-							Editing book.pillar
-						</a>
-						
-					</div>
-
-					<ul class="dd-item">
-					
-					</ul>						
-				</li>
-				
-		   	  	<li class="dd-item ">
-					<div>
-						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#(to move) selecting and installing book">
-							(To MOVE) Selecting and Installing Book
-						</a>
-						
-					</div>
-
-					<ul class="dd-item">
-					
-					</ul>						
-				</li>
-				
-		   	  	<li class="dd-item ">
-					<div>
-						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#conclusion">
-							Conclusion
-						</a>
-						
-					</div>
-
-					<ul class="dd-item">
 					
 					</ul>						
 				</li>
@@ -566,27 +514,6 @@
 							
 						<li class="dd-item">
 							<a href="/Booklet-PublishingAPillarBooklet/Chapters/PillarSyntax.html#columns">Columns</a>
-						</li>
-					
-					</ul>						
-				</li>
-				
-		   	  	<li class="dd-item  haschildren ">
-					<div>
-						<a href="/Booklet-PublishingAPillarBooklet/Chapters/PillarSyntax.html#under development">
-							Under development
-						</a>
-						<i class="fa fa-angle-right fa-lg category-icon"></i>
-					</div>
-
-					<ul class="dd-item">
-							
-						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/PillarSyntax.html#semantic links">Semantic links</a>
-						</li>
-							
-						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/PillarSyntax.html#structures">Structures</a>
 						</li>
 					
 					</ul>						
@@ -1220,30 +1147,53 @@
     
 	<h1>Publishing Documents with Pillar 7.0</h1>
 		
-	
-<h1>Coordinates</h1>
+	<h2>Editing a Book</h2>
+
+<h4>Editing book.pillar</h4>
+<p>
+Now we will edit the file <code>book.pillar</code> (the file listed in <code> &quot;mainDocument&quot;: &quot;book&quot;</code> in the <code>pillar.conf</code> file).
+</p>
+<p>
+We can simply add text there and file to be included using the Pillar command <code>${inputFile:nameOfTheFIle.pillar}$</code> as follows:
+</p><figure><pre><code>$ more book.pillar
+
+The current document is a little tutorial to show you how to begin with the creation of booklet.
+It describes the installation, customisation and integration with travis and bintray online services.
+${inputFile:path=Chapters/GettingStarted.pillar}$
+
+
+${inputFile:path=Chapters/TravisBintray.pillar}$</code></pre><figcaption></figcaption></figure>
+
+<h4>(To MOVE) Selecting and Installing Book</h4>
+<p>
+Pillar come with several templates and you can define your own using mustache (see the book Entreprise Pharo: a Web perspective).
+By default Pillar offers the following templates:
+</p>
+<ul>
+<li>Book. This is the template used in recent Pharo books and booklets. </li>
+<li>Presentation. These are the beamer templates used for example in the Pharo mooc. </li>
+<li>Basic-latex. This template is good to generate basic reports. What is nice is that you do not need the latest version of latex packages. </li>
+<li>Welcome. This template is to teach how to build templates. </li>
+</ul>
 
 <p>
-Contact me. I'm open for collaborations.
-All that you need about lost people.
-I will help you find them
+To install a template you should indicate it to pillar using the archetype command as follows: 
 </p>
-<h2>Email</h2>
+<figure><pre><code>pillar archetype book</code></pre><figcaption></figcaption></figure>
 
 <p>
-johndoe@mail.com
+Then you can compile the default template to check that it effectively worked. 
 </p>
-<h2>Snail mail / Visits</h2>
+<figure><pre><code>pillar build pdf </code></pre><figcaption></figcaption></figure>
 
 <p>
-
-Space Laboratory - J. Doe, 1500, avenue des Disparus,<br/>
-Parc d'Attraction,<br/>
-France<br/>
-Tel:33 (0)0 00 00 00 00<br/>
-Fax:33 (0)8 88 88 88 88<br/>
-
+produces a book in the folder <code>_result</code>. Indeed the folder Chapters and figures contain some samples.
 </p>
+
+
+
+<h3>Conclusion</h3>
+
 
   </section>
 

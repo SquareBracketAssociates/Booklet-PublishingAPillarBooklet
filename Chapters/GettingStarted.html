@@ -112,7 +112,7 @@
 		   	  	<li class="dd-item  haschildren ">
 					<div>
 						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#building pillar from sources">
-							Building Pillar from sources
+							Building Pillar from Sources
 						</a>
 						<i class="fa fa-angle-right fa-lg category-icon"></i>
 					</div>
@@ -128,11 +128,11 @@
 						</li>
 							
 						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#installing it in your system">Installing it in your system</a>
+							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#installing it in your system">Installing it in your System</a>
 						</li>
 							
 						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#test your installation">Test your installation</a>
+							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#test your installation">Test your Installation</a>
 						</li>
 					
 					</ul>						
@@ -183,7 +183,7 @@
 		   	  	<li class="dd-item  haschildren ">
 					<div>
 						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#versionning your project">
-							Versionning your project
+							Versionning your Project
 						</a>
 						<i class="fa fa-angle-right fa-lg category-icon"></i>
 					</div>
@@ -195,64 +195,12 @@
 						</li>
 							
 						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#versioning your book">Versioning your book</a>
+							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#versioning your book">Versioning your Book</a>
 						</li>
 							
 						<li class="dd-item">
 							<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#adding a .gitignore">Adding a .gitignore</a>
 						</li>
-					
-					</ul>						
-				</li>
-				
-			  </ul>
-		  
-		  </li>
-		
-		  <li class="dd-item  haschildren ">
-			<div>
-			  <a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#editing a book">
-					Editing a Book
-			  </a>
-			   <i class="fa fa-angle-right fa-lg category-icon"></i> 
-			</div>
-			  <ul class="dd-item">
-				
-		   	  	<li class="dd-item ">
-					<div>
-						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#editing book.pillar">
-							Editing book.pillar
-						</a>
-						
-					</div>
-
-					<ul class="dd-item">
-					
-					</ul>						
-				</li>
-				
-		   	  	<li class="dd-item ">
-					<div>
-						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#(to move) selecting and installing book">
-							(To MOVE) Selecting and Installing Book
-						</a>
-						
-					</div>
-
-					<ul class="dd-item">
-					
-					</ul>						
-				</li>
-				
-		   	  	<li class="dd-item ">
-					<div>
-						<a href="/Booklet-PublishingAPillarBooklet/Chapters/GettingStarted.html#conclusion">
-							Conclusion
-						</a>
-						
-					</div>
-
-					<ul class="dd-item">
 					
 					</ul>						
 				</li>
@@ -566,27 +514,6 @@
 							
 						<li class="dd-item">
 							<a href="/Booklet-PublishingAPillarBooklet/Chapters/PillarSyntax.html#columns">Columns</a>
-						</li>
-					
-					</ul>						
-				</li>
-				
-		   	  	<li class="dd-item  haschildren ">
-					<div>
-						<a href="/Booklet-PublishingAPillarBooklet/Chapters/PillarSyntax.html#under development">
-							Under development
-						</a>
-						<i class="fa fa-angle-right fa-lg category-icon"></i>
-					</div>
-
-					<ul class="dd-item">
-							
-						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/PillarSyntax.html#semantic links">Semantic links</a>
-						</li>
-							
-						<li class="dd-item">
-							<a href="/Booklet-PublishingAPillarBooklet/Chapters/PillarSyntax.html#structures">Structures</a>
 						</li>
 					
 					</ul>						
@@ -1232,7 +1159,7 @@ This chapter covers also the installation of LaTeX, which is required to generat
 Once Pillar is installed, we will proceed to create a first Pillar project.
 A Pillar project is a directory that will contain several <code>.pillar</code> files with your content, a <code>pillar.conf</code> configuration file and a <code>_suppert</code> directory containing several template-related files which will manage the style of your document.
 </p>
-<h3>Building Pillar from sources</h3>
+<h3>Building Pillar from Sources</h3>
 
 <p>
 This section explains how to build and install Pillar both in Unix based systems (like OSX and Linux) and Windows.
@@ -1267,7 +1194,7 @@ Once we got the repository, we should execute the <code>build.sh</code> script f
 <figure><pre><code>$ cd pillar
 $ ./scripts/build.sh</code></pre><figcaption></figcaption></figure>
 
-<h4>Installing it in your system</h4>
+<h4>Installing it in your System</h4>
 
 <p>
 You can then proceed to install that pillar build where you want.
@@ -1283,7 +1210,7 @@ Then add that directory to the PILLAR_HOME and HOME environment variables, for e
 </p><figure><pre><code>export PILLAR_HOME=&quot;$HOME/.pillar/build&quot;
 export PATH=&quot;$PATH:$PILLAR_HOME&quot;</code></pre><figcaption></figcaption></figure>
 
-<h4>Test your installation</h4>
+<h4>Test your Installation</h4>
 
 <p>
 To test your pillar installation, open a new terminal and execute the pillar <code>--version command</code>. If everything is ok, that should print out (as in the current version) the version of the Pharo VM. For example:
@@ -1445,7 +1372,7 @@ For example, if you want to build only <code>index.pillar</code> to html you can
 <p>
 this will generate only the output related to the <code>index.pillar</code> file.
 </p>
-<h3>Versionning your project</h3>
+<h3>Versionning your Project</h3>
 
 <p>
 In this section we explain how to share your project in a source code repository such as Git.
@@ -1471,7 +1398,7 @@ $ cp path_to_your_project</code></pre><figcaption></figcaption></figure>
 <figure><pre><code>cd Booklet-PublishingAPillarBooklet</code></pre><figcaption></figcaption></figure>
 
 
-<h4>Versioning your book</h4>
+<h4>Versioning your Book</h4>
 
 <p>
 Now to version simply you book you should version all the files except <code>_result</code>. 
@@ -1494,52 +1421,7 @@ Not all the downloaded files are worth versionning. We suggest the following .gi
 You can remove the folder figures and the chapter samples. 
 Now you are ready to commit your files. 
 </p>
-<h2>Editing a Book</h2>
 
-<h4>Editing book.pillar</h4>
-<p>
-Now we will edit the file <code>book.pillar</code> (the file listed in <code> &quot;mainDocument&quot;: &quot;book&quot;</code> in the <code>pillar.conf</code> file).
-</p>
-<p>
-We can simply add text there and file to be included using the Pillar command <code>${inputFile:nameOfTheFIle.pillar}$</code> as follows:
-</p><figure><pre><code>$ more book.pillar
-
-The current document is a little tutorial to show you how to begin with the creation of booklet.
-It describes the installation, customisation and integration with travis and bintray online services.
-${inputFile:path=Chapters/GettingStarted.pillar}$
-
-
-${inputFile:path=Chapters/TravisBintray.pillar}$</code></pre><figcaption></figcaption></figure>
-
-<h4>(To MOVE) Selecting and Installing Book</h4>
-<p>
-Pillar come with several templates and you can define your own using mustache (see the book Entreprise Pharo: a Web perspective).
-By default Pillar offers the following templates:
-</p>
-<ul>
-<li>Book. This is the template used in recent Pharo books and booklets. </li>
-<li>Presentation. These are the beamer templates used for example in the Pharo mooc. </li>
-<li>Basic-latex. This template is good to generate basic reports. What is nice is that you do not need the latest version of latex packages. </li>
-<li>Welcome. This template is to teach how to build templates. </li>
-</ul>
-
-<p>
-To install a template you should indicate it to pillar using the archetype command as follows: 
-</p>
-<figure><pre><code>pillar archetype book</code></pre><figcaption></figcaption></figure>
-
-<p>
-Then you can compile the default template to check that it effectively worked. 
-</p>
-<figure><pre><code>pillar build pdf </code></pre><figcaption></figcaption></figure>
-
-<p>
-produces a book in the folder <code>_result</code>. Indeed the folder Chapters and figures contain some samples.
-</p>
-
-
-
-<h3>Conclusion</h3>
 
 
 
