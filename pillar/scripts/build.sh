@@ -29,7 +29,7 @@ function get_platform_identifier() {
 # Set magic variables for current file & dir
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __builddir="$(pwd)/build"
-PHARO_VERSION="${PHARO_VERSION:-61}"
+PHARO_VERSION="${PHARO_VERSION:-70}"
 PHARO="./pharo Pharo.image"
 
 rm -rf "${__builddir}" && mkdir -p "${__builddir}" && cd "${__builddir}"
@@ -41,7 +41,7 @@ if [ "$OS" == "win" ]; then
     REPOSITORY_PATH=$(cygpath $REPOSITORY_PATH --windows)
 fi
 
-${PHARO} eval --save "Metacello new baseline: 'Pillar'; repository: 'filetree://${REPOSITORY_PATH}'; load"
+${PHARO} eval --save "Metacello new baseline: 'Pillar'; repository: 'gitlocal://${REPOSITORY_PATH}'; load"
 
 ${PHARO} eval --save "Deprecation raiseWarning: false."
 ${PHARO} eval --save "Deprecation showWarning: false."

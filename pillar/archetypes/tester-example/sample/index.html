@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>nil</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon" />
+<link href="/Booklet-PublishingAPillarBooklet/_support/html/css/font-awesome.min.css" rel="stylesheet">
+<link href="/Booklet-PublishingAPillarBooklet/_support/html/css/nucleus.css" rel="stylesheet">
+<link href="/Booklet-PublishingAPillarBooklet/_support/html/css/flex.css" rel="stylesheet">
+<link rel="stylesheet" href="/Booklet-PublishingAPillarBooklet/_support/html/highlightjs/styles/default.css">
+<link rel="stylesheet" href="/Booklet-PublishingAPillarBooklet/_support/html/css/highlight-commands.css">
+<link rel="stylesheet" href="/Booklet-PublishingAPillarBooklet/_support/html/css/bootstrap.min.css">
+<script src="/Booklet-PublishingAPillarBooklet/_support/html/js/jquery-2.x.min.js"></script>
+<script src="/Booklet-PublishingAPillarBooklet/_support/html/highlightjs/highlight.pack.js"></script>
+<script src="/Booklet-PublishingAPillarBooklet/_support/html/js/highlight-commands.js"></script>
+<meta name="description" content="nil">
+nil<meta name="author" content="Stéphane Ducasse and Guillermo Polito">nil
+  </head>
+  <body>
+    <header>
+  <div class="logo">
+    <a class="baselink" href="/Booklet-PublishingAPillarBooklet">nil</a>
+  </div>
+  <div class="burger"><a href="javascript:void(0);" style="font-size:15px;">&#9776;</a></div>
+  
+</header>
+<article>
+  <aside>
+    <ul class="menu">
+   		<li data-nav-id="123" class="dd-item">
+    		<a href="/Booklet-PublishingAPillarBooklet">
+		       <i class="fa fa-fw fa-home"></i>
+	    	</a>
+        </li>
+
+		
+		  <li class="dd-item ">
+			<div>
+			  <a href="">
+					
+			  </a>
+			  
+			</div>
+			  <ul class="dd-item">
+				
+			  </ul>
+		  
+		  </li>
+		
+    </ul>
+  </aside>
+
+  <section class="page">
+    
+	<h1>Publishing Documents with Pillar 7.0</h1>
+		
+	<h2>Superheroes</h2>
+
+<p>
+Sameple of a book that could be real, other examples later in the book
+</p>
+<p>
+Let's define a class, one of its methods and test it.
+</p>
+<figure><pre><code>Object subclass: #Superhero
+	instanceVariableNames: 'name powers currentCity vilain'
+	classVariableNames: ''
+	package: 'Superheroes'</code></pre><figcaption></figcaption></figure>
+
+<figure><pre><code>Superhero &gt;&gt; defendCity: aCity against: aSuperVilain
+	self currentCity: aCity.
+	self vilain: aSuperVilain.</code></pre><figcaption></figcaption></figure>
+
+<p>
+by defining the accessors:
+</p>
+<figure><pre><code>Superhero &gt;&gt; currentCity: aCity
+	currentCity := aCity</code></pre><figcaption></figcaption></figure>
+
+<figure><pre><code>Superhero &gt;&gt; currentCity
+	^ currentCity</code></pre><figcaption></figcaption></figure>
+
+
+<figure><pre><code>Superhero &gt;&gt; name: aName
+	name := aName</code></pre><figcaption></figcaption></figure>
+<figure><pre><code>Superhero &gt;&gt; name
+	^ name</code></pre><figcaption></figcaption></figure>
+
+
+<figure><pre><code>Superhero &gt;&gt; vilain: aVilain
+	vilain := aVilain</code></pre><figcaption></figcaption></figure>
+<figure><pre><code>Superhero &gt;&gt; vilain
+	^ vilain</code></pre><figcaption></figcaption></figure>
+
+
+<figure><pre><code>Superhero &gt;&gt; powers: aPowerList
+	powers := aPowerList</code></pre><figcaption></figcaption></figure>
+<figure><pre><code>Superhero &gt;&gt; powers
+	^ powers</code></pre><figcaption></figcaption></figure>
+<p>
+(same for <code>vilain</code> and all the other instance variable)
+</p>
+<p>
+We will now define tests around this method.
+</p>
+<figure><pre><code>TestCase subclass: #SuperheroTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	package: 'Superheroes-Tests'</code></pre><figcaption></figcaption></figure>
+
+<figure><pre><code>SuperheroTest &gt;&gt; testDefendCityAgainstJoker
+	| batman |
+	batman := Superhero new.
+	batman defendCity: 'Gotham' against: 'The Joker'.
+	self assert: batman currentCity equals: 'Gotham'.
+	self assert: batman vilain equals: 'The Joker'.</code></pre><figcaption></figcaption></figure>
+
+<p>
+Our test should be green!
+</p>
+
+<h2>Other tests</h2>
+
+<p>
+Examples:
+</p>
+<figure><pre><code>1+1
+&gt;&gt;&gt;2</code></pre><figcaption></figcaption></figure>
+
+<figure><pre><code>1+1
+&gt;&gt;&gt;3</code></pre><figcaption></figcaption></figure>
+
+<figure><pre><code>1+'1'
+&gt;&gt;&gt;2</code></pre><figcaption></figcaption></figure>
+
+<p>
+Method Definition:
+</p><figure><pre><code>Bla&gt;&gt;bla
+	hmm ^'bla'</code></pre><figcaption></figcaption></figure>
+
+<p>
+Class definition:
+</p><figure><pre><code>Object subclass: #Foo
+	instanceVariableNames: ''
+	classVariableNames: ''
+	&quot;package: 'Superheroes-Tests'&quot; 
+	&quot;failing due to the lack of the key package&quot;</code></pre><figcaption></figcaption></figure>
+
+
+
+
+
+  </section>
+
+</article>
+
+<footer>
+
+<div class="footline">
+    <div class="github-link">
+      <a href="" target="blank"><i class="fa fa-code-fork"></i>Github</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/Booklet-PublishingAPillarBooklet/_support/html/js/clipboard.min.js"></script>
+
+<link href="/Booklet-PublishingAPillarBooklet/_support/html/css/featherlight.min.css" rel="stylesheet">
+<script src="/Booklet-PublishingAPillarBooklet/_support/html/js/featherlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/Booklet-PublishingAPillarBooklet/_support/html/js/flex.js"></script>
+<!-- Prettify annotated paragraphs-->
+    <script src="/Booklet-PublishingAPillarBooklet_support/html/js/annotated-paragraphs.js"></script>
+
+  </body>
+</html>

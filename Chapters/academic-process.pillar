@@ -1,3 +1,5 @@
+
+
 This tutorial shows how to put into place a personal website using pillar, and automatically deploy it using github pages and travis.
 
 
@@ -195,7 +197,7 @@ This way, on every commit we can build our site and push our html to our website
 Automatic building and hosting of our website is using Travis Continuous Integration. So let's launch to Travis via our GitHub account following *this>https://trailhead.salesforce.com/en/modules/sfdx_travis_ci/units/sfdx_travis_ci_setup#Tdxn4tBKheading7*.
 
 We can now activate our GitHub repository in Travis:
-+Travis activation>file://figures/activate.png+
+%+Travis activation>file://figures/activate.png+
 
 This will automatically add travis as a service in your GitHub repository.
 
