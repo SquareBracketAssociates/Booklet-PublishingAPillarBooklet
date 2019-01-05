@@ -445,51 +445,6 @@ generates a todo annotation
 <p>
 By default the templates support <code>@@todo</code> and <code>@@note</code>. 
 </p>
-
-<h4>Nice HTML</h4>
-<p>
-Note that the annotation (e.g., <code>todo</code> and <code>note</code>) can be any word that is meaningful to the author. In HTML, an annotated paragraph triggers the generation of a paragraph with the annotation as the paragraph <code>class</code>. In LaTeX, an environment with the annotation name is generated. In HTML, you can tweak the output to make it look nice, for example with such JavaScript code:
-</p>
-<figure><pre><code class="javascript">// Wraps paragraphs with class pClass inside a div and adds an H4 element with pTitle.
-function transformAnnotatedParagraphs(pClass, pTitle) {
-   $(&quot;p.&quot; + pClass).wrap( &quot;&lt;div class='annotated-paragraph &quot;
-         + pClass + &quot;' /&gt;&quot; ).prepend(&quot;&lt;h4&gt;&quot;+ pTitle +&quot;&lt;/h4&gt;&quot;);
-}
-
-transformAnnotatedParagraphs(&quot;note&quot;, &quot;Note&quot;);
-transformAnnotatedParagraphs(&quot;todo&quot;, &quot;To do&quot;);</code></pre><figcaption></figcaption></figure>
-
-<p>
-Above code will prepend the titles &quot;Note&quot; and &quot;To do&quot; to the <code>@@note</code> and <code>@@todo</code> paragraphs. You can make that looks nice using a little bit of CSS:
-</p>
-<figure><pre><code class="css">.annotated-paragraph {
-   margin: 20px 0;
-   padding: 15px 30px 15px 15px;
-   border-left: 5px solid #eee;
-}
-.annotated-paragraph h4 {
-   margin-top: 0;
-}
-.annotated-paragraph p:last-child {
-   margin-bottom: 0;
-}
-.note {
-   background-color: #f0f7fd;
-   border-color: #d0e3f0;
-}
-.note h4 {
-   color: #3a87ad;
-}
-.todo {
-   background-color: #dff0d8;
-   border-color: #d6e9c6;
-}
-.todo h4 {
-   color: #3c763d;
-}</code></pre><figcaption></figcaption></figure>
-
-
-
 <h3>Raw</h3>
 
 <p>

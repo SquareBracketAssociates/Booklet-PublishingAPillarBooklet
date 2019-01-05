@@ -55,9 +55,721 @@ nil<meta name="author" content="Stéphane Ducasse and Guillermo Polito">nil
     
 	<h1>Publishing Documents with Pillar 7.0</h1>
 		
-	<p>
-This document is under HEAVY REWRITE!!!
+	<h2>About Pillar </h2>
+
+<p>
+Pillar is a system to manage documents (books, presentations, and web sites). It is able to emit resulting documents in multiple formats (html, markdown, latex, AsciiDoc). 
+It is composed of several modules such as importers, transformers, document model and outputers.
 </p>
+<p>
+This book describes Pillar in its current version 7.0. Pillar is currently developed and maintained by Stéphane Ducasse and Guillermo Polito.
+The original author of Pillar was Damien Cassou. Many people have also contributed to Pillar: Ben Coman, Guillermo Polito, Lukas Renggli (original author of the PierCMS from which a first version of Pillar has been extracted), Benjamin van Ryseghem, Cyril Ferlicot-Delbecque, Thibault Arloing, Yann Dubois, Quentin Ducasse and Asbathou Sama Biyalou. Special thanks to Asbathou Sama Biyalou!
+</p>
+<p>
+This book adapts, extends, and clarifies the chapter explaining Pillar in the <em>Enterprise Pharo: a Web Perspective</em> book.
+</p>
+<p>
+Pillar was sponsored by <a href="http://www.esug.org">ESUG</a>.
+</p>
+<h3>Introduction</h3>
+<p>
+Pillar (hosted at <a href="http://github.com/pillar-markup">http://github.com/pillar-markup</a>) is a markup language and associated tools to write and generate documentation, books (such as this one), web sites, and slide-based presentations. The Pillar screenshot in Figure <a href="#voyageDocExample"></a> shows the HTML version of chapter Voyage.
+</p>
+<p>
+<a id="voyageDocExample"></a>
+<figure>
+	<img src="Chapters/figures/voyageDocExample-small.png" width="60%" id="voyageDocExample" alt="An example Pillar output"/>
+	<figcaption>An example Pillar output</figcaption>
+</figure>
+</p>
+<p>
+Pillar has many features, helpful tools, and documentation:
+</p><ul>
+<li>simple markup syntax with references, tables, pictures, captions, syntax-highlighted code blocks;</li>
+<li>export documents to HTML, LaTeX, Markdown, AsciiDoc, ePuB and Pillar itself, and presentations to Beamer and Deck.js;</li>
+<li>many tests with good coverage (94% with more than a 2100 executed tests), which are regularly run by a <a href="https://ci.inria.fr/pharo-contribution/job/Pillar">continuous integration job</a></li>
+<li>a command-line interface and dedicated plugins for several text editors: <a href="https://github.com/pillar-markup/pillar-mode">Emacs</a>, <a href="https://github.com/cdlm/vim-pillar">Vim</a>, <a href="https://github.com/Uko/Pillar.tmbundle">TextMate</a>, and <a href="https://github.com/Uko/language-pillar">Atom</a></li>
+<li>a cheat sheet (see Chapter <a href="#chacheat"></a>). </li>
+</ul>
+
+
+<h3>Pillar users</h3>
+<a id="pillarUSERS"></a>
+<p>
+This book was written in Pillar itself. If you want to see how Pillar is used, have a look at its source code (<a href="http://github.com/SquareBracketAssociates/Booklet-PublishingAPillarBooklet">http://github.com/SquareBracketAssociates/Booklet-PublishingAPillarBooklet</a>), or check the following other real-world projects:
+</p>
+<ul>
+<li>the Updated Pharo by Example book (<a href="https://github.com/SquareBracketAssociates/UpdatedPharoByExample">https://github.com/SquareBracketAssociates/UpdatedPharoByExample</a>),</li>
+<li>the Pharo MOOC - Massive open online course (<a href="https://github.com/SquareBracketAssociates/PharoMooc">https://github.com/SquareBracketAssociates/PharoMooc</a>,</li>
+<li>Any of the Pharo booklets (<a href="https://github.com/SquareBracketAssociates/Booklet-XXXX">https://github.com/SquareBracketAssociates/Booklet-XXXX</a>,</li>
+<li>the PillarHub open-access shared blog (<a href="http://pillarhub.pharocloud.com">http://pillarhub.pharocloud.com</a>).</li>
+</ul>
+
+
+<h3>Pillar future features</h3>
+
+<p>
+Pillar 70 saw some major refactorings and cleaning: it does not rely on Grease and Magritte anymore. 
+Its architecture is a lot cleaner.
+</p>
+<p>
+Still some issues are missing. Here is a little list of features that we are working on or will soon:
+</p>
+<ul>
+<li>Incremental recompilation. Since we remove the use of make (so that Windows users can use Pillar) we should introduce a way to avoid to recompile complete book when just one chapter changed.</li>
+<li>Markdown syntax.</li>
+<li>Release of Ecstatic. Pillar supports the deployment of web sites named Ecstatic and we are working on a second version of Ecstatic.</li>
+<li>Better table support.</li>
+</ul>
+
+<h3>Conclusion</h3>
+<p>
+Pillar is still in active development: maintainers keep improving its implementation. The current version of Pillar is Pillar 70. This booklet only documents Pillar 70. This booklet will be synchronised with future enhancements.
+</p>
+<h2>Pillar core syntactic elements</h2>
+<a id="chawriting"></a>
+<p>
+In this Chapter we present the Pillar syntax. Have a look at the
+Chapter <a href="#chacheat"></a>: it contains a two pages summary. We use the current text as example, notice however, that some results may be different on other support like HTML because of different common practices (for example creating an anchor with the reference instead of a footnote for an external link).
+</p>
+<p>
+It is important to see that since Pillar is extensible, plugins may extend the default markup. The extension mechanisms
+allow one not to learn new syntax but just new tags and parameters as will present later.
+</p>
+<h3>Meta-Information</h3>
+
+<p>
+Meta-information of a particular file is written at the start of the file between curly braces using the STON syntax (a super set of JSON). A meta-information starts with a word between quotation marks acting as a key, is followed by a colon <code>:</code>, and finishes with a value.
+</p>
+<p>
+For example, the following Pillar file,
+</p>
+<figure><pre><code class="pillar">{
+	&quot;title&quot;: &quot;A first document&quot;,
+	&quot;author&quot;: &quot;John Doe&quot;
+}
+
+!Hello World</code></pre><figcaption></figcaption></figure>
+
+<p>
+represents a Pillar document with the title and author set. You can use whatever keys you like. The metadata keys can be used in templates (see Chapter <a href="#templating"></a> for more information about templating).
+</p>
+<h3>Headings: Chapters &amp; sections</h3>
+<a id="chapterAndSections"></a>
+<p>
+A line starting with <code>!</code> represents a heading. Use multiple <code>!</code> to create sections and subsections.
+</p>
+<figure><pre><code>!!!Headings: Chapters &amp; Sections</code></pre><figcaption></figcaption></figure>
+
+<p>
+is the way the current section is created. The exporter and template may interpret the section the way they want (.i.e., for example outputing <code>subsection</code> instead of <code>section</code>).
+</p>
+<p>
+Some exporters support the possibility to specify a level of interpretation for <code>!</code>.
+<code>headingLevelOffset</code> controls how to convert from the level of a Pillar heading to the level of heading in your exported document.
+For example, a <code>headingLevelOffset</code> of 3 converts a 1st level Pillar heading to an <code>&lt;h4&gt;</code> in HTML.
+</p>
+<figure><pre><code>&quot;headingLevelOffset&quot; : 3</code></pre><figcaption></figcaption></figure>
+
+<h3>References and links</h3>
+
+<h4>Anchor definition</h4>
+<p>
+ To refer to a section or chapter, put an anchor (equivalent to <code>\label{chapterAndSections}</code> in LaTeX) using the <code>@chapterAndSections</code> syntax on a <em>separate line</em>. 
+ 
+</p><figure><pre><code>@chapterAndSections</code></pre><figcaption></figcaption></figure>
+<p>
+ 
+</p><h4>Anchor reference</h4>
+<p>
+When you want to refer to an anchor (equivalent to <code>\ref{chapterAndSections}</code> in LaTeX), use the <code>*@chapterAndSections*</code> syntax. Anchors are invisible and links will be rendered as: <a href="#chapterAndSections"></a>.
+</p>
+<figure><pre><code>*@chapterAndSections*</code></pre><figcaption></figcaption></figure>
+
+<h4>Alias</h4>
+
+<p>
+You can create alias for links. Tthis is especially adapted for web sites containing reference to other pages.
+</p>
+<figure><pre><code>*Chapters&gt;chapterAndSections*</code></pre><figcaption></figcaption></figure>
+
+<p>
+creates the link <a href="Chapters/chapterAndSections">Chapters</a>. Again the template may interpret this differently than a LaTeX footnote.
+</p>
+<p>
+To create a link to another pillar file, use the <code>*Alias&gt;File.pillar@AnchorName*</code>. The alias and anchor parts are optional but you will need them in some cases (for example if you have an inter-file link and you export in LaTeX, or if you have an inter-file link and you export all your file in the same html file).
+</p>
+<h4>External links</h4>
+
+<p>
+To create links to external resources, use the <code>*Pharo&gt;http://pharo.org/*</code> syntax which is rendered as <a href="http://pharo.org/">Pharo</a>. 
+</p>
+<figure><pre><code>*http://www.pharo.org*</code></pre><figcaption></figcaption></figure>
+
+<p>
+The same syntax can also represent email addresses: write <code>*dupond@free.fr*</code> to get <a href="mailto:dupond@free.fr">dupond@free.fr</a>.
+</p>
+
+<h3>Lists</h3>
+<p>
+Pillar offers three default lists: Bullet, numbered and labelled. 
+</p>
+<h4>Bulleted lists</h4>
+
+<figure><pre><code class="pillar">-A block of lines,
+-where each line starts with ==-==
+-is transformed to a bulleted list</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates
+</p>
+<ul>
+<li>A block of lines,</li>
+<li>where each line starts with <code>-</code></li>
+<li>is transformed to a bulleted list</li>
+</ul>
+
+<h4>Numbered lists</h4>
+
+<figure><pre><code class="pillar">#A block of lines,
+#where each line starts with ==#==
+#is transformed to a numbered list</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates
+</p>
+<ol><li>A block of lines,</li>
+<li>where each line starts with <code>#</code></li>
+<li>is transformed to a numbered list</li>
+</ol>
+
+<h4>Definition lists</h4>
+
+<p>
+Definition lists (<em>aka.</em> description lists) are lists with labels:
+</p>
+<figure><pre><code class="pillar">;blue.
+:color of the sky
+;red.
+:color of the fire</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates
+</p>
+<dl><dt>blue.</dt>
+<dd>color of the sky</dd>
+<dt>red.</dt>
+<dd>color of the fire</dd>
+</dl>
+
+<h4>List nesting</h4>
+
+<figure><pre><code class="pillar">-Lists can also be nested.
+-#Thus, a line starting with ==-#==
+-#is an element of an unordered list that is part of an ordered list.</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates
+</p>
+<ul>
+<li>Lists can also be nested.<ol><li>Thus, a line starting with <code>-#</code></li>
+<li>is an element of a bulleted list that is part of an ordered list.</li>
+</ol>
+</li>
+</ul>
+
+<h3>Commented lines</h3>
+
+<p>
+Lines that start with a <code>%</code> are considered comments and will not be rendered in the resulting document.
+</p>
+<h3>Escaping characters</h3>
+
+<p>
+Special characters (e.g., <code>+</code> and <code>*</code>) must be escaped with a backslash: to get a <code>+</code>, you actually have to write <code>\+</code>. The list of characters to escape is:
+</p>
+<figure><pre><code>| characters |
+characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
+stream nextPutAll: '[[['; cr.
+characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
+stream cr; nextPutAll: ']]]'; cr.</code></pre><figcaption></figcaption></figure>
+
+
+<h3>Formatting</h3>
+<p>
+There is some syntax for text formatting:
+</p>
+<ul>
+<li>To make something <strong>bold</strong>, write <code>&quot;&quot;bold&quot;&quot;</code> (with 2 double quotes)</li>
+<li>To make something <em>italic</em>, write <code>''italic''</code> (with 2 single quotes)</li>
+<li>To make something <code>monospaced</code>, write <code>==monospaced==</code></li>
+<li>To make something <s>strikethrough</s>, write <code>--strikethrough--</code></li>
+<li>To make something <sub>subscript</sub>, write <code>@@subscript@@</code></li>
+<li>To make something <sup>superscript</sup>, write <code>^^superscript^^</code></li>
+<li>To make something <u>underlined</u>, write <code>__underlined__</code></li>
+</ul>
+
+
+<h3>Pictures</h3>
+<p>
+To include a picture, use the syntax <code>+caption&gt;file://filename|parameters+</code>:
+</p>
+<figure><pre><code class="pillar">+Caption of the picture.&gt;file://figures/pharo-logo.png|width=50|label=pharoLogo+</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates Figure <a href="#pharoLogo"></a> (this reference has been generated using <code>*@pharoLogo*</code>).
+</p>
+<p>
+Parameters are pairs <code>&quot;label&quot;=&quot;value&quot;</code> separated by <code>|</code>.
+</p>
+<p>
+<a id="pharoLogo"></a>
+<figure>
+	<img src="Chapters/figures/pharo-logo.png" width="50%" id="pharoLogo" alt="Caption of the picture."/>
+	<figcaption>Caption of the picture.</figcaption>
+</figure>
+</p>
+
+<h3>Tables</h3>
+<p>
+To create a table, start the lines with <code>|</code> and separate the elements with <code>|</code>. Each new line represents a new row of the table. Add a single <code>!</code> to let the cell become a table heading.
+</p>
+<figure><pre><code class="pillar">|!Country |!Capital
+|France | Paris
+|Belgium | Brussels</code></pre><figcaption></figcaption></figure>
+
+<table style="border: solid thin"><tr><th>Country</th>
+<th>Capital</th>
+</tr>
+<tr><td>France</td>
+<td>Paris</td>
+</tr>
+<tr><td>Belgium</td>
+<td>Brussels</td>
+</tr>
+</table>
+
+
+<p>
+The contents of cells can be aligned left, centered or aligned right by using <code>|{</code>, <code>||</code> or <code>|}</code> respectively.
+</p>
+<figure><pre><code class="pillar">||centered||!centered header||centered
+|{ left |} right || center</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates:
+</p>
+<table style="border: solid thin"><tr><td style="text-align: center">centered</td>
+<th style="text-align: center">centered header</th>
+<td style="text-align: center">centered</td>
+</tr>
+<tr><td style="text-align: left">left</td>
+<td style="text-align: right">right</td>
+<td style="text-align: center">center</td>
+</tr>
+</table>
+
+
+
+<h3>Preformatted</h3>
+<p>
+To create a preformatted block, begin each line with <code>=</code>. A preformatted block uses equally spaced text so that spacing is preserved. In general you should prefer code block over preformatted blocks. Code blocks more powerful. 
+</p>
+<pre>= this is preformatted text
+= this line as well</pre>
+<h3>Code block</h3>
+<a id="scripts"></a>
+<p>
+Use code blocks when you want to add code snippets to your document.
+Code blocks are delimited by <code>[[[</code> and <code>]]]</code>.
+</p>
+<pre>[[[
+foo bar
+]]]</pre>
+<p>
+generates
+</p>
+<figure><pre><code>foo bar</code></pre><figcaption></figcaption></figure>
+
+<h4>Code block with a label or caption</h4>
+
+<p>
+If you want either a label (to reference the code later) or a caption (to give a nice title to the code block), write the following:
+</p>
+<pre>[[[label=foobar|caption=My code block that works|language=smalltalk
+self foo bar
+]]]</pre>
+<p>
+which produces script <a href="#foobar"></a> (this reference is produced with <code>*@foobar*</code>).
+</p>
+<figure><pre><code class="smalltalk">self foo bar</code></pre><figcaption><a id="foobar"></a>My code block that works</figcaption></figure>
+
+<h4>Code block syntax highlighting</h4>
+<a id="sec:syntaxHighlighting"></a>
+<p>
+To specify the syntax a code block is written in, you need to use the <code>language</code> parameter.
+For example on <a href="#foobar"></a> we used the <code>smalltalk</code> value for the <code>language</code> parameter.
+</p>
+
+<figure><pre><code>| languages |
+stream nextPutAll: '@@note The currently supported languages are '.
+languages := PRRealScriptLanguage withAllConcreteClasses collect: #standardName.
+languages asStringOn: stream delimiter: ', ' last: ' and '</code></pre><figcaption></figcaption></figure>
+
+<p>
+If you don't want syntax highlighting for a particular script, specify <code>no language</code> as value to the <code>language</code> parameter.
+</p>
+<h4>Code block with line numbers</h4>
+
+<p>
+If you need to explain a long piece of code, you may want a code block to have line numbers:
+</p>
+<pre>[[[lineNumber=true
+self foo bar.
+self bar foo.
+]]]</pre>
+<p>
+produces
+</p>
+<figure><pre><code>self foo bar.
+self bar foo.</code></pre><figcaption></figcaption></figure>
+
+<h4>Code block from an external file</h4>
+
+<p>
+If you want you can also include a code block from a external file. For example if you have a file `myProject.html` and you want to take the code from line 15 to
+line 45, instead of copy/pasting the code you can use:
+</p>
+<pre>[[[language=html|fromFile=myProject.html|firstLine=15|lastLine=45
+]]]</pre>
+<p>
+The <code>firstLine</code> and <code>lastLine</code> parameters are optional.
+</p>
+
+
+
+<h4>Generate a part of your document with a script</h4>
+
+<p>
+If you want you can also evaluate a script to generate a part of your document.
+Notice that some pillar version may disable it for security reasons.
+</p>
+<p>
+For example if you write a project's documentation and want to give some metrics about its code, you can write something like this:
+</p>
+<pre>[[[eval=true
+| packages classes |
+packages := RPackageOrganizer default packages select: [ :each |
+               each name includesSubstring: 'Pillar' ].
+classes := packages flatCollect: [ :each | each classes ].
+stream
+   nextPutAll: 'The Pillar project contains:';
+   lf;
+   nextPutAll: '- ==';
+   print: packages size;
+   nextPutAll: ' packages==.';
+   lf;
+   nextPutAll: '- ==';
+   print: classes size;
+   nextPutAll: ' classes=='.
+]]]</pre>
+<p>
+will generate:
+</p>
+<figure><pre><code>| packages classes |
+packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
+classes := packages flatCollect: [ :each | each classes ].
+stream
+   nextPutAll: 'The Pillar project contains:';
+   lf;
+   nextPutAll: '- ==';
+   print: packages size;
+   nextPutAll: ' packages==.';
+   lf;
+   nextPutAll: '- ==';
+   print: classes size;
+   nextPutAll: ' classes=='.</code></pre><figcaption></figcaption></figure>
+
+<h3>Annotated paragraphs</h3>
+
+<p>
+An empty line starts a new paragraph.
+</p>
+<p>
+An annotated paragraph starts with <code>@@</code> followed by a keyword such as <code>todo</code> and <code>note</code>. For example,
+</p>
+<figure><pre><code class="pillar">@@note this is a note annotation.</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates
+</p>
+<p class="note">this is a note annotation.</p>
+<p>
+And,
+</p>
+<figure><pre><code class="pillar">@@todo this is a todo annotation</code></pre><figcaption></figcaption></figure>
+
+<p>
+generates a todo annotation
+</p>
+<p class="todo">this is a todo annotation</p>
+<p>
+By default the templates support <code>@@todo</code> and <code>@@note</code>. 
+</p>
+<h3>Raw</h3>
+
+<p>
+If you want to include raw text into a page you must enclose it between <code>{{{</code> and <code>}}}</code>, otherwise Pillar ensures that text appears as you type it which might require transformations.
+</p>
+<p>
+A good practice is to always specify for which kind of export the raw text must be outputted by starting the block with <code>{{{latex:</code> or <code>{{{html:</code>. For example, the following shows a formula, either using LaTeX or plain text depending on the kind of export.
+</p>
+<pre>{{{latex:
+\begin{equation}
+   \label{eq:1}
+   \frac{1+\sqrt{2}}{2}
+\end{equation}
+}}}
+{{{html:
+(1+sqrt(2)) / 2
+}}}</pre>
+<p>
+<strong>Take care:</strong> Avoid terminating the verbatim text with a <code>}</code> as
+this will confuse the parser, better add a space or two. So, don't write <code>{{{\begin{scriptsize}}}}</code> but <code>{{{\begin{scriptsize} }}}</code> instead.
+</p>
+
+
+<h3>Annotations: supporting extensions</h3>
+
+<p>
+Pillar proposes two extensions mechanisms: tags and parameters. Pay attention that each plugin should handle the tag or parameter processing. 
+</p>
+
+<p>
+Annotations are the Pillar way to have extensible syntax. An annotation has this syntax:
+</p>
+<figure><pre><code class="pillar">${tag:parameter=value|parameter2=value2}$</code></pre><figcaption></figcaption></figure>
+
+<h4>InputFile annotation</h4>
+
+<p>
+You can include a file into another pillar file. The <code>inputFile</code> annotation takes as parameter the path of the file relative to <code>baseDirectory</code> (if you don't change the base directory, it is your working directory). In this example, 2 files are included:
+</p>
+<figure><pre><code class="pillar">${inputFile:test.pillar}$
+
+${inputFile:chapter2/chapter2.pillar}$</code></pre><figcaption></figcaption></figure>
+
+<h4>Footnote annotation</h4>
+
+<p>
+You can add footnotes to explain or annotate words. The <code>footnote</code> annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
+</p>
+<figure><pre><code>Foo${footnote:Some Explanation for Foo}$</code></pre><figcaption></figcaption></figure>
+
+<h4>Parameters</h4>
+
+<p>
+Pictures and scripts are both using parameters to specify different options and variations. Parameters are pairs <code>&quot;label&quot;=&quot;value&quot;</code> separated by <code>|</code>.
+</p>
+<p>
+Here are two examples within the same expressions: Code blocks and captions use parameters.
+</p>
+<pre>[[[label=foobar|caption=My code block that works|language=pillar
++Caption of the picture.&gt;file://figures/pharo-logo.png|width=50|label=pharoLogo+
+]]]</pre>
+
+
+<h2>Specific markup</h2>
+<p>
+This chapter presents some extensions specific to a given support such as LaTeX or slides.
+</p>
+<h3>LaTeX</h3>
+
+<h4>Citations</h4>
+
+<p>
+Citations are only available for LaTeX.
+You can add citations to your document to reference an element in a LaTeX bibliography. The <code>cite</code> annotationtakes as parameter the key of the reference in the bibliography.
+</p>
+<figure><pre><code>${cite:ref=Duca17a}$</code></pre><figcaption></figcaption></figure>
+
+<p>
+The example above will render as <code>cite{Duca17a}</code>
+</p>
+<p>
+If you want to use other type of citations like <code>citep</code> or <code>citet</code>, please overwrite the command in your LaTeX template:
+<code>renewcommand{cite}{citep}</code>
+</p>
+<p>
+Future versions will support also the definition in pillar.conf of the bibliography file. Right now you should harcode it in the template. 
+</p>
+<figure><pre><code>\bibliographystyle{alpha}
+\bibliography{rmod,others,new}</code></pre><figcaption></figcaption></figure>
+
+
+<h3>Slides</h3>
+<p>
+Pillar offers the possibility to define slides. Slides requires the use of the presentation archetype. 
+</p>
+<h4>Slide annotation</h4>
+<a id="sec:slide"></a>
+<p>
+This annotation is used to create slides structure for a <code>beamer</code> or a <code>deck.js</code> export.
+The parameter <strong>title</strong> is required.
+The <strong>label</strong> parameter can be used to refer to this slide in another slide:
+</p>
+<figure><pre><code class="pillar">${slide:title=My slide|label=sld:mySlide}$</code></pre><figcaption></figcaption></figure>
+
+<h4>Columns</h4>
+
+<p>
+With Pillar you can put text and other contents in columns.
+To do that, you need to delimit an environment with the <code>columns</code> and <code>endColumns</code> annotations.
+Then you can create columns with the <code>column</code> annotation.
+The column annotation takes 1 required parameter: the width of the column. Here is an example:
+</p>
+<figure><pre><code class="pillar">${columns}$
+
+   ${column:width=60}$
+      bla
+   ${column:40}$
+      bla
+
+${endColumns}$</code></pre><figcaption></figcaption></figure>
+
+<p class="note">The column annotations currently works only for the beamer, HTML and Deck.js export.</p>
+
+
+
+<h2>Pillar cheatsheet</h2>
+<a id="chacheat"></a>
+<h4>Headings</h4>
+<table style="border: solid thin"><tr><td style="text-align: left"><code>! Heading</code></td>
+<td>Heading 1</td>
+<td style="text-align: left"><code>!!! Heading</code></td>
+<td>Heading 3</td>
+</tr>
+<tr><td style="text-align: left"><code>!! Heading</code></td>
+<td>Heading 2</td>
+<td style="text-align: left"><code>!!!! Heading</code></td>
+<td>Heading 4</td>
+</tr>
+</table>
+
+
+<h4>Anchors and links </h4>
+<table style="border: solid thin"><tr><td style="text-align: left"><code>@anchor</code></td>
+<td>anchor</td>
+</tr>
+<tr><td style="text-align: left"><code>*@Internal Link*</code></td>
+<td>Internal link</td>
+</tr>
+<tr><td style="text-align: left"><code>*http://www.pharo.org*</code></td>
+<td>External link</td>
+</tr>
+<tr><td style="text-align: left"><code>*Pharo&gt;http://www.pharo.org*</code></td>
+<td>Alias external link</td>
+</tr>
+</table>
+
+<h4>Lists</h4>
+<table style="border: solid thin"><tr><td style="text-align: left"><code>-bullet</code></td>
+<td>Creates one bullet</td>
+</tr>
+<tr><td style="text-align: left"><code>#numbered</code></td>
+<td>Creates one numbered item</td>
+</tr>
+<tr><td style="text-align: left"><code>;description :definition</code></td>
+<td>Creates a description definition item</td>
+</tr>
+</table>
+
+
+
+<h4>Formatting</h4>
+<table style="border: solid thin"><tr><td><code>&quot;&quot;bold&quot;&quot;</code></td>
+<td><strong>bold</strong></td>
+</tr>
+<tr><td><code>''italic''</code></td>
+<td><em>italic</em></td>
+</tr>
+<tr><td><code>==monospaced==</code></td>
+<td><code>monospaced</code></td>
+</tr>
+<tr><td><code>--strikethrough--</code></td>
+<td><s>strikethrough</s></td>
+</tr>
+<tr><td><code>@@subscript@@</code></td>
+<td><sub>subscript</sub></td>
+</tr>
+<tr><td><code>^^superscript^^</code></td>
+<td><sup>superscript</sup></td>
+</tr>
+<tr><td><code>__underlined__</code></td>
+<td><u>underlined</u></td>
+</tr>
+</table>
+
+<p>
+Characters to be escaped using <code>\</code> are
+</p><figure><pre><code>| characters |
+characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
+stream nextPutAll: '[[['; cr.
+characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
+stream cr; nextPutAll: ']]]'; cr.</code></pre><figcaption></figcaption></figure>
+
+<table style="border: solid thin"><tr><td><code>%</code> commented line</td>
+<td>each line starting with <code>%</code> is ignored</td>
+</tr>
+</table>
+
+
+<h4>Pictures</h4>
+<pre>+Caption.&gt;file://figures/pharo-logo.png|width=50|label=pharoLogo+</pre>
+<h4>Tables</h4>
+
+<table style="border: solid thin"><tr><td><code>|! Column1 | Column2</code></td>
+<td>Two column header</td>
+</tr>
+<tr><td><code>||</code></td>
+<td>centered</td>
+</tr>
+<tr><td><code>|{ left</code></td>
+<td>left</td>
+</tr>
+<tr><td><code>|} right</code></td>
+<td>right</td>
+</tr>
+</table>
+
+
+<h4>Annotated paragraphs</h4>
+<table style="border: solid thin"><tr><td>==@@note==</td>
+<td>Produce a note paragraph</td>
+</tr>
+<tr><td>==@@todo==</td>
+<td>Produces a todo</td>
+</tr>
+</table>
+
+<h4>Code blocks</h4>
+
+<pre>[[[
+self foo bar
+]]]</pre>
+<pre>[[[label=foobar|caption=My code block that works|language=smalltalk
+self foo bar
+]]]</pre>
+<h4>Raw</h4>
+<figure><pre><code>{{{latex:
+latex code here
+}}}
+{{{html:
+plain html here
+}}}</code></pre><figcaption></figcaption></figure>
+
+
+
 
 
 

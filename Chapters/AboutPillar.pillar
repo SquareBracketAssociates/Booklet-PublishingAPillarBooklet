@@ -1,12 +1,12 @@
 !! About Pillar 
 
-Pillar is a system to manage documents (books, presentations, web sites). It is able to emit resulting documents in multiple formats (html, markdown, latex, AsciiDoc). 
+Pillar is a system to manage documents (books, presentations, and web sites). It is able to emit resulting documents in multiple formats (html, markdown, latex, AsciiDoc). 
 It is composed of several modules such as importers, transformers, document model and outputers.
 
 This book describes Pillar in its current version 7.0. Pillar is currently developed and maintained by Stéphane Ducasse and Guillermo Polito.
-The original author of Pillar was Damien Cassou. Many people have also contributed to Pillar: Ben Coman, Guillermo Polito, Lukas Renggli (original author of Pier from which a first version of Pillar has been extracted), Benjamin van Ryseghem, Cyril Ferlicot-Delbecque, Thibault Arloing, Yann Dubois, Quentin Ducasse and Asbathou Sama Biyalou. Special thanks to Asbathou Sama Biyalou!
+The original author of Pillar was Damien Cassou. Many people have also contributed to Pillar: Ben Coman, Guillermo Polito, Lukas Renggli (original author of the PierCMS from which a first version of Pillar has been extracted), Benjamin van Ryseghem, Cyril Ferlicot-Delbecque, Thibault Arloing, Yann Dubois, Quentin Ducasse and Asbathou Sama Biyalou. Special thanks to Asbathou Sama Biyalou!
 
-This book adapts, extends, clarifies the chapter explaining Pillar in the ''Enterprise Pharo: a Web Perspective'' book.
+This book adapts, extends, and clarifies the chapter explaining Pillar in the ''Enterprise Pharo: a Web Perspective'' book.
 
 Pillar was sponsored by *ESUG>http://www.esug.org*.
 
@@ -27,7 +27,7 @@ Pillar has many features, helpful tools, and documentation:
 !!!Pillar users
 @pillarUSERS
 
-This book was written in Pillar. If you want to see how Pillar is used, have a look at its source code (*http://github.com/SquareBracketAssociates/*), or check the following other real-world projects:
+This book was written in Pillar itself. If you want to see how Pillar is used, have a look at its source code (*http://github.com/SquareBracketAssociates/Booklet-PublishingAPillarBooklet*), or check the following other real-world projects:
 
 - the Updated Pharo by Example book (*https://github.com/SquareBracketAssociates/UpdatedPharoByExample*),
 - the Pharo MOOC - Massive open online course (*https://github.com/SquareBracketAssociates/PharoMooc*,
@@ -35,9 +35,12 @@ This book was written in Pillar. If you want to see how Pillar is used, have a l
 - the PillarHub open-access shared blog (*http://pillarhub.pharocloud.com*).
 
 
-!!! Pillar 70 planned features
+!!! Pillar future features
 
-Pillar 70 saw some major refactorings and cleaning: it does not rely on Grease, Magritte. Still some issues will be implemented to reach the version 70 we envision. Here is a little list of features that we are working on or will soon:
+Pillar 70 saw some major refactorings and cleaning: it does not rely on Grease and Magritte anymore. 
+Its architecture is a lot cleaner.
+
+Still some issues are missing. Here is a little list of features that we are working on or will soon:
 
 - Incremental recompilation. Since we remove the use of make (so that Windows users can use Pillar) we should introduce a way to avoid to recompile complete book when just one chapter changed.
 - Markdown syntax.
@@ -45,6 +48,4 @@ Pillar 70 saw some major refactorings and cleaning: it does not rely on Grease, 
 - Better table support.
 
 !!! Conclusion
-Pillar is still in active development: maintainers keep improving its implementation. The current version of Pillar is Pillar 70. This booklet only documents Pillar 70. This booklet will be synchronised with future enhancements. 
-
-
+Pillar is still in active development: maintainers keep improving its implementation. The current version of Pillar is Pillar 70. This booklet only documents Pillar 70. This booklet will be synchronised with future enhancements.
