@@ -42,7 +42,8 @@ Both in these cases, creating the repository on GitHub is the same.
 For that, we need to follow these steps:
 
 - In the upper-right corner of any page, click ""+"", and then click ""New repository"" as: 
-+New repository>file://figures/new.png+
+%+New repository>file://figures/new.png+
+
 - Type a name for your repository.
 -# For personal website you need to named it as ""myAccount.github.io""
 -# For the second case, you can named it as you want, ""myProject"" for example.
@@ -53,7 +54,7 @@ For that, we need to follow these steps:
 - Now click ""Create repository"".
 
 Your GitHub repository is now created and look like that.
-+GitHub repository>file://figures/repo_created.png+
+%+GitHub repository>file://figures/repo_created.png+
 
 
 !! Generate Token for Travis
@@ -62,12 +63,12 @@ We are now going to generate a token on Github and add it as an environement var
 In the both cases, this token will be used to allow a dialog between Travis and Github for automating website build.
 
 
-+Travis settings>file://figures/travis_settings.png+
+%+Travis settings>file://figures/travis_settings.png+
 
 On your project Settings in Travis, you have a menu labelled ""Environment variables""
 where you can add variables (those variables will be automatically encrypted).
 
-+Add Token>file://figures/settings.png+
+%+Add Token>file://figures/settings.png+
 
 
 
@@ -96,7 +97,7 @@ $ pillar serve -p xxxx -w &
 ]]]
 
 After these steps, you will get a default website as: 
-+Skeleton website>file://figures/default.png+
+%+Skeleton website>file://figures/default.png+
 
 !! Editing your site
 
@@ -180,7 +181,7 @@ We can notice that ==toc.pillar== is the file used to declare different menus.
 
 Now you should get a page like that:
 
-+New Page>file://figures/teach.png+
+%+New Page>file://figures/teach.png+
 
 @@note We have not cover all the syntax of Pillar here. So for more, you can click *here>https://samakhov.github.io/Booklet-PublishingAPillarBooklet/Chapters/CheatSheet.html#pillar%20cheatsheet*.
 

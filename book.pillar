@@ -1,24 +1,27 @@
-%${inputFile:path=Chapters/AboutPillar.pillar}$
+${inputFile:path=Chapters/AboutPillar.pillar}$
+
+${inputFile:path=Chapters/PillarSyntax.pillar}$
 %migrated
-This document is under HEAVY REWRITE!!!
+
+${inputFile:path=Chapters/CheatSheet.pillar}$ 
+%migrated
+
+
 
 
 %${inputFile:path=Chapters/GettingStarted.pillar}$
 % migrated
 
 
-%${inputFile:path=Chapters/PillarSyntax.pillar}$
+
 
 %${inputFile:path=Chapters/Templating.pillar}$
 
 %${inputFile:path=Chapters/InPharo.pillar}$
 
-
-
 %%Apparently the follwogin is broken
 %${inputFile:path=Chapters/TravisBintray.pillar}$
 
-%${inputFile:path=Chapters/CheatSheet.pillar}$ 
-%migrated
+
 
 %%${inputFile:path=Chapters/BookTester-Documentation.pillar}$ 
