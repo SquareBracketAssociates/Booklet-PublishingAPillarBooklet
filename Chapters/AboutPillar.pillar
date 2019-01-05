@@ -1,6 +1,6 @@
 !! About Pillar 
 
-Pillar is a system to manage documents (books, presentations, and web sites). It is able to emit resulting documents in multiple formats (html, markdown, latex, AsciiDoc). 
+Pillar is a system to manage documents (books, presentations, and web sites). From a common format, it is able to generate documents in multiple formats (html, markdown, latex, AsciiDoc). 
 It is composed of several modules such as importers, transformers, document model and outputers.
 
 This book describes Pillar in its current version 7.0. Pillar is currently developed and maintained by Stéphane Ducasse and Guillermo Polito.
