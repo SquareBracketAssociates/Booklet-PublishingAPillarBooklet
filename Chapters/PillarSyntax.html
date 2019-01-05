@@ -58,7 +58,7 @@ nil<meta name="author" content="Stéphane Ducasse and Guillermo Polito">nil
 	<h2>Pillar core syntactic elements</h2>
 <a id="chawriting"></a>
 <p>
-In this Chapter we present the Pillar syntax. Have a look at the
+In this chapter, we present the Pillar syntax. Have a look at the
 Chapter <a href="#chacheat"></a>: it contains a two pages summary. We use the current text as example, notice however, that some results may be different on other support like HTML because of different common practices (for example creating an anchor with the reference instead of a footnote for an external link).
 </p>
 <p>
@@ -484,9 +484,9 @@ Annotations are the Pillar way to have extensible syntax. An annotation has this
 <p>
 You can include a file into another pillar file. The <code>inputFile</code> annotation takes as parameter the path of the file relative to <code>baseDirectory</code> (if you don't change the base directory, it is your working directory). In this example, 2 files are included:
 </p>
-<figure><pre><code class="pillar">${inputFile:test.pillar}$
+<figure><pre><code class="pillar">${inputFile:path=test.pillar}$
 
-${inputFile:chapter2/chapter2.pillar}$</code></pre><figcaption></figcaption></figure>
+${inputFile:path=chapter2/chapter2.pillar}$</code></pre><figcaption></figcaption></figure>
 
 <h4>Footnote annotation</h4>
 
@@ -535,6 +535,9 @@ Future versions will support also the definition in pillar.conf of the bibliogra
 <figure><pre><code>\bibliographystyle{alpha}
 \bibliography{rmod,others,new}</code></pre><figcaption></figcaption></figure>
 
+<p>
+You have to add a plugin in the pillar.conf file to manage the creation of bibliography.
+</p>
 
 <h3>Slides</h3>
 <p>
