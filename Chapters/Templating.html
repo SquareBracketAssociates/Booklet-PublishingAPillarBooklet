@@ -156,8 +156,7 @@ Pillar exporting mechanism can be configured using <a href="http://smalltalkhub.
 </p>
 <h4>Configuration Parameters</h4>
 <a id="configParameters"></a>
-<figure><pre><code>CCDocumentationGeneration of: PRPillarConfiguration on: stream.</code></pre><figcaption></figcaption></figure>
-
+<pre>MessageNotUnderstood: receiver of &quot;of:on:&quot; is nil</pre>
 
 <h3>Command-Line Interface</h3>
 <a id="commandLineInterface"></a>
@@ -169,10 +168,9 @@ One of the basic uses of the command line is:
 </p>
 <figure><pre><code class="bash">$ ./pillar export --to=latex PharoSound.pillar</code></pre><figcaption></figcaption></figure>
 
-<figure><pre><code>stream nextPutAll: 'You can select an export type with the parameter ==-\-to==. The possible exports are: '.
-(PRDocumentWriter withAllConcreteClasses collect: #writerName) asStringOn: stream delimiter: ', ' last: ' and '.
-stream nextPutAll: '.'</code></pre><figcaption></figcaption></figure>
-
+<p>
+You can select an export type with the parameter <code>--to</code>. The possible exports are: = MessageNotUnderstood: PRDocumentWriter class&gt;&gt;withAllConcreteClasses
+</p>
 <p>
 The <code>Makefile</code> will create a symbolic link named <code>root</code> referencing the output directory into each directory containing output files.
 You can use this symbolic link to reference files in specified in the <code>support</code> collection.

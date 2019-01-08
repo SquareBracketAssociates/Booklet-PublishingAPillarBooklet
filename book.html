@@ -288,11 +288,7 @@ Lines that start with a <code>%</code> are considered comments and will not be r
 <p>
 Special characters (e.g., <code>+</code> and <code>*</code>) must be escaped with a backslash: to get a <code>+</code>, you actually have to write <code>\+</code>. The list of characters to escape is:
 </p>
-<figure><pre><code>| characters |
-characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
-stream nextPutAll: '[[['; cr.
-characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
-stream cr; nextPutAll: ']]]'; cr.</code></pre><figcaption></figcaption></figure>
+<figure><pre><code>^, _, :, ;, =, @, {, |, !, &quot;, #, $, %, ', *, +, [, -</code></pre><figcaption></figcaption></figure>
 
 
 <h3>Formatting</h3>
@@ -411,11 +407,7 @@ To specify the syntax a code block is written in, you need to use the <code>lang
 For example on <a href="#foobar"></a> we used the <code>smalltalk</code> value for the <code>language</code> parameter.
 </p>
 
-<figure><pre><code>| languages |
-stream nextPutAll: '@@note The currently supported languages are '.
-languages := PRRealScriptLanguage withAllConcreteClasses collect: #standardName.
-languages asStringOn: stream delimiter: ', ' last: ' and '</code></pre><figcaption></figcaption></figure>
-
+<p class="note">The currently supported languages are bash, css, html, http, json, javascript, pillar, sql, ston, shellcommands and smalltalk</p>
 <p>
 If you don't want syntax highlighting for a particular script, specify <code>no language</code> as value to the <code>language</code> parameter.
 </p>
@@ -445,51 +437,6 @@ line 45, instead of copy/pasting the code you can use:
 <p>
 The <code>firstLine</code> and <code>lastLine</code> parameters are optional.
 </p>
-
-
-
-<h4>Generate a part of your document with a script</h4>
-
-<p>
-If you want you can also evaluate a script to generate a part of your document.
-Notice that some pillar version may disable it for security reasons.
-</p>
-<p>
-For example if you write a project's documentation and want to give some metrics about its code, you can write something like this:
-</p>
-<pre>[[[eval=true
-| packages classes |
-packages := RPackageOrganizer default packages select: [ :each |
-               each name includesSubstring: 'Pillar' ].
-classes := packages flatCollect: [ :each | each classes ].
-stream
-   nextPutAll: 'The Pillar project contains:';
-   lf;
-   nextPutAll: '- ==';
-   print: packages size;
-   nextPutAll: ' packages==.';
-   lf;
-   nextPutAll: '- ==';
-   print: classes size;
-   nextPutAll: ' classes=='.
-]]]</pre>
-<p>
-will generate:
-</p>
-<figure><pre><code>| packages classes |
-packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
-classes := packages flatCollect: [ :each | each classes ].
-stream
-   nextPutAll: 'The Pillar project contains:';
-   lf;
-   nextPutAll: '- ==';
-   print: packages size;
-   nextPutAll: ' packages==.';
-   lf;
-   nextPutAll: '- ==';
-   print: classes size;
-   nextPutAll: ' classes=='.</code></pre><figcaption></figcaption></figure>
-
 <h3>Annotated paragraphs</h3>
 
 <p>
@@ -583,6 +530,55 @@ Here are two examples within the same expressions: Code blocks and captions use 
 <p>
 This chapter presents some extensions specific to a given support such as LaTeX or slides.
 </p>
+<h3>Generate a part of your document with a script</h3>
+
+<p>
+If you want you can also evaluate a script to generate a part of your document.
+Notice that some pillar version may disable it for security reasons.
+</p>
+<p>
+For example if you write a project's documentation and want to give some metrics about its code, you can write something like this:
+</p>
+<pre>[[[eval=true
+| packages classes |
+packages := RPackageOrganizer default packages select: [ :each |
+               each name includesSubstring: 'Pillar' ].
+classes := packages flatCollect: [ :each | each classes ].
+stream
+   nextPutAll: 'The Pillar project contains:';
+   lf;
+   nextPutAll: '- ==';
+   print: packages size;
+   nextPutAll: ' packages==.';
+   lf;
+   nextPutAll: '- ==';
+   print: classes size;
+   nextPutAll: ' classes=='.
+]]]</pre>
+<p>
+will generate:
+</p>
+<p>
+The Pillar project contains:
+</p><ul>
+<li><code>37 packages</code>.</li>
+<li><code>453 classes</code></li>
+</ul>
+
+<p>
+To enable this feature, you should declare that you want to use the corresponding plugin in the <code>pillar.conf</code> (<code>&quot;plugins&quot;: [&quot;PRScriptEvaluator&quot;]</code>).
+</p>
+<figure><pre><code>{
+  &quot;title&quot;: &quot;Publishing Documents with Pillar 7.0&quot;,
+  &quot;attribution&quot;: &quot;Stéphane Ducasse and Guillermo Polito&quot;,
+  &quot;series&quot;: &quot;Square Bracket tutorials&quot;,
+  &quot;keywords&quot;: &quot;Pillar, HTML, PDF, Markdown, EPUB, AsciiDoc, Beamer, Pharo, Smalltalk&quot;,	
+  &quot;newLine&quot;: #unix,
+  &quot;plugins&quot;: [&quot;PRScriptEvaluator&quot;],
+  &quot;htmlWriter&quot;: #html
+	}</code></pre><figcaption></figcaption></figure>
+
+
 <h3>LaTeX</h3>
 
 <h4>Citations</h4>
@@ -715,11 +711,7 @@ ${endColumns}$</code></pre><figcaption></figcaption></figure>
 
 <p>
 Characters to be escaped using <code>\</code> are
-</p><figure><pre><code>| characters |
-characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
-stream nextPutAll: '[[['; cr.
-characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
-stream cr; nextPutAll: ']]]'; cr.</code></pre><figcaption></figcaption></figure>
+</p><figure><pre><code>^, _, :, ;, =, @, {, |, !, &quot;, #, $, %, ', *, +, [, -</code></pre><figcaption></figcaption></figure>
 
 <table style="border: solid thin"><tr><td><code>%</code> commented line</td>
 <td>each line starting with <code>%</code> is ignored</td>

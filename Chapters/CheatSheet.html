@@ -126,11 +126,7 @@ nil<meta name="author" content="Stéphane Ducasse and Guillermo Polito">nil
 
 <p>
 Characters to be escaped using <code>\</code> are
-</p><figure><pre><code>| characters |
-characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
-stream nextPutAll: '[[['; cr.
-characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
-stream cr; nextPutAll: ']]]'; cr.</code></pre><figcaption></figcaption></figure>
+</p><figure><pre><code>^, _, :, ;, =, @, {, |, !, &quot;, #, $, %, ', *, +, [, -</code></pre><figcaption></figcaption></figure>
 
 <table style="border: solid thin"><tr><td><code>%</code> commented line</td>
 <td>each line starting with <code>%</code> is ignored</td>
