@@ -294,51 +294,6 @@ line 45, instead of copy/pasting the code you can use:
 
 The ==firstLine== and ==lastLine== parameters are optional.
 
-
-
-
-!!!! Generate a part of your document with a script
-
-If you want you can also evaluate a script to generate a part of your document.
-Notice that some pillar version may disable it for security reasons.
-
-For example if you write a project's documentation and want to give some metrics about its code, you can write something like this:
-
-= [[[eval=true
-= | packages classes |
-= packages := RPackageOrganizer default packages select: [ :each |
-=                each name includesSubstring: 'Pillar' ].
-= classes := packages flatCollect: [ :each | each classes ].
-= stream
-=    nextPutAll: 'The Pillar project contains:';
-=    lf;
-=    nextPutAll: '- ==';
-=    print: packages size;
-=    nextPutAll: ' packages==.';
-=    lf;
-=    nextPutAll: '- ==';
-=    print: classes size;
-=    nextPutAll: ' classes=='.
-= ]]]
-
-will generate:
-
-[[[eval=true
-| packages classes |
-packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
-classes := packages flatCollect: [ :each | each classes ].
-stream
-   nextPutAll: 'The Pillar project contains:';
-   lf;
-   nextPutAll: '- ==';
-   print: packages size;
-   nextPutAll: ' packages==.';
-   lf;
-   nextPutAll: '- ==';
-   print: classes size;
-   nextPutAll: ' classes=='.
-]]]
-
 !!! Annotated paragraphs
 
 An empty line starts a new paragraph.
@@ -429,6 +384,63 @@ Here are two examples within the same expressions: Code blocks and captions use 
 
 !! Specific markup
 This chapter presents some extensions specific to a given support such as LaTeX or slides.
+
+!!! Generate a part of your document with a script
+
+If you want you can also evaluate a script to generate a part of your document.
+Notice that some pillar version may disable it for security reasons.
+
+For example if you write a project's documentation and want to give some metrics about its code, you can write something like this:
+
+= [[[eval=true
+= | packages classes |
+= packages := RPackageOrganizer default packages select: [ :each |
+=                each name includesSubstring: 'Pillar' ].
+= classes := packages flatCollect: [ :each | each classes ].
+= stream
+=    nextPutAll: 'The Pillar project contains:';
+=    lf;
+=    nextPutAll: '- ==';
+=    print: packages size;
+=    nextPutAll: ' packages==.';
+=    lf;
+=    nextPutAll: '- ==';
+=    print: classes size;
+=    nextPutAll: ' classes=='.
+= ]]]
+
+will generate:
+
+[[[eval=true
+| packages classes |
+packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
+classes := packages flatCollect: [ :each | each classes ].
+stream
+   nextPutAll: 'The Pillar project contains:';
+   lf;
+   nextPutAll: '- ==';
+   print: packages size;
+   nextPutAll: ' packages==.';
+   lf;
+   nextPutAll: '- ==';
+   print: classes size;
+   nextPutAll: ' classes=='.
+]]]
+
+To enable this feature, you should declare that you want to use the corresponding plugin in the ==pillar.conf== (=="plugins": ["PRScriptEvaluator"]==).
+
+[[[
+{
+  "title": "Publishing Documents with Pillar 7.0",
+  "attribution": "Stéphane Ducasse and Guillermo Polito",
+  "series": "Square Bracket tutorials",
+  "keywords": "Pillar, HTML, PDF, Markdown, EPUB, AsciiDoc, Beamer, Pharo, Smalltalk",	
+  "newLine": #unix,
+  "plugins": ["PRScriptEvaluator"],
+  "htmlWriter": #html
+	}
+]]]
+
 
 !!!LaTeX
 
