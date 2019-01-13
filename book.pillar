@@ -1,5 +1,8 @@
 ${inputFile:path=Chapters/AboutPillar.pillar}$
 
+${inputFile:path=Chapters/GettingStarted.pillar}$
+% migrated
+
 ${inputFile:path=Chapters/PillarSyntax.pillar}$
 %migrated
 
@@ -7,8 +10,7 @@ ${inputFile:path=Chapters/CheatSheet.pillar}$
 %migrated
 
 
-${inputFile:path=Chapters/GettingStarted.pillar}$
-% migrated
+
 
 
 
