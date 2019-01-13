@@ -7,9 +7,7 @@ ${inputFile:path=Chapters/CheatSheet.pillar}$
 %migrated
 
 
-
-
-%${inputFile:path=Chapters/GettingStarted.pillar}$
+${inputFile:path=Chapters/GettingStarted.pillar}$
 % migrated
 
 
