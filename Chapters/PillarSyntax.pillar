@@ -367,7 +367,38 @@ ${inputFile:path=chapter2/chapter2.pillar}$
 You can add footnotes to explain or annotate words. The ==footnote== annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
 
 [[[
-Foo${footnote:Some Explanation for Foo}$
+Foo${footnote:note=Some Explanation for Foo}$
+]]]
+
+In addition we should add the plugin as follows in the pillar.conf file.
+
+[[[
+  "plugins": ["PRFootnoteTransformer"],
+]]]
+
+
+!!!! Citation annotation
+
+You can add citations to refer to publications or books. The ==citation== annotation takes as parameter the reference using the ==ref==.
+
+[[[
+In this chapter we will explore a minimal reflective class-based kernel, inspired 
+from ObjVlisp ${cite:ref=Coin87a}$.
+]]]
+
+You have to declare the plugins as follow. 
+[[[
+	{
+	  "title":"A simple reflective object kernel",
+	  "attribution":"Stéphane Ducasse",
+	  "series": "The Pharo TextBook Collection",
+	  "keywords": "bootstrap, reflective, meta system, Pharo, Smalltalk",
+	  "latexWriter" : #'latex:sbabook',
+	  "plugins": ["PRCitationTransformer"],
+	  "bibFile": "others.bib",
+	  "newLine": #unix,
+	  "htmlWriter": #html
+	}
 ]]]
 
 !!!!Parameters
