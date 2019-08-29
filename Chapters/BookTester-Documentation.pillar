@@ -14,7 +14,7 @@ Pillar syntax allows you to write codeblocks, showing a part of code. The body o
    [[[
 	   1 + 1
 	>>> 2
-]]]
+	]]]
 ]]]
 
 !!!! Method definition
@@ -121,6 +121,7 @@ When a path is not explicitely stated, the book tester takes the first file matc
 
 
 !!!! Check all files
+
 [[[language=bash
 > $PHARO_VM $IMAGE clap checkRepository yourfolder/f1.pillar
 ]]]
@@ -145,6 +146,11 @@ However, using one method or the other leads you to obtaining a report on all te
 !!! From within Pharo
 
 You can also test a pillar file from within Pharo itself. To do so you should use a ==PRBookTesterVisitor== to check a file using ==checkFileNamed:==. This can be useful to inspect each of the results. In particular the successful one.
+
+[[[
+PRBookTesterVisitor new checkFileNamed: 
+
+]]]
 
 !!! What can not be tested
 

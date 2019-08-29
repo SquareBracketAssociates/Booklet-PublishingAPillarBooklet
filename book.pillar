@@ -9,7 +9,7 @@ ${inputFile:path=Chapters/PillarSyntax.pillar}$
 ${inputFile:path=Chapters/CheatSheet.pillar}$ 
 %migrated
 
-
+${inputFile:path=Chapters/TravisBintray.pillar}$s
 
 
 
@@ -19,9 +19,5 @@ ${inputFile:path=Chapters/CheatSheet.pillar}$
 
 %${inputFile:path=Chapters/InPharo.pillar}$
 
-%%Apparently the follwogin is broken
-%${inputFile:path=Chapters/TravisBintray.pillar}$
 
-
-
-%%${inputFile:path=Chapters/BookTester-Documentation.pillar}$ 
+${inputFile:path=Chapters/BookTester-Documentation.pillar}$ 
