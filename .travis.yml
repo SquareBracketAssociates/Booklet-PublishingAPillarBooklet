@@ -12,7 +12,7 @@ env:
   - JOB=test TYPE=System ARCHETYPE=book OUTPUT=pdf
 
 install:
-  - git clone https://github.com/pillar-markup/pillar.git -b v7.4.1 
+  - git clone https://github.com/pillar-markup/pillar.git -b v7.7.1 
 # Run pillar build script. Pillar will be built in `pwd`/build!
   - cd pillar && ./scripts/build.sh && cd ..                              
 # Install latex
