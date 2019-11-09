@@ -21,3 +21,6 @@ ${inputFile:path=Chapters/TravisBintray.pillar}$s
 
 
 ${inputFile:path=Chapters/BookTester-Documentation.pillar}$ 
+
+
+${inputFile:path=Chapters/MigratingToPillar70.pillar}$ 

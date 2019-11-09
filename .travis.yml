@@ -10,15 +10,19 @@ smalltalk:
 env:
   matrix:
   - JOB=test TYPE=System ARCHETYPE=book OUTPUT=pdf
+# Unit tests run the normal pillar tests
+# Integration tests test that pillar itself can interact with generated files, pdf generation, etc.
+# System tests test that we can install and use pillar as a black box
+  global:
+    - TEXLIVE_RELEASE=2019
+    - TEXLIVE_MIRROR=http://mirror.ctan.org/systems/texlive/tlnet
+    - PATH="$HOME/texlive/bin/x86_64-linux:$PWD/build:$PATH"
 
 install:
-  - git clone https://github.com/pillar-markup/pillar.git -b v7.4.1 
-# Run pillar build script. Pillar will be built in `pwd`/build!
-  - cd pillar && ./scripts/build.sh && cd ..                              
-# Install latex
-  - . pillar/scripts/ci/ensure_latex.sh                                  
-  # Install latex dependencies required by pillar
-  - ./pillar/scripts/ci/ensure_book_dependencies.sh                       
+  - git clone https://github.com/pillar-markup/pillar.git -b dev-7
+  - ./pillar/scripts/ci/install-texlive
+  - ./_support/latex/ensure-deps.sh
+  - ./pillar/scripts/build.sh
 
 script:
   - ./pillar/build/pillar build ${JOB}
@@ -32,8 +36,4 @@ after_success:
 branches:
   except:
     - /^(?i:continuous)$/
-  
-script:
-
-  
 

@@ -11,8 +11,8 @@ Pillar syntax allows you to write codeblocks, showing a part of code. The body o
 
 !!!! Examples
 [[[
-   [[[
-	   1 + 1
+	[[[
+		1 + 1
 	>>> 2
 	]]]
 ]]]
@@ -23,10 +23,10 @@ Pillar syntax allows you to write codeblocks, showing a part of code. The body o
 This codeblock presents a method definition.
 
 [[[
-  [[[
+	[[[
 	YourClass >> yourMethod
 		^ 'bla'
-  ]]]
+	]]]
 ]]]
 
 !!!! Class definition
@@ -65,7 +65,7 @@ The book tester follows the following pattern with only one ==>>>== per codebloc
 [[[
     [[[example=true
        Action 
-    >>> ExpectedResult
+       >>> ExpectedResult
     ]]]
 ]]]
 
@@ -148,8 +148,7 @@ However, using one method or the other leads you to obtaining a report on all te
 You can also test a pillar file from within Pharo itself. To do so you should use a ==PRBookTesterVisitor== to check a file using ==checkFileNamed:==. This can be useful to inspect each of the results. In particular the successful one.
 
 [[[
-PRBookTesterVisitor new checkFileNamed: 
-
+PRBookTesterVisitor new checkFileNamed: aFile
 ]]]
 
 !!! What can not be tested
@@ -165,11 +164,11 @@ Some codeblocks can not be tested. For example, nested results to show what happ
 	]]]
 ]]]
 
-Local variable definition are not validated:
+Local variable definitions are not validated:
 
 [[[
 	[[[
-		|tmp|
+		| tmp |
 		tmp := 0.
 		tmp >>> 0
 	]]]
@@ -190,9 +189,6 @@ Or examples without concrete values
 		>>> aDate
 	]]]
 ]]]
-with ==yourAge== and ==myAge== as variables for example.
-
- 
 
 
 !! Improving Book Writability
@@ -222,7 +218,7 @@ This is why every codeblock with the parameter ==methodDefinition== has its comp
 ${run:testClass=YourTestClassName}$
 ]]]
 
-The run annotation will run every test defined with ==methodDefinition== within a given test class and report the results in the booktester report.
+The ==run== annotation executes every test defined with ==methodDefinition== within a given test class and report the results in the booktester report.
 
 
 !!!! Typical TDD booklet 
