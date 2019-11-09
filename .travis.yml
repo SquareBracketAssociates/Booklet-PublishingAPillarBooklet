@@ -25,8 +25,9 @@ install:
   - ./pillar/scripts/build.sh
 
 script:
-  - ./pillar/build/pillar build ${JOB}
-  - if [[ ${JOB} == "html" ]]; then touch _result/html/.nojekyll; fi
+  - ./pillar/build/pillar build pdf
+  #- ./pillar/build/pillar build ${JOB}
+  #- if [[ ${JOB} == "html" ]]; then touch _result/html/.nojekyll; fi
 
 after_success:
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
