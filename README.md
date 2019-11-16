@@ -6,7 +6,7 @@
 [badge]: https://travis-ci.org/SquareBracketAssociates/Booklet-PublishingAPillarBooklet.svg?branch=master
 
 
-The result from the latest successful Travis build can be found [on Bintray (PDF)](https://bintray.com/squarebracketassociates/wip/download_file?file_path=DistributingPillar-wip.pdf).
+The result from the latest successful Travis build can be found in the release pane of this page.
 
 # Pillar installation on Mac OS X / Linux
 
