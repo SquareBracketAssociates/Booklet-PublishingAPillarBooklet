@@ -1,4 +1,5 @@
 #!/bin/bash
+# this dependency list is for LaTex 2018
 
 xargs tlmgr install <<DEPS
     ctablestack
@@ -9,15 +10,17 @@ xargs tlmgr install <<DEPS
     footmisc
     gentium-tug
     graphics
+    ifetex
     import
     listings
+    luaotfload
     luatexbase
     memoir
+    ms
     multirow
     opensans
     pgf
     polyglossia
-    ragged2e
     tcolorbox
     tools
     trimspaces
