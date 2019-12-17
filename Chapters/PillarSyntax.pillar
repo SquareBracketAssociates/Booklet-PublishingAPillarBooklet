@@ -23,9 +23,11 @@ Some exporters support the possibility to specify a level of interpretation for 
 ==headingLevelOffset== controls how to convert from the level of a Pillar heading to the level of heading in your exported document.
 For example, a ==headingLevelOffset== of 3 converts a 1st level Pillar heading to an ==<h4>== in HTML.
 
+
 [[[
 "headingLevelOffset" : 3
 ]]]
+This feature does not work in Pillar 7.0 and it is planned to reintroduce it. 
 
 !!! References and links
 
@@ -37,7 +39,7 @@ For example, a ==headingLevelOffset== of 3 converts a 1st level Pillar heading t
 ]]]
  
 !!!!Anchor reference
-When you want to refer to an anchor (equivalent to ==\\ref\{chapterAndSections\}== in LaTeX), use the ==\*@chapterAndSections\*== syntax. Anchors are invisible and links will be rendered as: *@chapterAndSections*.
+When you want to refer to an anchor (equivalent to ==\\ref\{chapterAndSections\}== in LaTeX), use the ==\*@chapterAndSections\*== syntax. Anchors are invisible and links will be rendered as: *@chapterAndSections*. If you get a Fig. without a number this is probably that you forgot the ==@== in the reference.
 
 [[[
 *@chapterAndSections*
@@ -45,13 +47,13 @@ When you want to refer to an anchor (equivalent to ==\\ref\{chapterAndSections\}
 
 !!!!Alias
 
-You can create alias for links. Tthis is especially adapted for web sites containing reference to other pages.
+You can create alias for links. This is especially adapted for web sites containing reference to other pages.
 
 [[[
 *Chapters>chapterAndSections*
 ]]]
 
-creates the link *Chapters>chapterAndSections*. Again the template may interpret this differently than a LaTeX footnote.
+creates the link *Chapters>chapterAndSections*. Again the template may interpret this differently.
 
 To create a link to another pillar file, use the ==\*Alias>File.pillar@AnchorName\*==. The alias and anchor parts are optional but you will need them in some cases (for example if you have an inter-file link and you export in LaTeX, or if you have an inter-file link and you export all your file in the same html file).
 
@@ -67,7 +69,7 @@ The same syntax can also represent email addresses: write ==\*dupond@free.fr\*==
 
 
 !!! Lists
-Pillar offers three default lists: Bullet, numbered and labelled. 
+Pillar offers three default lists: Bullet, numbered and labelled.
 
 !!!! Bulleted lists
 
@@ -278,6 +280,32 @@ line 45, instead of copy/pasting the code you can use:
 
 The ==firstLine== and ==lastLine== parameters are optional.
 
+
+!!!! Code block whose contents is computed
+Sometimes you would like to program the contents of a code block. 
+You can do it using the ==eval\=tag== and the system offers you a stream variable that you can use to emit 
+the contents of the code block.
+
+=[[[eval=true
+= | languages |
+= stream nextPutAll: '@@note The currently supported languages are '.
+= languages := PRRealScriptLanguage withAllConcreteClasses collect: #standardName.
+= ...
+=]]]
+
+Note that since this feature is a potential security holes it has to be enable via a plugin declaration. 
+[[[
+	{
+	  "title":"A simple reflective object kernel",
+	  "attribution":"Stéphane Ducasse",
+	  ...
+	  "plugins": ["PRScriptEvaluator"],
+	  ...
+	}
+]]]
+
+
+
 !!! Annotated paragraphs
 
 An empty line starts a new paragraph.
@@ -340,6 +368,8 @@ For example, the following Pillar file,
 
 represents a Pillar document with the title and author set. You can use whatever keys you like. The metadata keys can be used in templates (see Chapter *@templating* for more information about templating).
 
+For example the template for the current book uses the following template variables: attributions, title, series, and keywords. 
+You can see this in the file main.mustache in the \_support/template/latex folder.
 
 
 !!! Annotations: supporting extensions
