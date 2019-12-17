@@ -7,22 +7,6 @@ Chapter *@chacheat*: it contains a two pages summary. We use the current text as
 It is important to see that since Pillar is extensible, plugins may extend the default markup. The extension mechanisms
 allow one not to learn new syntax but just new tags and parameters as will present later.
 
-!!! Meta-Information
-
-Meta-information of a particular file is written at the start of the file between curly braces using the STON syntax (a super set of JSON). A meta-information starts with a word between quotation marks acting as a key, is followed by a colon ==:==, and finishes with a value.
-
-For example, the following Pillar file,
-
-[[[language=pillar
-{
-	"title": "A first document",
-	"author": "John Doe"
-}
-
-!Hello World
-]]]
-
-represents a Pillar document with the title and author set. You can use whatever keys you like. The metadata keys can be used in templates (see Chapter *@templating* for more information about templating).
 
 !!! Headings: Chapters & sections
 @chapterAndSections
@@ -338,6 +322,23 @@ A good practice is to always specify for which kind of export the raw text must 
 
 ""Take care:"" Avoid terminating the verbatim text with a ==}== as
 this will confuse the parser, better add a space or two. So, don't write ==\{{{\\begin{scriptsize}}}}== but ==\{{{\\begin{scriptsize} }}}== instead.
+
+
+!!! Meta-Information
+Meta-information of a particular file is written at the start of the file between curly braces using the STON syntax (a super set of JSON). A meta-information starts with a word between quotation marks acting as a key, is followed by a colon ==:==, and finishes with a value.
+
+For example, the following Pillar file,
+
+[[[language=pillar
+{
+	"title": "A first document",
+	"author": "John Doe"
+}
+
+!Hello World
+]]]
+
+represents a Pillar document with the title and author set. You can use whatever keys you like. The metadata keys can be used in templates (see Chapter *@templating* for more information about templating).
 
 
 
