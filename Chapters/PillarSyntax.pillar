@@ -13,7 +13,7 @@ allow one not to learn new syntax but just new tags and parameters as will prese
 
 A line starting with ==!== represents a heading. Use multiple ==!== to create sections and subsections.
 
-[[[
+[[[language=pillar
 !!!Headings: Chapters & Sections
 ]]]
 
@@ -24,7 +24,7 @@ Some exporters support the possibility to specify a level of interpretation for 
 For example, a ==headingLevelOffset== of 3 converts a 1st level Pillar heading to an ==<h4>== in HTML.
 
 
-[[[
+[[[language=pillar
 "headingLevelOffset" : 3
 ]]]
 This feature does not work in Pillar 7.0 and it is planned to reintroduce it. 
@@ -34,14 +34,14 @@ This feature does not work in Pillar 7.0 and it is planned to reintroduce it.
 !!!!Anchor definition
  To refer to a section or chapter, put an anchor (equivalent to ==\\label\{chapterAndSections\}== in LaTeX) using the ==@chapterAndSections== syntax on a ''separate line''. 
  
-[[[
+[[[language=pillar
 @chapterAndSections
 ]]]
  
 !!!!Anchor reference
 When you want to refer to an anchor (equivalent to ==\\ref\{chapterAndSections\}== in LaTeX), use the ==\*@chapterAndSections\*== syntax. Anchors are invisible and links will be rendered as: *@chapterAndSections*. If you get a Fig. without a number this is probably that you forgot the ==@== in the reference.
 
-[[[
+[[[language=pillar
 *@chapterAndSections*
 ]]]
 
@@ -49,7 +49,7 @@ When you want to refer to an anchor (equivalent to ==\\ref\{chapterAndSections\}
 
 You can create alias for links. This is especially adapted for web sites containing reference to other pages.
 
-[[[
+[[[language=pillar
 *Chapters>chapterAndSections*
 ]]]
 
@@ -61,7 +61,7 @@ To create a link to another pillar file, use the ==\*Alias>File.pillar@AnchorNam
 
 To create links to external resources, use the ==\*Pharo>http://pharo.org/\*== syntax which is rendered as *Pharo>http://pharo.org/*. 
 
-[[[
+[[[language=pillar
 *http://www.pharo.org*
 ]]]
 
@@ -220,19 +220,19 @@ Code blocks are delimited by ==\[\[\[== and ==\]\]\]==.
 
 generates
 
-[[[
+[[[language=no language
 foo bar
 ]]]
 
 !!!! Code block with a label or caption
 
-If you want either a label (to reference the code later) or a caption (to give a nice title to the code block), write the following:
+If you want either a label (to reference the code later) or a caption (to give a nice title to the code block), check out the following example:
 
 = [[[label=foobar|caption=My code block that works|language=smalltalk
 = self foo bar
 = ]]]
 
-which produces script *@foobar* (this reference is produced with ==\*@foobar\*==).
+which produces the *@foobar* script (this reference is produced with ==\*@foobar\*==).
 
 [[[label=foobar|caption=My code block that works|language=smalltalk
 self foo bar
@@ -241,8 +241,8 @@ self foo bar
 !!!! Code block syntax highlighting
 @sec:syntaxHighlighting
 
-To specify the syntax a code block is written in, you need to use the ==language== parameter.
-For example on *@foobar* we used the ==smalltalk== value for the ==language== parameter.
+To specify the syntax of a code block, use the ==language== parameter.
+For example, in *@foobar* we set this to ==smalltalk== via (==language=smalltalk==).
 
 
 [[[eval=true
@@ -252,7 +252,7 @@ languages := PRRealScriptLanguage withAllConcreteClasses collect: #standardName.
 languages asStringOn: stream delimiter: ', ' last: ' and '
 ]]]
 
-If you don't want syntax highlighting for a particular script, specify ==no language== as value to the ==language== parameter.
+If you don't want syntax highlighting for a particular script, aset it to ==no language==.
 
 !!!! Code block with line numbers
 
@@ -281,36 +281,11 @@ line 45, instead of copy/pasting the code you can use:
 The ==firstLine== and ==lastLine== parameters are optional.
 
 
-!!!! Code block whose contents is computed
-Sometimes you would like to program the contents of a code block. 
-You can do it using the ==eval\=tag== and the system offers you a stream variable that you can use to emit 
-the contents of the code block.
-
-=[[[eval=true
-= | languages |
-= stream nextPutAll: '@@note The currently supported languages are '.
-= languages := PRRealScriptLanguage withAllConcreteClasses collect: #standardName.
-= ...
-=]]]
-
-Note that since this feature is a potential security holes it has to be enable via a plugin declaration. 
-[[[
-	{
-	  "title":"A simple reflective object kernel",
-	  "attribution":"Stéphane Ducasse",
-	  ...
-	  "plugins": ["PRScriptEvaluator"],
-	  ...
-	}
-]]]
-
-
-
 !!! Annotated paragraphs
 
 An empty line starts a new paragraph.
 
-An annotated paragraph starts with ==\@@== followed by a keyword such as ==todo== and ==note==. For example,
+An annotated paragraph starts with ==\@@== followed by a keyword such as ==todo== or ==note==. For example,
 
 [[[language=pillar
 @@note this is a note annotation.
@@ -326,11 +301,11 @@ And,
 @@todo this is a todo annotation
 ]]]
 
-generates a todo annotation
+generates this todo annotation
 
 @@todo this is a todo annotation
 
-By default the templates support ==@\@todo== and ==@\@note==. 
+==@\@todo== and ==@\@note== are the templates supported by default. 
 
 !!!Raw
 
@@ -349,11 +324,11 @@ A good practice is to always specify for which kind of export the raw text must 
 = }}}
 
 ""Take care:"" Avoid terminating the verbatim text with a ==}== as
-this will confuse the parser, better add a space or two. So, don't write ==\{{{\\begin{scriptsize}}}}== but ==\{{{\\begin{scriptsize} }}}== instead.
+this will confuse the parser. An easy fix is to add a space or two at the end. So, instead of writing ==\{{{\\begin{scriptsize}}}}==, write ==\{{{\\begin{scriptsize} }}}==.
 
 
 !!! Meta-Information
-Meta-information of a particular file is written at the start of the file between curly braces using the STON syntax (a super set of JSON). A meta-information starts with a word between quotation marks acting as a key, is followed by a colon ==:==, and finishes with a value.
+Meta-information of a particular file is written at the start of the file between curly braces using the STON syntax (a superset of JSON). Meta-information markup starts with a word between quotation marks acting as a key, followed by a colon ==:==, and then a value.
 
 For example, the following Pillar file,
 
@@ -366,26 +341,27 @@ For example, the following Pillar file,
 !Hello World
 ]]]
 
-represents a Pillar document with the title and author set. You can use whatever keys you like. The metadata keys can be used in templates (see Chapter *@templating* for more information about templating).
+represents a Pillar document with the title and author set. You can use whatever keys you like, and they can be used in templates (see Chapter *@templating* for more information about templating).
 
-For example the template for the current book uses the following template variables: attributions, title, series, and keywords. 
+For example, the template for the current book uses the following template variables: attributions, title, series, and keywords. 
 You can see this in the file main.mustache in the \_support/template/latex folder.
 
 
 !!! Annotations: supporting extensions
 
-Pillar proposes two extensions mechanisms: tags and parameters. Pay attention that each plugin should handle the tag or parameter processing. 
-
-
-Annotations are the Pillar way to have extensible syntax. An annotation has this syntax:
+Annotations are the Pillar way to have extensible syntax. An annotation has the following form:
 
 [[[language=pillar
 ${tag:parameter=value|parameter2=value2}$
 ]]]
 
+You can think of the tag as the ''type'' of annotation and parameters as method arguments. Pay attention that each plugin should handle tag or parameter processing. 
+
+Here are some existing examples:
+
 !!!!InputFile annotation
 
-You can include a file into another pillar file. The ==inputFile== annotation takes as parameter the path of the file relative to ==baseDirectory== (if you don't change the base directory, it is your working directory). In this example, 2 files are included:
+You can include a file in another pillar file. The ==inputFile== annotation takes a ==path== parameter, the value of which is relative to ==baseDirectory== (which defaults to your working directory). In this example, 2 files are included:
 
 [[[language=pillar
 ${inputFile:path=test.pillar}$
@@ -395,7 +371,7 @@ ${inputFile:path=chapter2/chapter2.pillar}$
 
 !!!!Footnote annotation
 
-You can add footnotes to explain or annotate words. The ==footnote== annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
+You can add footnotes to explain or annotate words. The ==footnote== annotation takes a ==note== parameter specifying the text to appear at the end of the document. In this example, one footnote is added:
 
 [[[
 Foo${footnote:note=Some Explanation for Foo}$
@@ -407,52 +383,28 @@ In addition we should add the plugin as follows in the pillar.conf file.
   "plugins": ["PRFootnoteTransformer"],
 ]]]
 
-
-!!!! Citation annotation
-
-You can add citations to refer to publications or books. The ==citation== annotation takes as parameter the reference using the ==ref==.
-
-[[[
-In this chapter we will explore a minimal reflective class-based kernel, inspired 
-from ObjVlisp ${cite:ref=Coin87a}$.
-]]]
-
-You have to declare the plugins as follow. 
-[[[
-	{
-	  "title":"A simple reflective object kernel",
-	  "attribution":"Stéphane Ducasse",
-	  "series": "The Pharo TextBook Collection",
-	  "keywords": "bootstrap, reflective, meta system, Pharo, Smalltalk",
-	  "latexWriter" : #'latex:sbabook',
-	  "plugins": ["PRCitationTransformer"],
-	  "bibFile": "others.bib",
-	  "newLine": #unix,
-	  "htmlWriter": #html
-	}
-]]]
-
 !!!!Parameters
 
-Pictures and scripts are both using parameters to specify different options and variations. Parameters are pairs =="label"="value"== separated by ==\|==.
+Pictures and scripts both use parameters to specify different options and variations. Parameters are =="label"="value"== pairs separated by ==\|==.
 
-Here are two examples within the same expressions: Code blocks and captions use parameters.
+Here are two examples within the same expression, showing usage of parameters by both a code block and a caption:
 
 = [[[label=foobar|caption=My code block that works|language=pillar
 = +Caption of the picture.>file://figures/pharo-logo.png|width=50|label=pharoLogo+
 = ]]]
 
-
-
-!! Specific markup
-This chapter presents some extensions specific to a given support such as LaTeX or slides.
-
 !!! Generate a part of your document with a script
 
-If you want you can also evaluate a script to generate a part of your document.
-Notice that some pillar version may disable it for security reasons.
+We'll now explore one of the most powerful and dynamic (but potentially dangerous) features. Since there is an entire development environment available underneath Pillar, blocks can not only be rendered for documentation purposes, but can be evaluated to dynamically alter the Pillar document model. By setting the code block ==eval== parameter to ==true==, the system offers you a stream variable that you can use to emit Pillar as specified by your code block. For example, here's a snippet from the block that generated the list of supported languages for syntax highlighting earlier in this document:
 
-For example if you write a project's documentation and want to give some metrics about its code, you can write something like this:
+=[[[eval=true
+= | languages |
+= stream nextPutAll: '@@note The currently supported languages are '.
+= languages := PRRealScriptLanguage withAllConcreteClasses collect: #standardName.
+= ...
+=]]]
+
+Here's another example showing how you could include some metrics in your code's documentation:
 
 = [[[eval=true
 = | packages classes |
@@ -471,7 +423,7 @@ For example if you write a project's documentation and want to give some metrics
 =    nextPutAll: ' classes=='.
 = ]]]
 
-will generate:
+which will generate:
 
 [[[eval=true
 | packages classes |
@@ -489,54 +441,57 @@ stream
    nextPutAll: ' classes=='.
 ]]]
 
-To enable this feature, you should declare that you want to use the corresponding plugin in the ==pillar.conf== (=="plugins": ["PRScriptEvaluator"]==).
-
+Since this feature enables arbitrary code evaluation, it presents a potential security risk. Therefore, it has to be explicitly enabled via a plugin declaration. To do this, add (=="plugins": ["PRScriptEvaluator"]==) to your ==pillar.conf==. For example:
+ 
 [[[
-{
-  "title": "Publishing Documents with Pillar 7.0",
-  "attribution": "Stéphane Ducasse and Guillermo Polito",
-  "series": "Square Bracket tutorials",
-  "keywords": "Pillar, HTML, PDF, Markdown, EPUB, AsciiDoc, Beamer, Pharo, Smalltalk",	
-  "newLine": #unix,
-  "plugins": ["PRScriptEvaluator"],
-  "htmlWriter": #html
+	{
+	  "title":"A simple reflective object kernel",
+	  "attribution":"Stéphane Ducasse",
+	  ...
+	  "plugins": ["PRScriptEvaluator"],
+	  ...
 	}
 ]]]
 
+!! Specific markup
+This chapter presents some extensions specific to a given support such as LaTeX or slides.
 
 !!!LaTeX
 
 !!!!Citations
 
-Citations are only available for LaTeX.
-You can add citations to your document to reference an element in a LaTeX bibliography. The ==cite== annotationtakes as parameter the key of the reference in the bibliography.
+Citations, which are only available for LaTeX, let you refer to books or other publications. The ==cite== annotation takes a ==ref== parameter specifying a reference to an element in a LaTeX bibliography. For example:
 
-[[[
+[[[language=pillar
 ${cite:ref=Duca17a}$
 ]]]
 
-The example above will render as ==\cite{Duca17a}==
+This will render as ==\cite{Duca17a}==
 
-If you want to use other type of citations like ==citep== or ==citet==, please overwrite the command in your LaTeX template:
+If you want to use other types of citations like ==citep== or ==citet==, please overwrite the command in your LaTeX template:
 ==\renewcommand{\cite}{\citep}==
-
-Future versions will support also the definition in pillar.conf of the bibliography file. Right now you should harcode it in the template. 
 
 [[[
 \bibliographystyle{alpha}
 \bibliography{rmod,others,new}
 ]]]
 
-You have to add a plugin in the pillar.conf file to manage the creation of bibliography.
+You have to declare the plugin, and specify the bibliography file, like so: 
+[[[
+	{
+	  "plugins": ["PRCitationTransformer"],
+	  "bibFile": "others.bib",
+	}
+]]]
 
 
 !!! Slides
-Pillar offers the possibility to define slides. Slides requires the use of the presentation archetype. 
+Pillar offers the possibility to define slides via the presentation archetype. 
 
 !!!!Slide annotation
 @sec:slide
 
-This annotation is used to create slides structure for a ==beamer== or a ==deck.js== export.
+This annotation is used to create a slideshow structure for export to ==beamer== or ==deck.js==.
 The parameter ""title"" is required.
 The ""label"" parameter can be used to refer to this slide in another slide:
 
@@ -547,9 +502,8 @@ ${slide:title=My slide|label=sld:mySlide}$
 !!!!Columns
 
 With Pillar you can put text and other contents in columns.
-To do that, you need to delimit an environment with the ==columns== and ==endColumns== annotations.
-Then you can create columns with the ==column== annotation.
-The column annotation takes 1 required parameter: the width of the column. Here is an example:
+To do that, you need to delimit a section with the ==columns== and ==endColumns== annotations.
+Then you can create columns with the ==column== annotation, which takes 1 required parameter: the width of the column. Here is an example:
 
 [[[language=pillar
 ${columns}$
@@ -562,7 +516,7 @@ ${columns}$
 ${endColumns}$
 ]]]
 
-@@note The column annotations currently works only for the beamer, HTML and Deck.js export.
+@@note The column annotations currently work only for export to beamer, HTML and Deck.js.
 
 
 
