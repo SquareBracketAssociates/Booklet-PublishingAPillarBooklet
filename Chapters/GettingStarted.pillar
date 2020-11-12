@@ -112,7 +112,7 @@ $ pillar build html index.pillar
 
 This will generate only the output related to the ==index.pillar== file.
 
-!!! Versionning your Project
+!!! Versioning your Project
 
 In this section we explain how to share your project in a source code repository such as Git.
 This section guides you through the setup of a Git repository, the selection of the correct files to commit, and the creation of a ==.gitignore== file to avoid auto-generated files.
