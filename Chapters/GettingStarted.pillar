@@ -1,33 +1,31 @@
 !! Getting Started
 @chagettingstarted
 
-In this section we give the basic steps to get you started with your first Pillar project.
-We show first how to install Pillar in different platforms and how to test your installation.
-This chapter covers also the installation of LaTeX, which is required to generate pdf documents. 
+In this section, we give the basic steps to get you started with your first Pillar project.
+We first show how to install Pillar on different platforms and how to test your installation.
+This chapter also covers the installation of LaTeX, which is required to generate pdf documents. 
 Installing LaTeX is not needed if you use the Travis build integration to automatically generate your documents once committed.
 
 Once Pillar is installed, we will proceed to create a first Pillar project.
-A Pillar project is a directory that will contain several ==.pillar== files with your content, a ==pillar.conf== configuration file and a ==_suppert== directory containing several template-related files which will manage the style of your document.
+A Pillar project consists of a directory containing:
+- ==.pillar== files with your content
+- a ==pillar.conf== configuration file 
+- a ==_support== directory containing several template-related files which will manage the style of your document
 
-!!! Installing the zip
+!!! Installation
 
-On *https://github.com/pillar-markup/pillar/releases*, Pillar comes up on all platforms as a zipped distribution. 
-
-This is the easiest way to get started. 
-
-
-!!!! Installing it in your System
-
-You can then proceed to install that pillar build where you want.
+Pillar releases for common platforms are available *on Github>https://github.com/pillar-markup/pillar/releases*. 
+Downloading one of these zipped builds is the easiest way to get started. 
+You can then install it wherever you want.
 For example, you can place it in a hidden directory in your home directory:
 
-[[[
+[[[language=bash
 # move the pillar directory to your HOME
 $ mv pillar ~/.pillar
 ]]]
 
 Then add that directory to the PILLAR_HOME and HOME environment variables, for example, by modifying your .bashrc (or .zshrc) with:
-[[[
+[[[language=bash
 export PILLAR_HOME="$HOME/.pillar/build"
 export PATH="$PATH:$PILLAR_HOME"
 ]]]
@@ -36,41 +34,40 @@ Now you are ready to use Pillar.
 
 !!! A First Pillar Project
 
-A Pillar project is a directory containing several ==.pillar== files with your content, a ==pillar.conf== configuration file and a ==_support== directory containing several template-related files which will manage the look-and-feel of your document.
-The complete project structure is setup by Pillar itself, you do not need to do it manually.
+The complete project structure with all needed files and directories will be setup for you by Pillar, you do not need to do it manually.
 
 
 !!!! Setup the Project
 
-Let's then procceed to create a new empty directory for our project and tell Pillar that we want to use the book archetype on it.
+Let's create a new empty directory for our project and tell Pillar that we want to apply the book archetype to it.
 
-[[[
+[[[language=bash
 $ mkdir my-pillar-project
 $ cd my-pillar-project
 $ pillar archetype book
 ]]]
 
-The ==archetype== command sets up the project structure for you: it installs a configuration file ''pillar.conf''prod with default values, it creates several Pillar files with some sample content, and it imports the basic styling files inside ''_support''.
+The ==archetype== command sets up the project structure for you: it creates a configuration file ''pillar.conf'' with default values as well as several Pillar files with some sample content, and it installs the basic styling files into ''_support''.
 
 !!!! Build your Project
 
-At this point, you can already generate your book using the command ==pillar build [output_format]== followed by the desired output. For example, to generate your project in html:
-[[[
+At this point, you can already generate your book using the command ==pillar build [desired_output_format]==. For example, to generate your project as html:
+[[[language=bash
 $ pillar build html
 ]]]
 
-Or in pdf using your system's LaTeX installation:
+Or as pdf using your system's LaTeX installation:
 
-[[[
+[[[language=bash
 $ pillar build pdf
 ]]]
 
 !!!! Inspect your Project's Output
 
-Once ==build== has finished, the build results are written into the ==\_result== directory.
+Once ==build== has finished, the results are written into the ==\_result== directory.
 The ==\_result== directory contains the output in different subdirectories depending on the used format, and is structured as follows:
 
-[[[
+[[[language=no language
 your_project\
   pillar.conf
   file1.pillar
@@ -86,7 +83,7 @@ your_project\
 
 For example, if you generated your files in html and pdf you will see
 
-[[[
+[[[language=no language
 your_project\
   pillar.conf
   file1.pillar
@@ -102,11 +99,11 @@ your_project\
 
 !!!! Building a Single File
 
-Pillar generates all ==.pillar== files it finds in your project by default.
-We can instruct it otherwise by specifying the files to build as argument.
-For example, if you want to build only ==index.pillar== to html you can use the ==pillar build== command as follows:
+By default, Pillar generates all ==.pillar== files it finds in your project.
+We can instruct it otherwise by specifying the files to build as an argument.
+For example, if you want to build only ==index.pillar== as html you can use the ==pillar build== command as follows:
 
-[[[
+[[[language=bash
 $ pillar build html index.pillar
 ]]]
 
@@ -121,28 +118,28 @@ This section guides you through the setup of a Git repository, the selection of 
 !!!! Setting up a Git Repository
 
 There are two main ways to setup a Git repository:
-- we can clone an existing repository and add our files there, or
-- we can create a new repository and push it to an existing remote
+- clone an existing repository and add our files there, or
+- create a new repository and push it to a remote
 
-This first option is the more practical in case you previously created a Git repository in GitHub.
-If that is the case, or if you prefer to start by creating a repository on GitHub or your favorite Git repository hosting, then this step consists on cloning that existing repository in a new directory and adding your files to it.
+The first option is more practical if you have already created a remote Git repository e.g. on GitHub.
+If that is the case, or if you prefer to start by creating a repository on your favorite Git repository host, then we'll clone that existing repository in a new directory and add your files to it.
 
-[[[
+[[[language=bash
 $ git clone git@github.com:[your_username]/[your_repository].git
 $ cp path_to_your_project
 ]]]
 
-[[[
+[[[language=bash
 cd your_repository
 ]]]
 
 
 !!!! Versioning your Book
 
-Now to version simply you book you should version all the files except ==_result==. 
-Later we will show you how to add travis and bintray support for automatic compilation so that you do not need to install locally LaTeX on your machine. 
+Now, to version your book, you should version all the files except ==_result==. 
+Later we will show you how to add travis and bintray support for automatic compilation so that you do not need to install LaTeX on your local machine. 
 
-[[[
+[[[language=bash
 $ git add pillar.conf
 $ git add _support
 $ git add Chapters
@@ -151,48 +148,48 @@ $ git add book.pillar
 
 !!!! Adding a .gitignore
 
-Not all the downloaded files are worth versionning. We suggest the following .gitignore configuration. 
+Not all the downloaded files should be versioned. We suggest the following .gitignore configuration. 
 
-[[[
+[[[language=bash
 more .gitignore
 /_result/
 ]]]
 
-You can remove the folder figures and the chapter samples. 
+You can also remove the ==figures== folder and the chapter samples. 
 Now you are ready to commit your files. 
 
 !!!Building Pillar from Sources
 
-This section explains how to build and install Pillar both in Unix based systems (like OSX and Linux) and Windows.
+This section explains how to build and install Pillar on both Unix-based systems (like OSX and Linux) and Windows.
 The first part of this section covers how to download an already built version of pillar or how to build one yourself.
 
 !!!! Build Requirements
 
-Building Pillar from sources requires that you have some dependencies installed in your system:
-- ""Git"": a Git installation is required to get the Pillar repository from ==git@github.com:pillar-markup/pillar.git==.
-- ""wget"": is required to do several file downloads. For OSX users, you might need to install ==wget== via ==brew== following for example the following instructions:
+Building Pillar from sources requires that you have some dependencies installed on your system:
+- ""Git"": required to get the Pillar repository from ==git@github.com:pillar-markup/pillar.git==.
+- ""wget"": required to do several file downloads. For OSX users, you might need to install ==wget== via ==brew== as follows:
 
-[[[
+[[[language=bash
 # The following lines will install both Homebrew and wget, ignore the first one if Homebrew is already installed
 $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 $ brew install wget --with-libressl
 ]]]
 
-#@@note Windows is not able to deal with ==.sh== and makefile scripts natively, so you have to install tools providing shell-like capabilities #such as *https://www.cygwin.com/*. If you decide to install cygwin you should be able to follow the Mac OS X and Linux installation section.
+#@@note Windows is not able to deal with ==.sh== and makefile scripts natively, so you have to install tools providing shell-like capabilities #such as *https://www.cygwin.com/*. Then you should be able to follow the Mac OS X and Linux installation section.
 
 !!!! Downloading and Building Pillar
 
 You can build Pillar from sources on Unix-like systems such as OSX and Linux.
-This approach is also valid using msys and cygwin like terminals on Windows.
+This approach is also valid using msys and cygwin-like terminals on Windows.
 To get Pillar source code, we can use a ==git clone== command as follows:
 
-[[[
+[[[language=bash
 $ git clone git@github.com:pillar-markup/pillar.git
 ]]]
 
-Once we got the repository, we should execute the ==build.sh== script found in the ''scripts'' directory:
+Once we have our repository, we should execute the ==build.sh== script found in the ''scripts'' directory:
 
-[[[
+[[[language=bash
 $ cd pillar
 $ ./scripts/build.sh
 ]]]
@@ -202,7 +199,7 @@ $ ./scripts/build.sh
 You can then proceed to install that pillar build where you want.
 For example, you can place it in a hidden directory in your home directory:
 
-[[[
+[[[language=bash
 # Go back to the previous directory and 
 # move the pillar directory to your HOME
 $ cd ..
@@ -210,16 +207,16 @@ $ mv pillar ~/.pillar
 ]]]
 
 Then add that directory to the PILLAR_HOME and HOME environment variables, for example, by modifying your .bashrc (or .zshrc) with:
-[[[
+[[[language=bash
 export PILLAR_HOME="$HOME/.pillar/build"
 export PATH="$PATH:$PILLAR_HOME"
 ]]]
 
 !!!! Test your Installation
 
-To test your pillar installation, open a new terminal and execute the pillar ==\-\-version command==. If everything is ok, that should print out (as in the current version) the version of the Pharo VM. For example:
+To test your pillar installation, open a new terminal and execute ==the pillar \-\-version== command. If everything is ok, that should print out the version of the Pharo VM. For example:
 
-[[[
+[[[language=bash
 $ pillar --version
 M:    CoInterpreter VMMaker.oscog-eem.2380 uuid: c76d...
 ]]]
@@ -228,22 +225,22 @@ M:    CoInterpreter VMMaker.oscog-eem.2380 uuid: c76d...
 
 !!! Getting Pillar Dependencies
 
-If you're going to build pdf documents using Pillar, then you will required to install LaTeX also.
-We recommend that you install a complete TeX Live installation, like that different LaTeX templates can reuse existing modules.
+If you're going to build pdf documents using Pillar, then you will need to install LaTeX also.
+We recommend that you install a complete TeX Live installation so that different LaTeX templates can reuse existing modules.
 You can get a full installation from *https://tug.org/texlive/* or by using your favorite package manager on Linux.
 For example using apt-get you can do:
 
-[[[
+[[[language=bash
 sudo apt-get install texlive-full
 ]]]
 
 Also, a manual LaTeX installation can be done by downloading TeX live's default distribution as a tarball and installing several packages on top. This installation procedure is already distributed with Pillar as it is used by our continuous integration jobs. You can find our installation script in the ==scripts/ci/ensureLatex.sh== file that you can find in:
 
-[[[
+[[[language=bash
 scripts/ci/ensureLatex.sh
 ]]]
 
-[[[
+[[[language=bash
   #!/bin/bash
   # From https://github.com/y-yu/install-tex-travis/blob/master/install-tex.sh
 
@@ -297,11 +294,11 @@ scripts/ci/ensureLatex.sh
 ]]]
 
 
-Now you are ready to write your document in Pillar and get them exported in PDF and HTML. 
+Now you are ready to write your document in Pillar and get it exported as PDF and HTML. 
 
-Once the basic installation is installed you can procceed to install all your required dependencies using TeXLives ==tlmgr== package manager. You'll find an up-to-date bash script that performs the installation of the minimal required packages in:
+Once the basic installation is complete you can procceed to install all your required dependencies using TeXLives ==tlmgr== package manager. You'll find an up-to-date bash script that performs the installation of the minimal required packages in:
 
-[[[
+[[[language=bash
 scripts/ci/ensure\_book\_dependencies.sh
 ]]]
 

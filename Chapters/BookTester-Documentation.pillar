@@ -1,13 +1,13 @@
 !!Testing Your Documents
  
-What does it mean to ‘test a book’ and why would you do it? Testing a book means checking the code it displays is up to date. This can be done by checking if examples are correct or verifying that method and class definitions compile without raising an error in the last Pharo version. Being able to test a book means updating it more easily and therefore more frequently. On the long term, easier updates means more frequent updates but also a documentation improvement along with more ressources available for the community.
+What does it mean to ‘test a book’ and why would you do it? Testing a book means checking that the code it displays is up to date. This can be done by checking if examples are correct or verifying that method and class definitions compile without raising an error in the latest Pharo release. Being able to test a book means updating it more easily and therefore more frequently. In the long term, more frequent updates also means that documentation will improve, leaving more resources available for the community.
 
 Pillar comes with a book tester.
 
 
 !!! Typical codeblocks
 
-Pillar syntax allows you to write codeblocks, showing a part of code. The body of a codeblock allows one to display any part of code you might want to. For instance, example, method and class definitions can be tested.
+Pillar syntax allows you to write codeblocks, showing a piece of code. The body of a codeblock allows one to display any piece of code deisred. For instance, examples, methods and class definitions can be tested.
 
 !!!! Examples
 [[[
@@ -100,10 +100,10 @@ It is important to understand that the class (here ==YourClass==) should be pres
 	]]]
 ]]]
 
-In addition to validate that the class definition is valid, the parameter defines the class in the environment 
-in which the book is defined. It supports the definition of testing other methods. 
+In addition to validating the class definition syntax, the parameter defines the class in the environment 
+in which the book is defined. This supports the testing of any methods added to the class. 
 
-As a general principle, any method definition refering to classes not defined in the system, should be defined after by a class definition or a loading instruction (see ==\$loader\$== as shown in the following).
+As a general principle, any method definition refering to classes not defined in the system, should be followed by a class definition or a loading instruction (see ==\$loader\$== as shown in the following).
 
 !!! Practical testing
 There are currently two ways of testing your book: (1) using the command line and (2) from within Pharo.

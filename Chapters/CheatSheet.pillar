@@ -77,7 +77,7 @@ stream cr; nextPutAll: ']]]'; cr.
 = ]]]
 
 !!!! Raw
-[[[
+[[[language=pillar
 {{{latex:
 latex code here
 }}}
